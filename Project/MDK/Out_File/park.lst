@@ -1,0 +1,223 @@
+C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE park
+OBJECT MODULE PLACED IN .\Out_File\park.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\park.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\Li
+                    -braries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src
+                    -) DEBUG PRINT(.\Out_File\park.lst) OBJECT(.\Out_File\park.obj) 
+
+stmt  level    source
+
+    1          #include "park.h"
+    2          #include "math.h"
+    3          
+    4          int8   flag_start           = 0;    //出库完成标志位
+    5          int8   flag_open_reed       = 0;    //打开干簧管
+    6          int8   reed_state           = 0;    //干簧管状态
+    7          int8   flag_end             = 0;    //开始停车标志位
+    8          uint16 T_outku              = 0;    //出库直走和打角定时
+    9          uint16 J_outku              = 0;
+   10          uint16 T_inku_wait=0;
+   11          uint16 T_inku_J=0;
+   12          uint16 T_inku_S=0;
+   13          uint16 T_inku=0;
+   14          
+   15          uint16 S_daoku              = 0;    //
+   16          uint16 S_daoku_2              = 0;    //
+   17          uint16 S_daoku_3              = 0;    //
+   18          
+   19          uint8 Library_selection = 1;
+   20          
+   21          /*****************************************出库函数***************************************
+   22          函数：  void Handle_Barn_Out(uint8 type) 
+   23          参数：  type-----1为左出库，2为右出库
+   24          说明：  出库函数
+   25          
+   26          *注意：调用此函数后执行出库操作，直走的时间和打角时间及占空比按需自己修改调试
+   27          返回值：无  
+   28          ******************************************************************************************/
+   29          void Handle_Barn_Out(uint8 type)
+   30          {
+   31   1              //1为左出库，2为右出库
+   32   1          if(type ==1)
+   33   1          {
+   34   2                       if(!flag_start)
+   35   2                       {
+   36   3                                //pwm_duty(PWMB_CH1_P74,STEER_MID);              //（C车用）
+   37   3                               go_motor(1500, 1500);        //开环电池电压对转速右影响，尽量用满电的电池调
+   38   3                               if(T_outku >= T_OUT_PARK1)   //T_OUT_PARK1----出库直走的时间
+   39   3                               {
+   40   4                                       //pwm_duty(PWMB_CH1_P74,STEER_MID+STEER_LIM);  //（C车用）
+   41   4                                       go_motor(0, 2000);         //左打角
+   42   4                                       //ips114_showuint16(0,1,J_outku);
+   43   4                               }
+   44   3                               if(T_outku > T_OUT_PARK2)  //T_OUT_PARK2----出库打角时间（打角时间为T_OUT_PARK2-T_OUT_PARK1）
+   45   3                               {
+   46   4                                        flag_start = 1;
+   47   4                                        T_outku=0;
+   48   4                               }              
+   49   3                        }     
+   50   2                }
+   51   1                      if(type ==2)
+   52   1          {
+   53   2                              if(!flag_start)
+   54   2                              {
+   55   3                                      //pwm_duty(PWMB_CH1_P74,STEER_MID);            //（C车用）
+   56   3                               go_motor(1500, 1500);
+   57   3                               if (T_outku >= T_OUT_PARK1) 
+C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 2   
+
+   58   3                               {
+   59   4                                       //pwm_duty(PWMB_CH1_P74,STEER_MID+STEER_LIM); //（C车用）
+   60   4                                       go_motor(2000, 0);  //右打角
+   61   4                               }
+   62   3                               if(T_outku > T_OUT_PARK2)
+   63   3                               {
+   64   4                                        flag_start = 1;
+   65   4                                        T_outku=0;
+   66   4                               }                                                                                                                      
+   67   3                              }
+   68   2          }
+   69   1      }
+   70          /*****************************************干簧管检测停车***************************************
+   71          函数：  void Reed(void) 
+   72          参数：  void
+   73          说明：  干簧管检测停车
+   74          
+   75          *注意： 干簧管使用方法就和按键类似，通过读取IO口电平即可
+   76          返回值：void  
+   77          *********************************************************************************************/
+   78          void Reed(void)
+   79          {
+   80   1              if(flag_start)//开始时不开启干簧管检测，防止出库时误测
+   81   1              {
+   82   2                      //走过一段距离后开启干簧管检测
+   83   2                      if(Open_pack_time > START_T)
+   84   2                      {
+   85   3                              flag_open_reed = 1;
+   86   3                              Open_pack_time=0;
+   87   3                      }
+   88   2              }
+   89   1              if(flag_open_reed==0)             //干簧管检测标志位成立后才开始检测
+   90   1              {
+   91   2                      reed_state = Reed_Switch_Pin;//干簧管状态
+   92   2                      if(reed_state==0)
+   93   2                      {
+   94   3                              flag_end += 1;              //识别到停车标志位开启
+   95   3                      }
+   96   2               }
+   97   1      }
+   98          /*****************************************入库函数***************************************
+   99          函数：  void Reed(void) 
+  100          参数：  void
+  101          说明：  入库函数
+  102          
+  103          
+  104          返回值：void  
+  105          *********************************************************************************************/
+  106          void In_park(uint8 type)
+  107          {
+  108   1              if(type ==1)
+  109   1        {
+  110   2                      if(flag_end==1)
+  111   2                      {
+  112   3                        go_motor(0,0);
+  113   3                              aim_speed =0;
+  114   3                              while(1)
+  115   3                              {
+  116   4                                      speed_measure();      //编码器测量
+  117   4                    S_daoku += fabs(real_speed)*0.1;
+  118   4                                      go_motor(-1500,-1500);
+  119   4                                      ips114_showint16(0,3,S_daoku);
+  120   4                                      BUZZ_ON;
+  121   4                                while(S_daoku>450)
+  122   4                                {
+  123   5                                              speed_measure();      //编码器测量
+C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 3   
+
+  124   5                                        go_motor(1500,1500);
+  125   5                                              S_daoku_2+= fabs(real_speed)*0.1;
+  126   5                                              ips114_showint16(0,4,S_daoku_2);
+  127   5                                              while(S_daoku_2>100)
+  128   5                                              {
+  129   6                                                      speed_measure();      //编码器测量
+  130   6                                                      go_motor(0,2000);
+  131   6                                                      S_daoku_3+= fabs(real_speed)*0.1;
+  132   6                                                      ips114_showint16(0,5,S_daoku_3);
+  133   6                                                while(S_daoku_3>150)
+  134   6                                                      {       
+  135   7                                                       go_motor(0,0);
+  136   7                                                 BUZZ_OFF;
+  137   7                                                      }
+  138   6                                              }
+  139   5                                }
+  140   4                              }
+  141   3                      }
+  142   2       }
+  143   1              if(type ==2)
+  144   1        {
+  145   2                      if(flag_end==1)
+  146   2                      {
+  147   3                                                go_motor(0,0);
+  148   3                              aim_speed =0;
+  149   3                              while(1)
+  150   3                              {
+  151   4                                      speed_measure();      //编码器测量
+  152   4                    S_daoku += fabs(real_speed)*0.1;
+  153   4                                      go_motor(-1500,-1500);
+  154   4                                      ips114_showint16(0,3,S_daoku);
+  155   4                                      BUZZ_ON;
+  156   4                                while(S_daoku>450)
+  157   4                                {
+  158   5                                              speed_measure();      //编码器测量
+  159   5                                        go_motor(1500,1500);
+  160   5                                              S_daoku_2+= fabs(real_speed)*0.1;
+  161   5                                              ips114_showint16(0,4,S_daoku_2);
+  162   5                                              while(S_daoku_2>100)
+  163   5                                              {
+  164   6                                                      speed_measure();      //编码器测量
+  165   6                                                      go_motor(2000,0);
+  166   6                                                      S_daoku_3+= fabs(real_speed)*0.1;
+  167   6                                                      ips114_showint16(0,5,S_daoku_3);
+  168   6                                                while(S_daoku_3>150)
+  169   6                                                      {       
+  170   7                                                       go_motor(0,0);
+  171   7                                                 BUZZ_OFF;
+  172   7                                                      }
+  173   6                                              }
+  174   5                                }
+  175   4                              }
+  176   3                      }
+  177   2       }
+  178   1              
+  179   1      }
+  180          
+  181          
+  182                  
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       776     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 4   
+
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        23     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        79     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

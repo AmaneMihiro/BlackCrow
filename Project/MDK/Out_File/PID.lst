@@ -1,0 +1,156 @@
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE PID
+OBJECT MODULE PLACED IN .\Out_File\PID.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\PID.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\Lib
+                    -raries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src)
+                    - DEBUG PRINT(.\Out_File\PID.lst) OBJECT(.\Out_File\PID.obj) 
+
+stmt  level    source
+
+    1          #include "PID.h"
+    2          #include "math.h"
+    3          /************************************************
+    4          ��������IncPIDInit(PID *sptr)
+    5          ��  �ܣ�PID������ʼ��
+    6          ��  ����
+    7          ����ֵ��void
+    8          ************************************************/
+    9          void IncPIDInit(PID *sptr)
+   10          {
+   11   1          sptr->SumError = 0;
+   12   1          sptr->LastError = 0;
+   13   1          sptr->LLastError = 0;
+   14   1      
+   15   1          sptr->Kp = 0;
+   16   1          sptr->Ki = 0;
+   17   1          sptr->Kd = 0;
+   18   1      }
+   19          
+   20          /************************************************
+   21          ��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   22          ��  �ܣ�λ��ʽPID����
+   23          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
+   24          ����ֵ��float
+   25          ************************************************/
+   26          int16 LocP_DCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
+   27          {
+   28   1          int16 iError, dError;
+   29   1          int16 output;
+   30   1      
+   31   1          iError = Setpoint - Turepoint;                // ƫ��
+   32   1          sptr->SumError += iError;                     // ����(����ʱ��ܶ�ʱ����
+             -һ�ײ�ִ���һ��΢�֣����ۼӴ������)
+   33   1          dError = (int16)(iError - (sptr->LastError)); // ΢��
+   34   1          sptr->LastError = iError;
+   35   1          if (sptr->SumError > 2000)
+   36   1              sptr->SumError = 2000; // �����޷�
+   37   1          if (sptr->SumError < -2000)
+   38   1              sptr->SumError = -2000;
+   39   1          output = (int16)(sptr->Kp * iError             // ������
+   40   1                           + (sptr->Ki * sptr->SumError) // ������
+   41   1                           + sptr->Kd * dError);         // ΢����
+   42   1          return (output);
+   43   1      }
+   44          /************************************************
+   45          ��������IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   46          ��  �ܣ�����ʽPID����
+   47          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
+   48          ����ֵ��int32 iIncpid
+   49          ************************************************/
+   50          int16 IncPIDCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
+   51          {
+   52   1          int16 iError, iIncpid;
+   53   1          // ��ǰ���
+   54   1          iError = Setpoint - Turepoint; // ƫ��
+   55   1      
+   56   1          iIncpid = sptr->Kp * (iError - sptr->LastError) + sptr->Ki * iError;
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 2   
+
+   57   1          //    //�����������´μ���
+   58   1          // if (iIncpid >= 2000) // ÿ����������޷�
+   59   1          // {
+   60   1          //     iIncpid = 2000;
+   61   1          // }
+   62   1          // if (iIncpid <= -2000)
+   63   1          // {
+   64   1          //     iIncpid = -2000;
+   65   1          // }
+   66   1          sptr->LastError = iError;
+   67   1          return (iIncpid);
+   68   1      }
+   69          /************************************************
+   70          ��������PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
+   71          ��  �ܣ���̬λ��ʽPID���� (һ������ת�����)
+   72          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
+   73          ����ֵ��int32 Actual
+   74          ************************************************/
+   75          int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
+   76          {
+   77   1          int16 iError, Actual;
+   78   1          float KP; // ��̬P��ע����Kp����
+   79   1      
+   80   1          iError = Setpoint - Turepiont;
+   81   1          KP = (iError)*sptr->Ki + sptr->Kp; // ��̬P�ļ���
+   82   1          // sptr->SumError+=iError;
+   83   1      
+   84   1          Actual = KP * iError + sptr->Kd * (iError - sptr->LastError);
+   85   1      
+   86   1          sptr->LastError = iError;
+   87   1          return Actual;
+   88   1      }
+   89          /************************************************
+   90          ��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   91          ��  �ܣ�D��λ��ʽPID���ƣ�����������
+   92          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
+   93          ����ֵ��float
+   94          ************************************************/
+   95          int16 PID_Turn_DT(PID *sptr, int16 Error, int16 Gory_z)
+   96          {
+   97   1          int16 iError, dError, gory_z;
+   98   1          float KP; // ��̬P��ע����Kp����
+   99   1          int16 output;
+  100   1      
+  101   1          iError = Error; // ƫ��
+  102   1          gory_z = Gory_z;
+  103   1      
+  104   1          // KP = (iError * iError) * sptr->Ki + sptr->Kp; // ��̬P�ļ��/�
+  105   1          KP = sptr->Kp + fabs(iError) * sptr->Ki; // 线性增加而非二次方增加
+  106   1      
+  107   1          dError = (iError - (sptr->LastError)); // ΢��
+  108   1      
+  109   1          output = KP * iError              // ������(��̬p)
+  110   1                   + sptr->Kd * dError      // ΢����
+  111   1                   + sptr->K_gory * gory_z; // ����������
+  112   1      
+  113   1          sptr->LastError = iError;
+  114   1      
+  115   1          return (output);
+  116   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       580     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 3   
+
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------          4
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

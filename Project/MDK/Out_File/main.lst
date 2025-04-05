@@ -1,0 +1,161 @@
+C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main
+OBJECT MODULE PLACED IN .\Out_File\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\main.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\Li
+                    -braries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src
+                    -) DEBUG PRINT(.\Out_File\main.lst) OBJECT(.\Out_File\main.obj) 
+
+stmt  level    source
+
+    1          
+    2          #include "headfile.h"
+    3          void main()
+    4          {
+    5   1              DisableGlobalIRQ(); // �ر����ж�
+    6   1              board_init();           // ��ʼ���Ĵ���,��ɾ���˾���롣
+    7   1              delay_ms(800);          // ������΢��ʱһ��
+    8   1      
+    9   1              //      lcd_init();
+   10   1              ips114_init(); // 1.14��Һ������ʼ��
+   11   1      
+   12   1              ADC_int();                                                                                                        // ADC�ɼ���ʼ��
+   13   1              ips114_showstr(0, 0, (unsigned char *)"Electromagnetic-Car"); // �ַ�����ʾ
+   14   1              ips114_showstr(0, 1, "interlize...");
+   15   1              delay_ms(500);
+   16   1              //      init_Steer_PWM();                                          //�����ʼ��
+   17   1              init_PWM(MOTOR_MODE_SELECT); // ��ʼ��DRV������ʽ��1-DRV/0-BTN��
+   18   1              encoder_init();                          // ��������ʼ��
+   19   1              //      uart_init(UART_4, UART4_RX_P02, UART4_TX_P03, 115200, TIM_2);//��ʼ�����ߴ���
+   20   1              //      pwm_init(PWMB_CH4_P77, 50, 750);                         //��ʼ����ˢ���20%ռ�ձ�
+             -��
+   21   1              //      pwm_init(PWMB_CH3_P33, 50, 750);                         //(1.2ms/20ms * 10000)��10000��PWM�
+             -����ռ�ձ�ʱ���ֵ�� 10000ΪPWM���ֵ
+   22   1              delay_ms(500);                                                     // ��ʱ����ˢ�����ת����
+   23   1              gpio_mode(Reed_Switch_Pin, GPI_IMPEDANCE); // ͣ��ʶ��ĸɻɹ�IO��ʼ��
+   24   1              PID_int();                                                                 // PID������ʼ��
+   25   1              // ips114_showstr(0,2,"icm20602_int...");
+   26   1              // icm20602_init();
+   27   1              // ips114_showstr(0,3,"icm20602_intok...");
+   28   1              // delay_ms(500);
+   29   1              // ips114_showstr(0,4,"dlla_int...");
+   30   1              // delay_ms(500);
+   31   1      
+   32   1              //      dl1a_init();                                               //����ģ���ʼ��
+   33   1              // ips114_showstr(0,5,"dlla_intok...");
+   34   1      
+   35   1              pit_timer_ms(TIM_1, 5);                   // ��ʼ����ʱ��1��Ϊ�����жϴ������
+             -��5MS��һ���ж�
+   36   1              NVIC_SetPriority(TIMER1_IRQn, 3); // ���ö�ʱ��1�ж����ȼ�Ϊ 3 ������
+             -�߼���
+   37   1      
+   38   1              gpio_mode(P6_7, GPO_PP); // ��������ʼ�����ķ���������ҲҪ�
+             -�������Ӧ�ĳ�ʼ����
+   39   1              BUZZ_DiDiDi(250);                // ��������һ��
+   40   1      
+   41   1              ips114_showstr(0, 6, "intall_intok...");
+   42   1              delay_ms(500);
+   43   1              ips114_clear(BLUE);
+   44   1              //       Key_Scan_Deal();      //��������//
+   45   1              EnableGlobalIRQ(); // ��ʼ����ϣ��������ж�
+   46   1      
+   47   1              /****����Ĳ��Ժ���ֻ�ǲ����ã����Խ�����ע�͹رգ�һ�
+             -��ֻ������һ�����Ժ�������******/
+   48   1              //      Test_Servo_Hardware();//���Զ����ֵ
+   49   1              //      Test_Motor_Hardware();//���Ե��ʹ��
+   50   1              //      Test_Electric_Hardware();//���Ե�ŵ�вɼ�
+   51   1              //      Test_Encoder();//���Ա������ɼ�//
+C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 2   
+
+   52   1              /*********************************************************************************/
+   53   1      
+   54   1              while (1)
+   55   1              {
+   56   2                      //       Strategy_Slect();     //���뿪�ز���ѡ�� 1--��ʾ���ֵ������
+             -ƫ�� 2--ѡ�����ҳ��� 3--ѡ���Ƿ��뻷��
+   57   2                      //       Handle_Barn_Out(Library_selection);     //ִ�г��⺯����flag_start��־λ��һ�
+             -��Ż���ж�
+   58   2      
+   59   2                      // 断点模块 调试使用
+   60   2                      if ((testflag == 7) || (testflag == 404))
+   61   2                      {
+   62   3                              DisableGlobalIRQ();
+   63   3                              go_motor(0, 0);
+   64   3                              switch (testflag)
+   65   3                              {
+   66   4                              case 7:
+   67   4                                      testflag = 100;
+   68   4                                      break;
+   69   4      
+   70   4                              case 404:
+   71   4                                      testflag = 101;
+   72   4                                      break;
+   73   4                              }
+   74   3                      }
+   75   2                      //                      ͣ����ʾ
+   76   2                      Reed();
+   77   2                      ips114_showint8(0, 6, Reed_Switch_Pin);
+   78   2                      ips114_showint8(0, 7, flag_end);
+   79   2      
+   80   2                      //     Roundabout_debugshow();//����������Ļ��ʾ�����Ի���ʱ�
+             -򿪣�
+   81   2                      // Speed_debugshow();     //�ٶȻ�������Ļ��ʾ�������ٶȻ�ʱ�򿪣
+             -��ٶȻ���������λ�������Σ�
+   82   2                      //                datasend();          //��λ����������
+   83   2      
+   84   2                      //                      �ٶ���ʾ
+   85   2                      ips114_showint16(50, 0, left_real_speed);
+   86   2                      ips114_showint16(50, 1, right_real_speed);
+   87   2                      ips114_showint16(50, 2, real_speed);
+   88   2                      ips114_showint16(50, 4, aim_speed);
+   89   2      
+   90   2                      //          �����ʾ
+   91   2                      ips114_showint16(0, 0, Left_Adc); // road_type.straight
+   92   2                      ips114_showint16(0, 1, Left_Shu_Adc);
+   93   2                      ips114_showint16(0, 2, Right_Shu_Adc);
+   94   2                      ips114_showint16(0, 3, Right_Adc);
+   95   2                      ips114_showint16(0, 4, testflag);
+   96   2                      //                      �����ʾ������ع�ͣ�
+   97   2                      ips114_showuint16(100, 5, dl1a_distance_mm);
+   98   2                      ips114_showuint16(100, 1, flag_obstacle);
+   99   2      
+  100   2                      //                      ����ƫ����ʾ
+  101   2                      ips114_showfloat(0, 5, Current_Dir, 2, 1); // ��ʾ������   ������ʾ2λ   С
+             -����ʾ1λ
+  102   2      
+  103   2                      //                      ��Դ��ѹ��ʾ
+  104   2                      ips114_showstr(140, 0, "Value:");
+  105   2                      ips114_showfloat(190, 0, adc_valueM, 2, 2);
+  106   2      
+  107   2                      //                      ���ڵ���
+  108   2                      uart_init(UART_2, UART2_RX_P10, UART2_TX_P11, 115200, TIM_2); // ��ʼ������
+  109   2                      printf("%d,%d,%d\n", aim_speed, left_real_speed, right_real_speed);
+  110   2              }
+  111   1      }
+
+C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 3   
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       533     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        66     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,768 @@
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE debug
+OBJECT MODULE PLACED IN .\Out_File\debug.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\debug.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\L
+                    -ibraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\sr
+                    -c) DEBUG PRINT(.\Out_File\debug.lst) OBJECT(.\Out_File\debug.obj) 
+
+stmt  level    source
+
+    1          #include "debug.h"
+    2          #include "math.h"
+    3          /*************************Ê¹ÓÃËµÃ÷****************************************
+    4          ±¾Ð­ÒéÓë¡°Visual Scope¡±Èí¼þÐ­Òé¼æÈÝ£¬ÓÃ¹ýµÄ¿ÉÒÔÖ±½ÓÓÃÔ­À´µÄÏÂÎ»»úÐ­Òé¼´¿É
+    5          Ê×´ÎÊ¹ÓÃÊ±£º
+    6          1.½«¡°outputdata.c¡±ºÍ¡°outputdata.h¡±Ìí¼Óµ½ÄãµÄ¹¤³ÌÖÐ
+    7          2.ÔÚ¡°outputdata.c¡±ÖÐ°üº¬ÄãÔ­³ÌÐòµÄ´®¿Ú·¢ËÍº¯ÊýÍ·ÎÄ¼þ
+    8          3.½«uart_putchar(databuf[i]);Óï¾äÌæ»»ÎªÄãµÄ´®¿Ú×Ö½Ú·¢ËÍº¯Êý£¬Èçsend_char(databuf[i]);
+    9          4.ÔÚÄãµÄ³ÌÐòÐèÒª·¢ËÍ²¨ÐÎÊý¾ÝµÄ.cÎÄ¼þÖÐÌí¼Ó°üº¬£º#include "outputdata.h"£¬²¢ÔÚ±¾ÎÄ¼þÖÐµ÷ÓÃº¯ÊýOutPut_Data(
+             -x,y,z,w);
+   10            ÆäÖÐÐÎ²Îx£¬y£¬z£¬w¾ÍÊÇ´«ÈëËÄ¸öshort int 16Î»Êý¾Ý£¬·Ö±ð¶ÔÓ¦Í¨µÀ1,2,3,4
+   11          ************************************************************************/
+   12          //´Ë´¦Ìí¼ÓÄãµÄ´®¿ÚÍ·ÎÄ¼þ°üº¬£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
+   13          #include "zf_uart.h"
+   14          //****************************ÒÆÖ²**************************//
+   15          
+   16          void Data_Send(UARTN_enum uratn,signed short int *pst)
+   17          {
+   18   1                      unsigned char _cnt=0; unsigned char sum = 0;
+   19   1          unsigned char data_to_send[23] = {0};         //·¢ËÍ»º´æ
+   20   1          unsigned char i;
+   21   1          data_to_send[_cnt++]=0xAA;
+   22   1          data_to_send[_cnt++]=0xAA;
+   23   1          data_to_send[_cnt++]=0x02;
+   24   1          data_to_send[_cnt++]=0;
+   25   1          data_to_send[_cnt++]=(unsigned char)(pst[0]>>8);  //¸ß8Î»
+   26   1          data_to_send[_cnt++]=(unsigned char)pst[0];  //µÍ8Î»
+   27   1          data_to_send[_cnt++]=(unsigned char)(pst[1]>>8);
+   28   1          data_to_send[_cnt++]=(unsigned char)pst[1];
+   29   1          data_to_send[_cnt++]=(unsigned char)(pst[2]>>8);
+   30   1          data_to_send[_cnt++]=(unsigned char)pst[2];
+   31   1          data_to_send[_cnt++]=(unsigned char)(pst[3]>>8);
+   32   1          data_to_send[_cnt++]=(unsigned char)pst[3];
+   33   1          data_to_send[_cnt++]=(unsigned char)(pst[4]>>8);
+   34   1          data_to_send[_cnt++]=(unsigned char)pst[4];
+   35   1          data_to_send[_cnt++]=(unsigned char)(pst[5]>>8);
+   36   1          data_to_send[_cnt++]=(unsigned char)pst[5];
+   37   1          data_to_send[_cnt++]=(unsigned char)(pst[6]>>8);
+   38   1          data_to_send[_cnt++]=(unsigned char)pst[6];
+   39   1          data_to_send[_cnt++]=(unsigned char)(pst[7]>>8);
+   40   1          data_to_send[_cnt++]=(unsigned char)pst[7];
+   41   1          data_to_send[_cnt++]=(unsigned char)(pst[8]>>8);
+   42   1          data_to_send[_cnt++]=(unsigned char)pst[8];
+   43   1      
+   44   1      
+   45   1          data_to_send[3] = _cnt-4;
+   46   1      
+   47   1          sum = 0;
+   48   1          for(i=0;i<_cnt;i++)
+   49   1              sum += data_to_send[i];
+   50   1      
+   51   1          data_to_send[_cnt++] = sum;
+   52   1      
+   53   1              for(i=0;i<_cnt;i++)
+   54   1          uart_putchar(uratn,data_to_send[i]);
+   55   1      }
+   56          
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 2   
+
+   57          //===================================================ÉÏÎ»»úÏà¹ØµÄ========================================
+             -==================
+   58          //=======================================================================================================
+             -===============
+   59          /****************Êý¾Ý´«Êä******************
+   60          º¯Êý£ºvoid datasend()
+   61          ²ÎÊý£º  ÎÞ
+   62          ËµÃ÷£º ¿ÉÒÔÍ¬Ê±´«Êä6¸öÊý  icm_gyro_x   icm_acc_x ICM_Real.gyro.y  ICM_Real.acc.z   
+   63          ³£¿´µÄ±äÁ¿£ºicm_acc_x  icm_gyro_y  Angle  adc_date[0] Left_Adc
+   64          
+   65          ·µ»ØÖµ£ºÎÞ
+   66          ÈÕÆÚ£º
+   67          ×÷Õß£º  */
+   68          void datasend()
+   69          {  
+   70   1         short send_data[6];                      
+   71   1      
+   72   1         send_data[0]= aim_speed;//left_speed; ////////ICM_Start.acc.x 
+   73   1         send_data[1]= left_real_speed;//right_speed; //////////////////    MpuStart.gyro.x   Angle  
+   74   1         send_data[2]= aim_speed; //////////
+   75   1         send_data[3]= right_real_speed;//imu660ra_gyro_z; //
+   76   1         send_data[4]= 0;//GORY_Z;
+   77   1         send_data[5]= 0;
+   78   1               //Data_Send(UART_4,send_data);
+   79   1         Data_Send(UART_User,send_data);
+   80   1      }
+   81          
+   82          float StrToDouble(const char *s)
+   83          {
+   84   1              int i = 0;
+   85   1              int k = 0;
+   86   1              float j;
+   87   1              int flag =1;
+   88   1              float result = 0.0;
+   89   1              if (s[i] == '+')
+   90   1              {
+   91   2                      i++;
+   92   2              }
+   93   1              if (s[i] == '-')
+   94   1              {
+   95   2                      i++;
+   96   2                      flag = -1;
+   97   2              }
+   98   1              while (s[i] != '\0' && s[i] != '.')
+   99   1              {
+  100   2                      j = (s[i] - '0')*1.0;
+  101   2                      result = result * 10 + j;
+  102   2                      i++;
+  103   2              }
+  104   1              if (s[i] == '.')
+  105   1              {
+  106   2                      i++;
+  107   2                      while (s[i] != '\0'&&s[i] != ' ')
+  108   2                      {
+  109   3                              k++;
+  110   3                              j = s[i] - '0';
+  111   3                              result = result + (1.0 * j) / pow(10.0, k);   
+  112   3                              i++;
+  113   3                      }
+  114   2              }
+  115   1              result = flag * result;
+  116   1              return result;
+  117   1      }
+  118          
+  119          void extern_iap_write_float(double dat,uint8 num,uint8 pointnum,uint16 addr)
+  120          {
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 3   
+
+  121   1        uint8   length;
+  122   1              int8    buff[34];
+  123   1              int8    start,end,point;
+  124   1      
+  125   1              if(0>dat)   length = zf_sprintf( &buff[0],"%f",dat);//¸ºÊý
+  126   1              else
+  127   1              {
+  128   2                      length = zf_sprintf( &buff[1],"%f",dat);
+  129   2                      length++;
+  130   2              }
+  131   1              point = length - 7;         //¼ÆËãÐ¡ÊýµãÎ»ÖÃ
+  132   1              start = point - num - 1;    //¼ÆËãÆðÊ¼Î»
+  133   1              end = point + pointnum + 1; //¼ÆËã½áÊøÎ»
+  134   1              while(0>start)//ÕûÊýÎ»²»¹»  Ä©Î²Ó¦¸ÃÌî³ä¿Õ¸ñ
+  135   1              {
+  136   2                      buff[end] = ' ';
+  137   2                      end++;
+  138   2                      start++;
+  139   2              }
+  140   1          
+  141   1              if(0>dat)   buff[start] = '-';
+  142   1        else        buff[start] = '+';
+  143   1          
+  144   1              buff[end] = '\0';
+  145   1      
+  146   1              extern_iap_write_bytes(addr,(uint8 *)buff,num+pointnum+3);
+  147   1      }
+  148          
+  149          float iap_read_float(uint8 len, uint16 addr)
+  150          {
+  151   1              uint8 buf[34];
+  152   1              iap_read_bytes(addr, buf, len);
+  153   1              
+  154   1              return StrToDouble(buf);
+  155   1      }
+  156          
+  157          void EEROM_CanshuInit() //PID³õÊ¼»¯
+  158          {
+  159   1      //ÏòeepromÐ´ÈëÊý¾Ý£¬ÔÚÐ´ÈëµÄÊ±ºò¼ÇµÃ°Ñ²Á³ýeepromÇø¹´ÉÏ
+  160   1      //      extern_iap_write_float(30,3,1,0x00);//(30,3,1,0x00)ÖÐµÄ30´ú±íÒªÐ´ÈëµÄÊý£¬3´ú±íÕûÊýÎ»£¬1´ú±íÐ¡ÊýÎ»¡£Õâ¾
+             -ä»°µÄÒâË¼ÊÇ°Ñ30×ª»»Îª"+030.0"´æÈë0x00-0x06µØÖ·ÖÐ£¬ÒòÎª"+030.0"Õ¼Áù¸öµØÖ·£¬¼ÓÉÏ×Ö·û´®µÄ½áÊø×Ö·û'/0'£¬ËùÒÔÕ¼ÁËÆß¸öµØÖ·£¬Ëù
+             -ÒÔÊÇ0x00µ½0x06,ÏÂ¸öÊý¾ÝÒª´æÒÔµ½0x07ÎªÆðÊ¼µØÖ·¡£
+  161   1      //      extern_iap_write_float(15,3,1,0x07);
+  162   1      //      extern_iap_write_float(11000,5,1,0x0e);
+  163   1      //      extern_iap_write_float(315,4,1,0x17);
+  164   1      //      extern_iap_write_float(2.0,1,1,0x1f);
+  165   1      //      extern_iap_write_float(1.5,1,1,0x24);
+  166   1      //      extern_iap_write_float(680,3,1,0x29);
+  167   1              
+  168   1      //´ÓeepromÖÐ¶ÁÈ¡Êý¾Ý£¬¼ÇµÃ²»Òª°Ñ²Á³ýeepromÇø¹´ÉÏ
+  169   1                //SpeedPID.Kp=iap_read_float(7,0x00);
+  170   1                //iap_read_bytes(0x00,SpeedPID.Kp,2);
+  171   1                //TurnPID.Ki=iap_read_float(7,0x0e);
+  172   1      //      TurnPID.Kp= iap_read_float(7,0x00);//Õâ¾ä»°µÄÒâË¼ÊÇ´Ó0x00µØÖ·¿ªÊ¼È¡³ö7¸öµØÖ·µÄÊý¾Ý£¬Ò²¾ÍÊÇ0x00µ½0x06¡£
+  173   1      //  TurnPID.Ki = iap_read_float(7,0x07);
+  174   1      //  TurnPID.Kd = iap_read_float(9,0x0e);
+  175   1                //iap_read_bytes(0x00,(uint16 *)"350",2); //aim_speed=
+  176   1      //  MotorPID.I = iap_read_float(8,0x17);
+  177   1      //      Stright=iap_read_float(5,0x1f);
+  178   1      //      Curve=iap_read_float(5,0x24);
+  179   1      //      pout0=iap_read_float(7,0x29);
+  180   1      }
+  181          //====================================================ÆÁÄ»Ïà¹ØµÄ=(ÒÑÉ¾³ý)================================
+             -=============================
+  182          //=======================================================================================================
+             -=====================
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 4   
+
+  183          //sprintf(temp," date20=%d",date);
+  184          //TFTSPI_P8X8Str(0,19,temp,BLACK,WHITE);break;
+  185          
+  186          //==========================================================²¦Âë¿ª¹Ø¼°°´¼üÏà¹Ø===========================
+             -==============================
+  187          //=======================================================================================================
+             -=============================
+  188          
+  189          //²¦Âë¿ª¹ØÒý½Åºê¶¨Òå
+  190          #define Switch_Pin_1       P75
+  191          #define Switch_Pin_2       P76
+  192          #define Switch_Pin_3       P11
+  193          #define Switch_Pin_4       P61
+  194          #define Switch_Pin_5       P14
+  195          #define Switch_Pin_6       P15
+  196          //¶¨Òå°´¼üÒý½Å
+  197          #define KEY1    P70      
+  198          #define KEY2    P71      
+  199          #define KEY3    P72        
+  200          #define KEY4    P73       
+  201          
+  202          //***************º¯Êýºê¶¨Òå****(ÏÂÃæÕâÐ©º¯ÊýÇëÐÞ¸Äºê¶¨ÒåÎª¶ÔÓ¦µÄGPIO¿âº¯Êý²Ù×÷)***********
+  203          #define KEY_INT(key_x)           gpio_pull_set(key_x,PULLUP)//ÅäÖÃÎªÉÏÀ­Êä³ö   
+  204          #define SWITCH_INT(switch_x)     gpio_pull_set(switch_x,PULLUP)//ÅäÖÃÎªÉÏÀ­µç×è
+  205          #define READ_GPIO(Pin_X)         Pin_X
+  206          #define TiaoCan_DelayMs(M_S)     delay_ms(M_S)   //ÑÓÊ±
+  207          
+  208          unsigned char TiaoCan=0;////////////////////////µ÷²Î±êÖ¾Î»
+  209          unsigned char TFT_SHOW=0;///////////////////////ÆÁÄ»¿ª¹Ø
+  210          unsigned char Switch1=0,Switch2=0,Switch3=0,Switch4=0,Switch5=0,Switch6=0;//²¦Âë
+  211          char parameter=0;//²ÎÊýÑ¡Ôñ
+  212          
+  213          //¿ª¹Ø×´Ì¬±äÁ¿
+  214          uint8 key1_status = 1,key2_status = 1,key3_status = 1, key4_status = 1,key5_status = 1;
+  215          //ÉÏÒ»´Î¿ª¹Ø×´Ì¬±äÁ¿
+  216          uint8 key1_last_status, key2_last_status, key3_last_status, key4_last_status,key5_last_status;
+  217          //¿ª¹Ø±êÖ¾Î»
+  218          uint8 key1_flag=0,key2_flag=0,key3_flag=0, key4_flag=0,key5_flag=0;
+  219          /*****************²¦Âë¿ª¹Ø¼°°´¼ü³õÊ¼»¯*****************
+  220          º¯Êý£ºvoid Switch_Key_init()
+  221          ¹¦ÄÜ£º³õÊ¼»¯IO
+  222          ²ÎÊý£º  ÎÞ
+  223          ËµÃ÷£º ³õÊ¼»¯IO¿Ú   gpio_init(D1, GPI, GPIO_HIGH, GPI_PULL_UP); GPO_PUSH_PULL
+  224          ·µ»ØÖµ£ºÎÞ*/
+  225          void Switch_Key_init()
+  226          {
+  227   1      
+  228   1        //²¦Âë¿ª¹Ø³õÊ¼»¯  £¨ÎÞÐèÐÞ¸Ä£¬ÇëÎðÐÞ¸Ä£©
+  229   1              SWITCH_INT(Switch_Pin_1) ;
+  230   1              SWITCH_INT(Switch_Pin_2) ;
+  231   1              SWITCH_INT(Switch_Pin_3) ;
+  232   1              SWITCH_INT(Switch_Pin_4) ;
+  233   1              SWITCH_INT(Switch_Pin_5) ;
+  234   1              SWITCH_INT(Switch_Pin_6) ;
+  235   1          
+  236   1        //°´¼ü³õÊ¼»¯ £¨ÎÞÐèÐÞ¸Ä£¬ÇëÎðÐÞ¸Ä£©
+  237   1        KEY_INT(KEY1);
+  238   1              KEY_INT(KEY2);
+  239   1              KEY_INT(KEY3);
+  240   1              KEY_INT(KEY4);
+  241   1      }
+  242          
+  243          /*****************²¦Âë¿ª¹Ø²ßÂÔÑ¡Ôñ*****************
+  244          º¯Êý£ºvoid Strategy_Slect()
+  245          ¹¦ÄÜ£ºÍ¨¹ý²¦Âë¿ª¹Øµ÷Õû²ßÂÔ
+  246          ²ÎÊý£º  ÎÞ
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 5   
+
+  247          ËµÃ÷£º  6Î»²¦Âë¿ª¹Ø£¬Èç¹ûÓÐÔö¼Ó»òÕß¼õÉÙ¿É¶ÔÕÕÐÞ¸Ä,Èç¹û²»×ã6¸öÒ²²»ÒªÉ¾³ý¶àÓàµÄ£¬¶àÓàµÄÄãËæ±ãÒý½Å¸Ä¸öÃ»ÓÃµÄ
+             -¼´¿É
+  248                  Ê¹ÓÃÄã¶¨ÒåµÄ¾ÍºÃÁË£¬ÆäËûÃ»ÓÐÓÃµ½µÄÎÞÐè¹ØÐÄ
+  249          ·µ»ØÖµ£ºÎÞ*/
+  250          void Strategy_Slect()
+  251          {
+  252   1            //¶ÁÈ¡²¦Âë¿ª¹Ø×´Ì¬
+  253   1            if(!READ_GPIO(Switch_Pin_1))//ÓÃ
+  254   1            {
+  255   2             Switch1=1;
+  256   2                               Annulus_selection=1;
+  257   2      //                       //ÏÔÊ¾µç¸ÐÔ­Ê¼Öµ
+  258   2      //                       ips114_showint16(0,0,adc_value[0]);
+  259   2      //           ips114_showint16(0,1,adc_value[1]);
+  260   2      //           ips114_showint16(0,2,adc_value[2]);
+  261   2      //           ips114_showint16(0,3,adc_value[3]);
+  262   2      //                              
+  263   2      //                       //ÏÔÊ¾µç¸Ð¹éÒ»»¯Öµ
+  264   2      //                       ips114_showuint8(80,0,Left_Adc);
+  265   2      //           ips114_showuint8(80,1,Left_Shu_Adc);
+  266   2      //           ips114_showuint8(80,2,Right_Shu_Adc);
+  267   2      //           ips114_showuint8(80,3,Right_Adc);
+  268   2      //                              
+  269   2      //                       ips114_showfloat(0,5,Current_Dir,2,1);//ÏÔÊ¾¸¡µãÊý   ÕûÊýÏÔÊ¾2Î»   Ð¡ÊýÏÔÊ¾1Î»
+  270   2      //                              
+  271   2      //                       ips114_showint16(130,0,left_speed);
+  272   2      //         ips114_showint16(130,1,right_speed);
+  273   2            }
+  274   1            if(!READ_GPIO (Switch_Pin_2))//ÓÃ
+  275   1            {
+  276   2             Switch2=1;
+  277   2                               Library_selection=2;   //³ö¿âÑ¡Ôñ£¬Library_selectionÄ¬ÈÏÎª1£¬×ó³ö¿â£¬²¦ÏÂºó±ä³É2£¬ÓÒ³ö¿â
+  278   2            }
+  279   1            if(!READ_GPIO (Switch_Pin_3))
+  280   1            {
+  281   2             Switch3=1;
+  282   2                               
+  283   2            }
+  284   1            if(!READ_GPIO (Switch_Pin_4))
+  285   1            {
+  286   2             Switch4=1;
+  287   2      
+  288   2            }
+  289   1            if(!READ_GPIO (Switch_Pin_5))
+  290   1            {
+  291   2             Switch5=1;
+  292   2      
+  293   2            }
+  294   1            if(!READ_GPIO (Switch_Pin_6))
+  295   1            {
+  296   2             Switch6=1;
+  297   2       
+  298   2            }
+  299   1              
+  300   1      }
+  301          
+  302          /*****************°´¼üÉ¨Ãè¶ÁÈ¡*****************
+  303          º¯Êý£ºvoid  Key_Scan_Deal ()
+  304          ¹¦ÄÜ£º¶ÁÈ¡°´¼ü²¢Ö´ÐÐ¶ÔÓ¦²Ù×÷
+  305          ²ÎÊý£º  ÎÞ
+  306          ËµÃ÷£º ²Î¿¼Öð·ÉÀý³Ì £¬5Î»°´¼ü£¬Èç¹ûÓÐÔö¼Ó»òÕß¼õÉÙ¿É¶ÔÕÕÐÞ¸Ä
+  307                // 1ºÅÎª×óÒÆ¼ü£¬2ºÅÎªÉÏ¼ü£¬3ºÅÎªÓÒÒÆ¼ü£¬4ºÅÎªÖÐ¼üÅÌ£¬5ºÅÎªÏÂ¼ü
+  308               //±¾´Î³ÌÐòÃ»ÓÐÊ¹ÓÃµ÷²Î£¬stcµ¥Æ¬»úÏÂÔØ³ÌÐòÒ²¿ì£¬¸ÄÁËÉÕ¾Í¿ÉÒÔ£¬Èç¹ûÒª¼ÓµÄ»°×Ô¼º¸ù¾ÝÏÂÃæµÄ×Ô¼º¼Ó¾Í¿ÉÒÔ
+  309          ·µ»ØÖµ£ºÎÞ     */
+  310          uint8 gogo=0;
+  311          void  Key_Scan_Deal ()
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 6   
+
+  312          {
+  313   1              while(gogo<=2)
+  314   1              {
+  315   2          //Ê¹ÓÃ´Ë·½·¨ÓÅµãÔÚÓÚ£¬²»ÐèÒªÊ¹ÓÃwhile(1) µÈ´ý£¬±ÜÃâ´¦ÀíÆ÷×ÊÔ´ÀË·Ñ
+  316   2          //±£´æ°´¼ü×´Ì¬
+  317   2          key1_last_status = key1_status;
+  318   2          key2_last_status = key2_status;
+  319   2          key3_last_status = key3_status;
+  320   2          key4_last_status = key4_status;
+  321   2          //¶ÁÈ¡µ±Ç°°´¼ü×´Ì¬
+  322   2          key1_status = READ_GPIO(KEY1);
+  323   2          key2_status = READ_GPIO(KEY2);
+  324   2          key3_status = READ_GPIO(KEY3);
+  325   2          key4_status = READ_GPIO(KEY4);
+  326   2          //¼ì²âµ½°´¼ü°´ÏÂÖ®ºó  ²¢·Å¿ªÖÃÎ»±êÖ¾Î»
+  327   2          if(key1_status && !key1_last_status)    key1_flag = 1;
+  328   2          if(key2_status && !key2_last_status)    key2_flag = 1;
+  329   2          if(key3_status && !key3_last_status)    key3_flag = 1;
+  330   2          if(key4_status && !key4_last_status)    key4_flag = 1;
+  331   2          if(key5_status && !key5_last_status)    key5_flag = 1;
+  332   2          //±êÖ¾Î»ÖÃÎ»Ö®ºó£¬¿ÉÒÔÊ¹ÓÃ±êÖ¾Î»Ö´ÐÐ×Ô¼ºÏëÒª×öµÄÊÂ¼þ
+  333   2       
+  334   2          if(key1_flag) //S1¼ü£¬²ÎÊý¼Ó
+  335   2          {
+  336   3            key1_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
+  337   3            /*ÒÔÏÂÎªÓÃ»§ÈÎÎñ  */
+  338   3            switch(parameter)
+  339   3            {
+  340   4            //-----------------------µ÷²ÎÇëÐÞ¸ÄÏÂÃæ--£¨×¢ÒâÐÞ¸Ä¶ÔÓ¦µÄÏÔÊ¾£©------------------------------------
+             -----------------------------
+  341   4            //µÚÒ»Ò³ÏÔÊ¾µÄ¶«Î÷
+  342   4              case 0:TurnPID.Kp+=1; break;//extern_iap_write_float(TurnPID.Kp,3,2,0x00);      break;
+  343   4              case 1:TurnPID.Ki+=0.1;  break;//extern_iap_write_float(TurnPID.Ki,3,2,0x07);                    break;
+  344   4              case 2:TurnPID.Kd+=0.1;  break;//extern_iap_write_float(TurnPID.Kd,3,2,0x0e);                    break;
+  345   4              case 3:;TurnPID.K_gory+=1;  break;
+  346   4              case 4:;  break;
+  347   4              case 5:;  break;
+  348   4            /// case 6:  ; break;//Õâ¸ö²»ÄÜ¼ÓÈÎºÎ²Ù×÷ÔÚÕâÀïÁË£¬·­Ò³Ê¹ÓÃÀ² extern_iap_write_bytes(0x00,&aim_spee
+             -d,2);
+  349   4            //µÚ¶þÒ³ÏÔÊ¾µÄ¶«Î÷
+  350   4              case 7:SpeedPID.Kp+=1;   break;
+  351   4                                      case 8:SpeedPID.Ki+=0.1; break;
+  352   4                                      case 9:SpeedPID.Kd+=0.1; break;
+  353   4                                      case 10:aim_speed+=10;   break;
+  354   4              case 11: break;
+  355   4              case 12: break;
+  356   4             //--------------------µ÷²ÎÇëÐÞ¸ÄÉÏÃæ--------------------------------------------------------------
+             -----
+  357   4             }
+  358   3           }
+  359   2           if(key2_flag)//S2¼ü£¬²ÎÊý¼õ
+  360   2           {
+  361   3             key2_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
+  362   3            /*  ÒÔÏÂÎªÓÃ»§ÈÎÎñ  */
+  363   3             switch(parameter)
+  364   3             {
+  365   4             //----------------------µ÷²ÎÇëÐÞ¸ÄÏÂÃæ--£¨×¢ÒâÐÞ¸Ä¶ÔÓ¦µÄÏÔÊ¾£©------------------------------------
+             ---------------------------
+  366   4             //µÚÒ»Ò³ÏÔÊ¾µÄ¶«Î÷
+  367   4              case 0:TurnPID.Kp-=20;       break;
+  368   4              case 1:TurnPID.Ki-=5;        break;
+  369   4              case 2:TurnPID.Kd-=5;        break;
+  370   4                                      case 3:;  TurnPID.K_gory-=5;break;
+  371   4              case 4:;  break;
+  372   4              case 5:;  break;
+  373   4              //case 6:ips114_showstr(0,0,"FANYE_ing");  ; break;//Õâ¸ö²»ÄÜ¼ÓÈÎºÎ²Ù×÷ÔÚÕâÀïÁË£¬·­Ò³Ê¹ÓÃÀ²
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 7   
+
+  374   4             //µÚ¶þÒ³ÏÔÊ¾µÄ¶«Î÷ 
+  375   4                                      case 7:SpeedPID.Kp-=1;   break;
+  376   4                                      case 8:SpeedPID.Ki-=0.1; break;
+  377   4                                      case 9:SpeedPID.Kd-=0.1; break;
+  378   4                                      case 10:aim_speed-=50;   break;
+  379   4                                      case 11: break;
+  380   4                                      case 12: break;
+  381   4             //--------------------µ÷²ÎÇëÐÞ¸ÄÉÏÃæ--------------------------------------------------------------
+             -----
+  382   4             } 
+  383   3            }
+  384   2            if(key3_flag)//S3¼ü£¬Ñ¡Ôñµ÷²ÎµÄ²ÎÊý
+  385   2            {
+  386   3              key3_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»               
+  387   3              parameter++;
+  388   3                                      ips114_clear(WHITE);
+  389   3                                      if(parameter>=11) parameter=0;
+  390   3            }
+  391   2            if(key4_flag)//S4¼ü£¬È·ÈÏ°´¼ü£¬°´ÈýÏÂÍË³öµ÷²Î
+  392   2            {
+  393   3              key4_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
+  394   3              gogo++;
+  395   3            }
+  396   2          //*******************************ÆÁÄ»ÏÔÊ¾µÚÒ»Ò³***********************
+  397   2      
+  398   2          if(parameter<6)//ÏÔÊ¾²ÎÊý0µ½5£¬Êµ¼ÊÏÔÊ¾1µ½6
+  399   2          {
+  400   3                              ips114_showstr(0,parameter+1,"->");
+  401   3                              ips114_showstr(20,0,"parameter->");    ips114_showint8(150,0,parameter);//xÎªint8ÀàÐÍ
+  402   3            //ÏÔÊ¾µ÷²Î¹ý³Ì   ÐÐºÅ×îºóÒ»ÐÐÎª9   Ö»ÄÜÏÔÊ¾ÕâÃ´¶à£¬¸ü¶àÖØÐÂ·­Ò³ÏÔÊ¾  Ò»Ò³µ÷6¸ö²ÎÊý
+  403   3            ips114_showstr(20,1,"TurnPID.Kp=");    ips114_showfloat(150,1,TurnPID.Kp,3,2);//ÏÔÊ¾¸¡µãÊý  
+  404   3            ips114_showstr(20,2,"TurnPID.Ki=");    ips114_showfloat(150,2,TurnPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý   
+  405   3            ips114_showstr(20,3,"TurnPID.Kd=");    ips114_showfloat(150,3,TurnPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý   
+  406   3                        ips114_showstr(20,4,"TurnPID.K_gory=");      ips114_showint16(150,4,TurnPID.K_gory);
+  407   3                              
+  408   3          }
+  409   2          //*******************************ÆÁÄ»ÏÔÊ¾µÚ¶þÒ³**************************************************
+  410   2          if(parameter>6&&parameter<11)//ÕâÀïÐÐºÅ´Ó4µ½9   Ò»Ò³µ÷6¸ö²ÎÊý  //ÏÔÊ¾²ÎÊý7µ½5£¬Êµ¼ÊÏÔÊ¾7µ½12
+  411   2          {
+  412   3            ips114_showstr(0,parameter-6,"->");
+  413   3                              ips114_showstr(20,0,"parameter->");    ips114_showint8(150,0,parameter);//xÎªint8ÀàÐÍ
+  414   3            //ÏÔÊ¾µ÷²Î¹ý³Ì   ÐÐºÅ×îºóÒ»ÐÐÎª9   Ö»ÄÜÏÔÊ¾ÕâÃ´¶à£¬¸ü¶àÖØÐÂ·­Ò³ÏÔÊ¾  Ò»Ò³µ÷6¸ö²ÎÊý
+  415   3            ips114_showstr(20,1,"SpeedPID.Kp=");    ips114_showfloat(150,1,SpeedPID.Kp,2,2);//ÏÔÊ¾¸¡µãÊý  
+  416   3            ips114_showstr(20,2,"SpeedPID.Ki=");    ips114_showfloat(150,2,SpeedPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý   
+  417   3            ips114_showstr(20,3,"SpeedPID.Kd=");    ips114_showfloat(150,3,SpeedPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý   
+  418   3                        ips114_showstr(20,4,"aim_speed=");      ips114_showint16(150,4,aim_speed); 
+  419   3      //                ips114_showstr(20,5,"Turn_NeiPID.Ki=");ips114_showfloat(150,5,Turn_NeiPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý 
+  420   3      //                ips114_showstr(20,6,"Turn_NeiPID.Kd=");ips114_showfloat(150,6,Turn_NeiPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý    
+  421   3          }
+  422   2          //*******************************ÆÁÄ»ÏÔÊ¾µÚÈýÒ³**************************************************
+  423   2      //    if(parameter>13&&parameter<20)
+  424   2      //    {
+  425   2      //                  
+  426   2      //    }
+  427   2          //###########»¹ÐèÒª¸ü¶àÒ³·ÂÕÕ×ÅÐ´¾Í¿ÉÒÔ¿©######################ÕâÀï¾Í²»Ð´ÁË ½áÊø
+  428   2          if(parameter==6||parameter==13||parameter==20)  //·­Ò³×¼±¸
+  429   2          {
+  430   3                               ips114_showstr(0,0,"Ready to turn the page...");
+  431   3                               ips114_showstr(0,1,"Press the button to display ");
+  432   3                               ips114_showstr(0,2,"the second page...");
+  433   3            // ips114_clear(WHITE);              
+  434   3          }//ÇåÆÁ
+  435   2                      if(gogo>2)
+  436   2          {
+  437   3                        ips114_clear(WHITE); 
+  438   3          }
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 8   
+
+  439   2              }
+  440   1      }
+  441          //===============================================µ÷ÊÔ»·µºÆÁÄ»ÏÔÊ¾========================================
+             -=====
+  442          //=======================================================================================================
+             -=====
+  443          /************************************************µ÷ÊÔ»·µºÆÁÄ»ÏÔÊ¾****************************************
+             -*****
+  444          º¯Êý£ºvoid Roundabout_debugshow(void)
+  445          ¹¦ÄÜ£ºµ÷ÊÔ»·µºÊ±ÏÔÊ¾ÏàÓ¦µÄ±êÖ¾Î»£¬·½±ãµ÷ÊÔ
+  446          ²ÎÊý£º  ÎÞ
+  447          ËµÃ÷£º
+  448          ·µ»ØÖµ£ºÎÞ 
+  449          *********************************************************************************************************
+             -*****/
+  450          void Roundabout_debugshow(void)
+  451          {
+  452   1              ips114_showuint8(0,0,Left_Adc);      //×óºáµç¸ÐÖµ
+  453   1        ips114_showuint8(0,1,Left_Shu_Adc);  //×óÊúµç¸ÐÖµ
+  454   1        ips114_showuint8(0,2,Right_Shu_Adc); //ÓÒÊúµç¸ÐÖµ
+  455   1        ips114_showuint8(0,3,Right_Adc);     //ÓÒºáµç¸ÐÖµ
+  456   1              ips114_showfloat(0,5,Current_Dir,2,1);//ÏÔÊ¾¸¡µãÊý   ÕûÊýÏÔÊ¾2Î»   Ð¡ÊýÏÔÊ¾1Î»  
+  457   1              
+  458   1              ips114_showuint8(50,0,road_type.annulus);         //»·µº±êÖ¾Î»
+  459   1              ips114_showint16(50,1,annulus_s);                 //¹ý»·µºÈý½ÇÇø±àÂëÆ÷»ý·Ö¾àÀë
+  460   1        ips114_showuint8(50,2,road_type.in_annulus_left); //×ó»·µº½ø»·´ò½Ç±êÖ¾Î»
+  461   1              ips114_showint16(50,3,annulus_z);                 //½ø»·´ò½ÇÍÓÂÝÒÇ»ý·Ö½Ç¶ÈÖµ
+  462   1              ips114_showint16(50,4,annulus_s2);                 
+  463   1              ips114_showuint8(50,5,road_type.on_annulus_left); //ÔÚ×ó»·µº±êÖ¾Î»£¨ÈÏÎªÐ¡³µÒÑ¾­Èë»·£©
+  464   1              ips114_showuint8(50,6,road_type.out_annulus);     //³ö»·µº±êÖ¾Î»
+  465   1              ips114_showint16(50,7,annulus_t);                 //³ö»·µº¶¨Ê±Çå0Ê±¼ä
+  466   1              
+  467   1              
+  468   1              ips114_showuint8(100,0,road_type.annulus);          //»·µº±êÖ¾Î»
+  469   1              ips114_showint16(100,1,annulus_s);                  //¹ý»·µºÈý½ÇÇø±àÂëÆ÷»ý·Ö¾àÀë
+  470   1              ips114_showuint8(100,2,road_type.in_annulus_right); //×ó»·µº½ø»·´ò½Ç±êÖ¾Î»
+  471   1              ips114_showint16(100,3,annulus_z);                  //½ø»·´ò½ÇÍÓÂÝÒÇ»ý·Ö½Ç¶ÈÖµ
+  472   1              ips114_showuint8(100,4,road_type.on_annulus_right); //ÔÚÓÒ»·µº±êÖ¾Î»£¨ÈÏÎªÐ¡³µÒÑ¾­Èë»·£©
+  473   1              ips114_showuint8(100,5,road_type.out_annulus);      //³ö»·µº±êÖ¾Î»
+  474   1              ips114_showint16(100,6,annulus_t);                  //³ö»·µº¶¨Ê±Çå0Ê±¼ä
+  475   1      }
+  476          
+  477          //===============================================µ÷ÊÔËÙ¶È»·Ä»ÏÔÊ¾========================================
+             -=====
+  478          //=======================================================================================================
+             -=====
+  479          /************************************************µ÷ÊÔËÙ¶È»·Ä»ÏÔÊ¾****************************************
+             -*****
+  480          º¯Êý£ºSpeed_debugshow(void)
+  481          ¹¦ÄÜ£ºµ÷ÊÔËÙ¶È»·Ê±ÏÔÊ¾ÏàÓ¦×óÓÒ±àÂëÆ÷µÄÖµ£¬·½±ãµ÷ÊÔ£¨ËÙ¶È»·ÍÆ¼öÓÃÉÏÎ»»ú¿´²¨ÐÎµ÷ÊÔ£©
+  482          ²ÎÊý£º  ÎÞ
+  483          ËµÃ÷£º
+  484          ·µ»ØÖµ£ºÎÞ 
+  485          *********************************************************************************************************
+             -*****/
+  486          void Speed_debugshow(void)
+  487          {
+  488   1              ips114_showint16(0,0,left_real_speed);  //×ó±àÂëÆ÷µÄÖµ
+  489   1        ips114_showint16(0,1,right_real_speed); //ÓÒ±àÂëÆ÷µÄÖµ
+  490   1        ips114_showint16(0,2,real_speed);       //×óÓÒÂÖÆ½¾ùÖµ
+  491   1              
+  492   1              
+  493   1      }
+  494          //===============================================·äÃùÆ÷Ïà¹Ø=============================================
+  495          //=====================================================================================================
+  496          
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 9   
+
+  497          //·äÃùÆ÷¿ªºÍ¹Ø ±»Ð´ÔÚ¶ÔÓ¦Í·ÎÄ¼þÈ¥ÁË£¬È¥HÎÄ¼þ²é¿´
+  498          
+  499          /*****************·äÃùÆ÷µÎµÎµÎ*****************
+  500          º¯Êý£ºvoid BUZZ_DiDiDi()
+  501          ¹¦ÄÜ£º·äÃùÆ÷µÎµÎµÎ
+  502          ²ÎÊý£º  ÎÞ
+  503          ËµÃ÷£º
+  504          ·µ»ØÖµ£ºÎÞ */
+  505          void BUZZ_DiDiDi(uint16 PinLV)
+  506          {
+  507   1        BUZZ_ON;
+  508   1        TiaoCan_DelayMs(PinLV);
+  509   1        BUZZ_OFF;
+  510   1      }
+  511          
+  512          
+  513          /***************************²âÊÔÍê±Ï**********************************************
+  514           *  º¯ÊýÃû³Æ£ºTest_Servo(void)
+  515           *  ¹¦ÄÜËµÃ÷£º¶æ»úPWM³õÊ¼»¯£¬²âÊÔ±ê¶¨Êä³öPWM¿ØÖÆSD5/S3010¶æ»ú
+  516           *  ²ÎÊýËµÃ÷£ºÎÞ
+  517           *  º¯Êý·µ»Ø£ºÎÞ
+  518           *  ÐÞ¸ÄÊ±¼ä£º
+  519           *  ±¸    ×¢£º²Î¿¼ÁúÇñ¿âÌá¹©µÄ£¡£¡£¡£¡
+  520           ¡¾×¢ÒâÊÂÏî¡¿×¢Òâ£¬Ò»¶¨Òª¶Ô¶æ»ú´ò½Ç½øÐÐÏÞÖÆ
+  521           Ê¹ÓÃÁúÇñÄ¸°å²âÊÔÁ÷³Ì£º
+  522           1.ÏÈÊ¹ÓÃÍòÓÃ±í²âÁ¿µç³ØµçÑ¹£¬Îñ±Ø±£Ö¤µç³ØµçÑ¹ÔÚ7VÒÔÉÏ£¬·ñÔòÎÞÁ¦²»·´Ó¦£¡
+  523           2.È»ºóÈ·¶¨¶æ»ú¹©µçµçÑ¹£¬SD5¶æ»úÓÃ5V¹©µç£¬S3010ÓÃ6-7V¹©µç£¬SD012¶æ»úÓÃ5V¹©µç£¡£¡£¡
+  524           3.°Ñ¶æ»úµÄ¶æÅÌÈ¥µô£¬ÈÃ¶æ»ú¿ÉÒÔ×ÔÓÉ×ª¶¯£»
+  525           4.ÉÕÐ´³ÌÐò²¢ÔËÐÐ£¬ÈÃ¶æ»ú×ª¶¯µ½ÖÐÖµ¸½½ü£»Èç¹ûÃ»·´Ó¦ÖØ¸´1-2²½£¬»òÕßµ÷Õû¶æ»úµÄPWMÆµÂÊ¼ÆÕ¼¿Õ±È£¬ÄÜÊÜ¿ØÎª×¼£»
+  526           5.¶æ»úÊÜ¿ØºóÓÃÊÖÇá×ª£¬¶æ»ú»áÖ¨Ö¨Ïì£¬¶Ô¿¹×ª¶¯£¬´ËÊ±¿ÉÒÔ×°ÉÏ¶æÅÌ£»
+  527           6.°´¼üK0/K1È·¶¨¶æ»úµÄ×óÓÒ×ª¶¯¼«ÏÞ£¬²¢¼ÇÏÂÀ´£¬×÷ÎªºóÐøÏÞ·ù·ÀÖ¹¶æ»ú¶Â×ªÉÕ»Ù£¡
+  528           *************************************************************************/
+  529          void Test_Servo_Hardware (void)
+  530          {
+  531   1          char txt[16] = "X:";
+  532   1          unsigned int  duty = Steer_Duty_Midle;
+  533   1      
+  534   1          ips114_clear(YELLOW);  //³õÊ¼ÇåÆÁ
+  535   1                ips114_showstr(0, 0, "Test_Servo_Hardware:");
+  536   1              pwm_init(Steer_Pin, 50, Steer_Duty_Midle);     //³õÊ¼»¯¶æ»ú  Êä³öPWMÆµÂÊ200HZ£¬²¢ÉèÖÃÖÐÖµ
+  537   1          pwm_duty(Steer_Pin, Steer_Duty_Midle);
+  538   1          while (1)
+  539   1          {
+  540   2              if (!READ_GPIO(KEY1))
+  541   2              {
+  542   3                  if (duty > 100)             //·ÀÖ¹duty³¬
+  543   3                  {
+  544   4                      duty += 10;     //±ê¶¨µÄÊ±ºò£¬¿ÉÒÔ°Ñ²½³¤¸ÄÐ¡µã£¬±ÈÈç10
+  545   4                  }
+  546   3              }
+  547   2              if (! READ_GPIO(KEY3))
+  548   2              {
+  549   3                  duty = Steer_Duty_Midle;
+  550   3              }
+  551   2              if (! READ_GPIO(KEY2))
+  552   2              {
+  553   3                  duty -= 10;
+  554   3              }
+  555   2                                pwm_duty(Steer_Pin, duty);
+  556   2                                      sprintf(txt, "Servo:%05d ", duty);
+  557   2                                      ips114_showstr(1, 2, txt); //ÏÔÊ¾
+  558   2                                      TiaoCan_DelayMs(100);        
+  559   2          }
+  560   1      }
+  561          
+  562          /****************************²âÊÔÍê±Ï*********************************************
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 10  
+
+  563           *  º¯ÊýÃû³Æ£ºTestMotor(void)
+  564           *  ¹¦ÄÜËµÃ÷£º²âÊÔ±ê¶¨Êä³öPWM¿ØÖÆµç»ú
+  565           *  ²ÎÊýËµÃ÷£ºÎÞ
+  566           *  º¯Êý·µ»Ø£ºÎÞ
+  567           *  ÐÞ¸ÄÊ±¼ä£º
+  568           *  ±¸    ×¢£ºÇý¶¯2¸öµç»ú
+  569           ¡¾×¢ÒâÊÂÏî¡¿×¢Òâ£¬Ò»¶¨Òª¶Ôµç»úÊä³ö½øÐÐÏÞÖÆ
+  570           Ê¹ÓÃÁúÇñÄ¸°å²âÊÔÁ÷³Ì£º
+  571           1.ÏÈÊ¹ÓÃÍòÓÃ±í²âÁ¿µç³ØµçÑ¹£¬Îñ±Ø±£Ö¤µç³ØµçÑ¹ÔÚ7VÒÔÉÏ£¬·ñÔòÎÞÁ¦²»·´Ó¦£¡
+  572           2.½ÓºÃÄ¸°åµ½Çý¶¯°åµÄÐÅºÅÏß¼°µçÔ´Ïß£»
+  573           3.½ÓºÃÇý¶¯°åµ½µç»úµÄµ¼Ïß£»
+  574           4.ÉÕÐ´³ÌÐò²¢ÔËÐÐ£¬È·¶¨µç»úÄÜÕý³£×ª¶¯ºó£¬¿ªÆôÇý¶¯°åµçÔ´¿ª¹Ø£»
+  575           5.°´¼üK0/K1È·¶¨µç»ú×ª¶¯ËÙ¶È¼°·½Ïò£»
+  576           6.Èç¹û³öÏÖ·è×ª£¬°´ÏÂK1¼ü·µ»ØµÍËÙÄ£Ê½£¬»òÕßÖ±½Ó¹Ø±ÕÇý¶¯°åµçÔ´£¡
+  577           *************************************************************************/
+  578          void Test_Motor_Hardware (void)
+  579          {
+  580   1          int16 motor_duty = 3000;
+  581   1          lcd_clear(YELLOW);  //³õÊ¼ÇåÆÁ
+  582   1                lcd_showstr(2, 0, "Test_Motor_Hardware:");
+  583   1          init_PWM(MOTOR_MODE_SELECT);
+  584   1              
+  585   1          while (1)
+  586   1          {
+  587   2          if (!READ_GPIO(KEY1))   //°´ÏÂKEY1¼ü   ×óÂÖµ¥¶ÀÕý×ª
+  588   2              {
+  589   3                 go_motor (motor_duty,0);
+  590   3                                               lcd_showstr(0, 4, "Left  Front");   //×Ö·û´®ÏÔÊ¾
+  591   3              }
+  592   2             if (!READ_GPIO(KEY3)) //°´ÏÂKEY2¼ü£¬×óÓÒÂÖÍ¬Ê±·´×ª
+  593   2              {
+  594   3                       go_motor (-motor_duty,-motor_duty);
+  595   3                                                 lcd_showstr(0, 4, "All  Black");   //×Ö·û´®ÏÔÊ¾
+  596   3                               
+  597   3              }
+  598   2             if (!READ_GPIO(KEY2))      //°´ÏÂKEY3¼ü  ÓÒÂÖµ¥¶ÀÕý×ª
+  599   2              {
+  600   3                       go_motor (0,motor_duty);
+  601   3                                                       lcd_showstr(0, 4, "Right Front");   //×Ö·û´®ÏÔÊ¾
+  602   3              }
+  603   2                                      if((READ_GPIO(KEY1))&&(READ_GPIO(KEY2))&&(READ_GPIO(KEY3)))
+  604   2              go_motor (0,0);
+  605   2              TiaoCan_DelayMs(100);  
+  606   2          }
+  607   1      }
+  608          
+  609          /****************************²âÊÔÍê±Ï*********************************************
+  610           *  º¯ÊýÃû³Æ£ºvoid Test_Electric_Hardware (void)
+  611           *  ¹¦ÄÜËµÃ÷£º²âÊÔµç´Åµç¸ÐÓ²¼þ
+  612           *  ²ÎÊýËµÃ÷£ºÎÞ
+  613           *  º¯Êý·µ»Ø£ºÎÞ
+  614           *  ±¸    ×¢£º
+  615           ¡¾×¢ÒâÊÂÏî¡¿
+  616           *************************************************************************/
+  617          void Test_Electric_Hardware (void)
+  618          {
+  619   1              char txt[16];
+  620   1              ips114_clear(YELLOW);  //³õÊ¼ÇåÆÁ
+  621   1              ips114_showstr(2, 0, "Test_Electric_Hardware:");
+  622   1              ADC_int();
+  623   1              while(1)
+  624   1              {
+  625   2      //                  if (!READ_GPIO(KEY1)) //°´ÏÂKEY1¼ü
+  626   2      //        {
+  627   2                                              lcd_showstr(2, 1, "Normalize_Deal....");   //×Ö·û´®ÏÔÊ¾
+  628   2                                              ADC_Collect();  //µç¸Ð²ÉÖµ
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 11  
+
+  629   2                                              
+  630   2                                              sprintf(txt,"adc0= %05d",adc_value[0]);
+  631   2                                              lcd_showstr(1, 2, txt); //ÏÔÊ¾
+  632   2                                              sprintf(txt,"adc1= %05d",adc_value[1]);
+  633   2                                              lcd_showstr(1, 3, txt); //ÏÔÊ¾
+  634   2                                              sprintf(txt,"adc2= %05d",adc_value[2]);
+  635   2                                              lcd_showstr(1, 4, txt); //ÏÔÊ¾
+  636   2                                              sprintf(txt,"adc3= %05d",adc_value[3]);
+  637   2                                              lcd_showstr(1, 5, txt); //ÏÔÊ¾                                           
+  638   2      //        }
+  639   2                                      if(!READ_GPIO(KEY2)) //°´ÏÂKEY2¼ü
+  640   2                                      {
+  641   3                                              lcd_showstr(2, 1, "GYH_Normalize_Deal....");   //×Ö·û´®ÏÔÊ¾
+  642   3                                              ADC_Collect();  //µç¸Ð²ÉÖµ
+  643   3                      Data_current_analyze();  //µç¸ÐÖµ¹éÒ»»¯º¯Êý
+  644   3                                              Current_Dir=Cha_bi_he(Left_Adc,Right_Adc,100);
+  645   3                                              
+  646   3                                              sprintf(txt,"adc0= %05d",Left_Adc);
+  647   3                                              lcd_showstr(1, 2, txt); //ÏÔÊ¾
+  648   3                                              sprintf(txt,"adc1= %05d",Left_Shu_Adc);
+  649   3                                              lcd_showstr(1, 3, txt); //ÏÔÊ¾
+  650   3                                              sprintf(txt,"adc2= %05d",Right_Shu_Adc);
+  651   3                                              lcd_showstr(1, 4, txt); //ÏÔÊ¾
+  652   3                                              sprintf(txt,"adc3= %05d",Right_Adc);
+  653   3                                              lcd_showstr(1, 5, txt); //ÏÔÊ¾
+  654   3                                              sprintf(txt,"Current_Dir= %05d",Current_Dir);
+  655   3                                              lcd_showstr(1, 6, txt); //ÏÔÊ¾
+  656   3              }
+  657   2        }     
+  658   1      }
+  659          /****************************²âÊÔÍê±Ï*********************************************
+  660           *  º¯ÊýÃû³Æ£ºvoid Test_Encoder(void)
+  661           *  ¹¦ÄÜËµÃ÷£º²âÊÔ±àÂëÆ÷
+  662           *  ²ÎÊýËµÃ÷£ºÎÞ
+  663           *  º¯Êý·µ»Ø£ºÎÞ
+  664           *  ÐÞ¸ÄÊ±¼ä£º
+  665           *  ±¸    ×¢£º
+  666           ¡¾×¢ÒâÊÂÏî¡¿
+  667           *************************************************************************/
+  668          void Test_Encoder(void)
+  669          {
+  670   1               char txt[16];
+  671   1         encoder_init();//±àÂëÆ÷³õÊ¼»¯
+  672   1               lcd_clear(YELLOW);  //³õÊ¼ÇåÆÁ
+  673   1               lcd_showstr(2, 0, "Test_Encoder:");                                    
+  674   1               while(1)
+  675   1               {
+  676   2                        speed_measure();
+  677   2                        delay_ms(50);
+  678   2                              sprintf(txt,"Left_Speed  = %05d",left_speed);
+  679   2                        lcd_showstr(1, 3, txt); //ÏÔÊ¾
+  680   2                              sprintf(txt,"Right_Speed = %05d",right_speed);
+  681   2                        lcd_showstr(1, 4, txt); //ÏÔÊ¾
+  682   2                        sprintf(txt,"Real_Speed = %05d",real_speed);
+  683   2                        lcd_showstr(1, 5, txt); //ÏÔÊ¾
+  684   2               }
+  685   1      }
+  686          
+  687          
+*** WARNING C183 IN LINE 580 OF ..\USER\src\debug.c: dead assignment eliminated
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      3429     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 12  
+
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        25        172
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =       620     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

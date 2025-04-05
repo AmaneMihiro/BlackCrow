@@ -1,0 +1,1 @@
+"..\USER\src\debug.c" XSMALL INTR2 WARNINGLEVEL (3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\debug.lst) OBJECT(.\Out_File\debug.obj)

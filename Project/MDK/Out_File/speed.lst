@@ -1,0 +1,248 @@
+C251 COMPILER V5.60.0,  speed                                                              05/04/25  19:33:44  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE speed
+OBJECT MODULE PLACED IN .\Out_File\speed.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\speed.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\L
+                    -ibraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\sr
+                    -c) DEBUG PRINT(.\Out_File\speed.lst) OBJECT(.\Out_File\speed.obj) 
+
+stmt  level    source
+
+    1          #include "speed.h"
+    2          #include "math.h"
+    3          
+    4          int16 aim_speed        = 10;  //Ŀ���ٶ�  
+    5          int16 real_speed       = 0;    //������ƽ���ٶ� 
+    6          int16 left_speed       = 0;    //�����ٶ�
+    7          int16 right_speed      = 0;    //�����ٶ�
+    8          int16 last_speed       = 0;    
+    9          int16 left_last_speed  = 0;
+   10          int16 right_last_speed = 0;
+   11          int16 left_real_speed  = 0;
+   12          int16 right_real_speed = 0;
+   13          
+   14          int16 All_PWM_left     = 0;     //��������PWM���
+   15          int16 All_PWM_right    = 0;     //��������PWM���
+   16          int16 Speed_pwm_left   = 0;     //�����ٶȻ�PWM��C���ã�
+   17          int16 Speed_pwm_right  = 0;     //�����ٶȻ�PWM��C���ã�
+   18          int16 Real_Speed_left  = 0;     //����ʵ���ٶ�
+   19          int16 Real_Speed_right = 0;     //����ʵ���ٶ�
+   20          int16 Speed_pwm_all    = 0;     //����ƽ���ٶȻ�PWM��D���ã�
+   21          int16 Steer_pwm        = 0;     //ת���ڻ�PWM
+   22          uint16 Open_pack_time  = 0;     //�򿪸ɻɹܶ�ʱ
+   23          uint16 Stop_time       = 0;     //ͣ����ʱ
+   24           
+   25          /******************************* �����ʼ��***********************************
+   26          ������  void init_PWM(unsigned char Motor_Set)
+   27          ������  Motor_Set---Ϊ0ʱ��ʼ��ΪBTN������ʽ��Ϊ1ʱ��ʼ��DRV�
+             -�������ʽ
+   28          ˵����  ��ĸ10000
+   29                              pwm_init(PWMA_CH1P_P60, 10000, 0); 
+   30                  ��ʼ��PWM  ʹ������P6.0  ���PWMƵ��10000HZ  ռ�ձ�Ϊ�ٷ�֮ 
+             -pwm_duty / PWM_DUTY_MAX * 100                          
+   31          ����ֵ����  
+   32          *****************************************************************************/
+   33          unsigned char MOTOR_MODE=0;//�м�����������޸�ɾ��������
+   34          void init_PWM(unsigned char Motor_Set)
+   35          {
+   36   1              MOTOR_MODE = Motor_Set;
+   37   1              if (MOTOR_MODE==0) 
+   38   1              {
+   39   2      //-----MOS����-----------
+   40   2          pwm_init(Left_Z_Pin,  20000,0);//���ֳ�ʼ��
+   41   2                pwm_init(Left_F_Pin,  20000,0);
+   42   2                pwm_init(Right_Z_Pin, 20000,0);//���ֳ�ʼ��
+   43   2                pwm_init(Right_F_Pin, 20000,0);
+   44   2              }
+   45   1                      else
+   46   1              {
+   47   2      //------DRV����-------------
+   48   2                pwm_init(Left_PWM_Pin, 20000,0);//���ֳ�ʼ��
+   49   2              pwm_init(Right_PWM_Pin,20000,0);//���ֳ�ʼ��
+   50   2                      gpio_mode(P6_4,GPO_PP);       // ����DRV��������ΪΪ�������
+   51   2                gpio_mode(P6_0,GPO_PP);       // ����DRV��������ΪΪ�������
+   52   2       } 
+   53   1      }
+   54          /****************************��������ʼ��****************************
+   55          ������  void encoder_init(void)
+C251 COMPILER V5.60.0,  speed                                                              05/04/25  19:33:44  PAGE 2   
+
+   56          ���ܣ�  ��������ʼ��
+   57          ������  ��
+   58          ˵����  ctimer_count_init(CTIM0_P34);
+   59                  ������ʹ��TIM3��TIM4�����������ֻ���޸ĺ궨�弴
+             -�� 
+   60                  ������ʹ�ô�����ı�������STC��֧��������
+             -��룩
+   61          ����ֵ����
+   62          ********************************************************************/
+   63          void encoder_init()
+   64          {
+   65   1          //���������ʼ��
+   66   1                      ctimer_count_init(Left_Ecoder_Pin1);
+   67   1                      //�ұ�������ʼ��
+   68   1                      ctimer_count_init(Right_Ecoder_Pin1);
+   69   1      }  
+   70          /***************************�ٶȲ���********************************
+   71          ��������speed_measure()
+   72          ��  �ܣ��ٶȲ�������ȡ��������ֵ����ͬ�������
+             -���װ�ͳ���ǰ�����򲻶Ի�
+   73                  ���²ɼ���ֵ�����Ƿ������ģ�ֻ���޸�* (-1)���У
+             -��ĵ�����Ϳ�
+   74                  ����
+   75          ��  ����void
+   76          ����ֵ��void
+   77          ******************************************************************/
+   78          void speed_measure()
+   79          { 
+   80   1                int16 temp_L, temp_R;
+   81   1          temp_L = ctimer_count_read(Left_Ecoder_Pin1); // �����ֵ�ǰ�ٶ�
+   82   1          temp_R = ctimer_count_read(Right_Ecoder_Pin1);
+   83   1      
+   84   1          ctimer_count_clean(Left_Ecoder_Pin1); // ����������
+   85   1          ctimer_count_clean(Right_Ecoder_Pin1);
+   86   1                
+   87   1                if(Left_Ecoder_Pin2 == 1)
+   88   1              left_speed = temp_L;
+   89   1          else
+   90   1              left_speed = (1) * temp_L;
+   91   1          if(Right_Ecoder_Pin2 == 0)
+   92   1              right_speed = temp_R;
+   93   1          else
+   94   1              right_speed = (1) * temp_R;
+   95   1                      
+   96   1                      last_speed = (right_speed+left_speed)/2;// �ٶ�ƽ��ֵ
+   97   1                real_speed*=0.8;            //һ�׵�ͨ�˲���
+   98   1                real_speed+=last_speed*0.2; //һ�׵�ͨ�˲���  left_last_speed
+   99   1                      
+  100   1                      left_last_speed =left_speed;
+  101   1                left_real_speed*=0.8;       //һ�׵�ͨ�˲���
+  102   1                left_real_speed+=left_last_speed*0.2; //һ�׵�ͨ�˲���
+  103   1                      
+  104   1                      right_last_speed =right_speed;
+  105   1                right_real_speed*=0.8;        //һ�׵�ͨ�˲���
+  106   1                right_real_speed+=right_last_speed*0.2; //һ�׵�ͨ�˲���
+  107   1      }
+  108          /*******************************���ⶨʱ�򿪸ɻɹܵ�***********************************
+  109          ������  void timed_task(void)
+  110          ������  ��
+  111          ˵����  ������ɶ�ʱ�򿪸ɻɹܵ���Ϊ��־λ��������ֹ��
+             -����ͼ�⵽ͣ��
+  112          ����ֵ���� 
+  113          *************************************************************************************/
+  114          void timed_task(void)
+  115          {
+  116   1              if(flag_start)
+C251 COMPILER V5.60.0,  speed                                                              05/04/25  19:33:44  PAGE 3   
+
+  117   1              {
+  118   2                      Open_pack_time=Open_pack_time+10;
+  119   2              }
+  120   1              if(flag_end)
+  121   1              {
+  122   2                      T_inku_wait=T_inku_wait+5;
+  123   2              }
+  124   1              if(T_inku_J)
+  125   1              {
+  126   2                      T_inku_S=T_inku_S+5;
+  127   2              }
+  128   1      }
+  129          
+  130          /*****************************������*******************************************
+  131          ������void go_motor (int16 left_PWM,int16 right_PWM)
+  132          ������  int16 left_PWM,int16 right_PWM
+  133          ˵����pwm_duty(PWMA_CH1P_P60, duty);
+  134                ��ؽ����ӵĵ���߼��������һ������һ������
+             -�����������ڶ������������ҵ��
+  135                ����Ĳ������Ϊ�����������ת����ֵ��ת���
+             -��������
+  136          ����ֵ���� 
+  137          ********************************************************************************/
+  138          #define Duty_Max  6000   //�޷����ֵ
+  139          
+  140          void go_motor (int16 left_PWM,int16 right_PWM)
+  141          {
+  142   1        if  (MOTOR_MODE==0)
+  143   1        {     
+  144   2      //---------------------------------MOS����-----------------------------------------     
+  145   2          if (left_PWM>0)                   //����
+  146   2          {
+  147   3                       left_PWM = left_PWM<=Duty_Max ? left_PWM : Duty_Max;
+  148   3           pwm_duty(Left_Z_Pin,left_PWM);
+  149   3           pwm_duty(Left_F_Pin,0);                        //��ת
+  150   3          }   
+  151   2          else 
+  152   2          {
+  153   3           left_PWM = left_PWM>=-Duty_Max ? (-left_PWM) : Duty_Max;  
+  154   3           pwm_duty(Left_Z_Pin,1);    
+  155   3           pwm_duty(Left_F_Pin,left_PWM);       //��ת
+  156   3          } 
+  157   2          if (right_PWM>0)                  //����
+  158   2          { 
+  159   3           right_PWM = right_PWM<=Duty_Max ? right_PWM : Duty_Max; 
+  160   3                 pwm_duty(Right_Z_Pin,right_PWM);     
+  161   3                 pwm_duty(Right_F_Pin,0);                         //��ת
+  162   3          } 
+  163   2          else 
+  164   2          {
+  165   3           right_PWM = right_PWM>=-Duty_Max ? (-right_PWM) : Duty_Max;  
+  166   3                 pwm_duty(Right_Z_Pin,1);     
+  167   3                 pwm_duty(Right_F_Pin,right_PWM); //��ת
+  168   3          }
+  169   2        }
+  170   1        else
+  171   1        {
+  172   2      //-------------------------------------------DRV����-------------------------------------
+  173   2         if (left_PWM>0)                     //����
+  174   2         {
+  175   3                       left_PWM = left_PWM<=Duty_Max ? left_PWM : Duty_Max;
+  176   3                       Left_DIR_Pin=0;                         
+  177   3           pwm_duty(Left_PWM_Pin,left_PWM);  //��ת
+  178   3         }    
+  179   2         else 
+  180   2         {
+C251 COMPILER V5.60.0,  speed                                                              05/04/25  19:33:44  PAGE 4   
+
+  181   3           left_PWM = left_PWM>=-Duty_Max ? (-left_PWM) : Duty_Max;  
+  182   3           Left_DIR_Pin=1;    
+  183   3           pwm_duty(Left_PWM_Pin,left_PWM);  //��ת
+  184   3         }
+  185   2         if (right_PWM>0)                    //����
+  186   2         {
+  187   3           right_PWM = right_PWM<=Duty_Max ? right_PWM : Duty_Max;
+  188   3           Right_DIR_Pin=0;                    
+  189   3                 pwm_duty(Right_PWM_Pin,right_PWM);//��ת         
+  190   3               } 
+  191   2         else 
+  192   2         {
+  193   3           right_PWM = right_PWM>=-Duty_Max ? (-right_PWM) : Duty_Max;  
+  194   3                 Right_DIR_Pin=1;
+  195   3                 pwm_duty(Right_PWM_Pin,right_PWM); //��ת
+  196   3         }
+  197   2        }
+  198   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       774     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        39     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =       119     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
