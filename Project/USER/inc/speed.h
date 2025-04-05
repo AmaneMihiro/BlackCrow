@@ -5,7 +5,7 @@
 
 #define Limit_Min_Max(data,min,max) (((data)>(max)) ? (max) : (((data) < (min)) ? (min) : (data)))
 
-//±äÁ¿ÉêÃ÷
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 extern int16 aim_speeda ;
 extern int16 aim_speedb ; 
@@ -24,13 +24,15 @@ extern int16 All_PWM_left;
 extern int16 All_PWM_right;    
 extern int16 Speed_pwm_left;      
 extern int16 Speed_pwm_right;
-extern int16 Real_Speed_left;    //×óÂÖÊµ¼ÊËÙ¶È
-extern int16 Real_Speed_right;   //ÓÒÂÖÊµ¼ÊËÙ¶È
+extern int16 Last_speed_pwm_left;
+extern int16 Last_speed_pwm_right;
+extern int16 Real_Speed_left;    //ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ù¶ï¿½
+extern int16 Real_Speed_right;   //ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ù¶ï¿½
 extern int16 Speed_pwm_all;      
 extern int16 Steer_pwm;
 extern uint16 Open_pack_time;
 
-//º¯ÊýÉùÃ÷
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void init_PWM(unsigned char Motor_Set);
 void encoder_init(void);
 void speed_measure(void);

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 1   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE debug
@@ -66,7 +66,7 @@ stmt  level    source
    54   1          uart_putchar(uratn,data_to_send[i]);
    55   1      }
    56          
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 2   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 2   
 
    57          //===================================================上位机相关的========================================
              -==================
@@ -134,7 +134,7 @@ stmt  level    source
   118          
   119          void extern_iap_write_float(double dat,uint8 num,uint8 pointnum,uint16 addr)
   120          {
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 3   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 3   
 
   121   1        uint8   length;
   122   1              int8    buff[34];
@@ -202,7 +202,7 @@ stmt  level    source
              -=============================
   182          //=======================================================================================================
              -=====================
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 4   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 4   
 
   183          //sprintf(temp," date20=%d",date);
   184          //TFTSPI_P8X8Str(0,19,temp,BLACK,WHITE);break;
@@ -270,7 +270,7 @@ stmt  level    source
   244          函数：void Strategy_Slect()
   245          功能：通过拨码开关调整策略
   246          参数：  无
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 5   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 5   
 
   247          说明：  6位拨码开关，如果有增加或者减少可对照修改,如果不足6个也不要删除多余的，多余的你随便引脚改个没用的
              -即可
@@ -338,7 +338,7 @@ stmt  level    source
   309          返回值：无     */
   310          uint8 gogo=0;
   311          void  Key_Scan_Deal ()
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 6   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 6   
 
   312          {
   313   1              while(gogo<=2)
@@ -406,7 +406,7 @@ stmt  level    source
   371   4              case 4:;  break;
   372   4              case 5:;  break;
   373   4              //case 6:ips114_showstr(0,0,"FANYE_ing");  ; break;//这个不能加任何操作在这里了，翻页使用啦
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 7   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 7   
 
   374   4             //第二页显示的东西 
   375   4                                      case 7:SpeedPID.Kp-=1;   break;
@@ -474,7 +474,7 @@ stmt  level    source
   436   2          {
   437   3                        ips114_clear(WHITE); 
   438   3          }
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 8   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 8   
 
   439   2              }
   440   1      }
@@ -542,7 +542,7 @@ stmt  level    source
   494          //===============================================蜂鸣器相关=============================================
   495          //=====================================================================================================
   496          
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 9   
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 9   
 
   497          //蜂鸣器开和关 被写在对应头文件去了，去H文件查看
   498          
@@ -610,7 +610,7 @@ stmt  level    source
   560   1      }
   561          
   562          /****************************测试完毕*********************************************
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 10  
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 10  
 
   563           *  函数名称：TestMotor(void)
   564           *  功能说明：测试标定输出PWM控制电机
@@ -678,7 +678,7 @@ stmt  level    source
   626   2      //        {
   627   2                                              lcd_showstr(2, 1, "Normalize_Deal....");   //字符串显示
   628   2                                              ADC_Collect();  //电感采值
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 11  
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 11  
 
   629   2                                              
   630   2                                              sprintf(txt,"adc0= %05d",adc_value[0]);
@@ -747,7 +747,7 @@ Module Information          Static   Overlayable
   code size            =      3429     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
-C251 COMPILER V5.60.0,  debug                                                              05/04/25  18:26:12  PAGE 12  
+C251 COMPILER V5.60.0,  debug                                                              05/04/25  21:33:16  PAGE 12  
 
   idata size           =    ------     ------
   pdata size           =    ------     ------

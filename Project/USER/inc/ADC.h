@@ -8,11 +8,11 @@
 // �����������ֵ
 #define OUT_ANNULUS_S_LIMIT 80
 // �������־���
-#define DISTANCE_ANNULUS_S 800
+#define DISTANCE_ANNULUS_S 1000
 // ������ǻ���
 #define DISTANCE_ANNULUS_Z 0
 // ������ʱ����
-#define DISTANCE_ANNULUS_T 1000
+#define DISTANCE_ANNULUS_T 900
 // �����ж�
 #define OUTSIDE 1
 // ����ģ���趨����(����ʵ������޸�)

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               05/04/25  21:33:16  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -66,7 +66,7 @@ stmt  level    source
    49   1              //      Test_Motor_Hardware();//���Ե��ʹ��
    50   1              //      Test_Electric_Hardware();//���Ե�ŵ�вɼ�
    51   1              //      Test_Encoder();//���Ա������ɼ�//
-C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               05/04/25  21:33:16  PAGE 2   
 
    52   1              /*********************************************************************************/
    53   1      
@@ -134,7 +134,7 @@ stmt  level    source
   110   2              }
   111   1      }
 
-C251 COMPILER V5.60.0,  main                                                               05/04/25  20:23:09  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               05/04/25  21:33:16  PAGE 3   
 
 
 Module Information          Static   Overlayable

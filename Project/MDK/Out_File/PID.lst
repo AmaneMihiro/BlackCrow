@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 1   
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE PID
@@ -66,7 +66,7 @@ stmt  level    source
    54   1          iError = Setpoint - Turepoint; // ƫ��
    55   1      
    56   1          iIncpid = sptr->Kp * (iError - sptr->LastError) + sptr->Ki * iError;
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 2   
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 2   
 
    57   1          //    //�����������´μ���
    58   1          // if (iIncpid >= 2000) // ÿ����������޷�
@@ -135,7 +135,7 @@ Module Information          Static   Overlayable
   code size            =       580     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  19:37:58  PAGE 3   
+C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 3   
 
   idata size           =    ------     ------
   pdata size           =    ------     ------

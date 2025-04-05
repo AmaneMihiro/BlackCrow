@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 1   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE ADC
@@ -66,7 +66,7 @@ stmt  level    source
    55                  45,
    56                  46,
    57                  47,
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 2   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 2   
 
    58                  48,
    59                  49,
@@ -134,7 +134,7 @@ stmt  level    source
   121   1              adc_init(Right_ADC_Pin, ADC_SYSclk_DIV_2);        // 初始化P0.6为ADC功能
   122   1      
   123   1              adc_init(Mid_ADC_Pin, ADC_SYSclk_DIV_2); // 初始化P1.5为ADC功能
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 3   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 3   
 
   124   1      }
   125          
@@ -202,7 +202,7 @@ stmt  level    source
   187   1              adc_value[1] = adc_ave(LeftXie_ADC_Pin, ADC_8BIT, 3);    // 左竖电感
   188   1              adc_value[2] = adc_ave(RightXie_ADC_Pin, ADC_8BIT, 3);   // 右竖电感
   189   1              adc_value[3] = adc_ave(Right_ADC_Pin, ADC_8BIT, 3);              // 右横电感
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 4   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 4   
 
   190   1              adc_valueM = adc_ave(Mid_ADC_Pin, ADC_8BIT, 3) * 0.2246; // 电源电压采集
   191   1      }
@@ -270,7 +270,7 @@ stmt  level    source
   253   1              he1 = data3 + data4 + 1;
   254   1      
   255   1              //    result = (cha*x)/(1.0*he);
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 5   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 5   
 
   256   1              result = ((cha * x) + (cha1 * y)) / ((1.0 * he) + (1.0 * he1));
   257   1              return result;
@@ -338,7 +338,7 @@ stmt  level    source
   314   1              if (road_type.on_annulus_right == 1) // road_type.in_annulus_left==1 ||                 && road_type.on_
              -annulus_left==0（外）&& road_type.on_annulus_right==0
   315   1              {
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 6   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 6   
 
   316   2                      //        annulus_z += fabs(GORY_Z);
   317   2                      annulus_s3 += fabs(last_speed) * 1; // 根据积分距离和编码器线值更改（0.1）
@@ -406,7 +406,7 @@ stmt  level    source
   373   1              {
   374   2                      obstacle_annulus_z1 += fabs(GORY_Z) * 0.1;
   375   2                      obstacle_annulus_s1 += fabs(real_speed) * 0.1;
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 7   
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 7   
 
   376   2              }
   377   1              if (obstacle_switch_1 == 1 && flag_obstacle == 1)
@@ -442,266 +442,268 @@ stmt  level    source
   407   3                              annulus_s = 0;
   408   3                              annulus_s2 = 0;
   409   3                              annulus_s3 = 0;
-  410   3                              BUZZ_OFF;
-  411   3                      }
-  412   2                      return; // 在直走阶段不允许进入环岛，直接返回
-  413   2              }
-  414   1      
-  415   1              // 环岛入口检测
-  416   1              if ((Left_Adc + Right_Adc) > IN_ANNULUS_H_LIMIT && road_type.annulus == 0 && road_type.out_annulus == 0)
+  410   3                              // Speed_pwm_left = Last_speed_pwm_left;
+  411   3                              // Speed_pwm_right = Last_speed_pwm_right;
+  412   3                              BUZZ_OFF;
+  413   3                      }
+  414   2                      return; // 在直走阶段不允许进入环岛，直接返回
+  415   2              }
+  416   1      
+  417   1              // 环岛入口检测
+  418   1              if ((Left_Adc + Right_Adc) > IN_ANNULUS_H_LIMIT && road_type.annulus == 0 && road_type.out_annulus == 0)
              - //&&Annulus_selection==0
-  417   1              {
-  418   2                      road_type.annulus = 1;
-  419   2                      //                      aim_speed        = 40;
-  420   2                      P52 = 0;
-  421   2                      BUZZ_ON;
-  422   2              }
-  423   1              // 左环进环判断
-  424   1              //              if(annulus_s > DISTANCE_ANNULUS_S&&road_type.annulus==1&&road_type.in_annulus_left==0&&(Left_Shu_Adc
+  419   1              {
+  420   2                      road_type.annulus = 1;
+  421   2                      //                      aim_speed        = 40;
+  422   2                      P52 = 0;
+  423   2                      BUZZ_ON;
+  424   2              }
+  425   1              // 左环进环判断
+  426   1              //              if(annulus_s > DISTANCE_ANNULUS_S&&road_type.annulus==1&&road_type.in_annulus_left==0&&(Left_Shu_Adc
              ->20))
-  425   1              //              {
-  426   1              //                      road_type.in_annulus_left = 1;
-  427   1              //                      BUZZ_ON;
-  428   1              //                      P52                      = 0;
-  429   1              //              }
-  430   1              // 右环进环判断
-  431   1              if (annulus_s > DISTANCE_ANNULUS_S && road_type.in_annulus_right == 0 && road_type.annulus == 1) //&&(Ri
+  427   1              //              {
+  428   1              //                      road_type.in_annulus_left = 1;
+  429   1              //                      BUZZ_ON;
+  430   1              //                      P52                      = 0;
+  431   1              //              }
+  432   1              // 右环进环判断
+  433   1              if (annulus_s > DISTANCE_ANNULUS_S && road_type.in_annulus_right == 0 && road_type.annulus == 1) //&&(Ri
              -ght_Adc>20)
-  432   1              {
-  433   2                      road_type.in_annulus_right = 1;
-  434   2                      BUZZ_ON;
-  435   2      
-  436   2                      //                              while(1)//入环节点1
-  437   2                      //                                      {
-  438   2                      //                                              go_motor(0,0);
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 8   
+  434   1              {
+  435   2                      road_type.in_annulus_right = 1;
+  436   2                      BUZZ_ON;
+  437   2      
+  438   2                      //                              while(1)//入环节点1
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 8   
 
-  439   2                      //                                      }
-  440   2              }
-  441   1              // 左环处理
-  442   1              //              if(road_type.in_annulus_left == 1 && annulus_z > DISTANCE_ANNULUS_Z && annulus_s2>350 &&road_type.on
+  439   2                      //                                      {
+  440   2                      //                                              go_motor(0,0);
+  441   2                      //                                      }
+  442   2              }
+  443   1              // 左环处理
+  444   1              //              if(road_type.in_annulus_left == 1 && annulus_z > DISTANCE_ANNULUS_Z && annulus_s2>350 &&road_type.on
              -_annulus_left==0)
-  443   1              //              {
-  444   1              //
-  445   1              //                        road_type.on_annulus_left = 1;
-  446   1              //                              BUZZ_ON;
-  447   1              //                        P52                      = 1;
-  448   1              //              }
-  449   1              // 右环处理
-  450   1              if (road_type.in_annulus_right == 1 && annulus_s2 > 1200) //
-  451   1              {
-  452   2                      road_type.on_annulus_right = 1;
-  453   2                      BUZZ_ON;
-  454   2                      //                        P52                      = 1;
-  455   2                      //                      annulus_s2=0;
-  456   2                      //                              while(1)//打角节点3
-  457   2                      //                                      {
-  458   2                      //                                              go_motor(0,0);
-  459   2                      //                                      }
-  460   2              }
-  461   1              if (road_type.on_annulus_right == 1 && annulus_s3 > 200 && (Left_Adc + Right_Adc) > OUT_ANNULUS_S_LIMIT 
+  445   1              //              {
+  446   1              //
+  447   1              //                        road_type.on_annulus_left = 1;
+  448   1              //                              BUZZ_ON;
+  449   1              //                        P52                      = 1;
+  450   1              //              }
+  451   1              // 右环处理
+  452   1              if (road_type.in_annulus_right == 1 && annulus_s2 > 1200) //
+  453   1              {
+  454   2                      road_type.on_annulus_right = 1;
+  455   2                      BUZZ_ON;
+  456   2                      //                        P52                      = 1;
+  457   2                      //                      annulus_s2=0;
+  458   2                      //                              while(1)//打角节点3
+  459   2                      //                                      {
+  460   2                      //                                              go_motor(0,0);
+  461   2                      //                                      }
+  462   2              }
+  463   1              if (road_type.on_annulus_right == 1 && annulus_s3 > 200 && (Left_Adc + Right_Adc) > OUT_ANNULUS_S_LIMIT 
              -&& road_type.out_annulus == 0) // +Right_Shu_Adc+Left_Shu_Adc
-  462   1              {
-  463   2                      BUZZ_ON;
-  464   2                      road_type.out_annulus = 1;
-  465   2                      // testflag = 7;
-  466   2                      annulus_s = 0;
-  467   2                      annulus_z = 0;
-  468   2                      annulus_s2 = 0;
-  469   2                      annulus_s3 = 0; // 清零annulus_s3防止影响下一次环岛判断
-  470   2                      P52 = 1;
-  471   2              }
-  472   1              // 出环处理
-  473   1              if (annulus_s3 > DISTANCE_ANNULUS_T && road_type.out_annulus == 1)
-  474   1              {
-  475   2                      road_type.in_annulus_left = 0;
-  476   2                      road_type.in_annulus_right = 0;
-  477   2                      road_type.on_annulus_left = 0;
-  478   2                      road_type.on_annulus_right = 0;
-  479   2                      road_type.out_annulus = 0;
-  480   2                      annulus_t = 0;
-  481   2      
-  482   2                      // 启动出环后直走阶段
-  483   2                      road_type.post_annulus = 1;
-  484   2                      annulus_post = 0; // 初始化出环后直走积分
-  485   2                      BUZZ_OFF;
-  486   2                      //                                      while(1)//出环7
-  487   2                      //                                      {
-  488   2                      //                                              go_motor(0,0);
-  489   2                      //                                      }
-  490   2              }
-  491   1      }
-  492          /*************************根据赛道类型选择不同的方向偏差计算方法**********************
+  464   1              {
+  465   2                      BUZZ_ON;
+  466   2                      road_type.out_annulus = 1;
+  467   2                      // testflag = 7;
+  468   2                      annulus_s = 0;
+  469   2                      annulus_z = 0;
+  470   2                      annulus_s2 = 0;
+  471   2                      annulus_s3 = 0; // 清零annulus_s3防止影响下一次环岛判断
+  472   2                      P52 = 1;
+  473   2              }
+  474   1              // 出环处理
+  475   1              if (annulus_s3 > DISTANCE_ANNULUS_T && road_type.out_annulus == 1)
+  476   1              {
+  477   2                      road_type.in_annulus_left = 0;
+  478   2                      road_type.in_annulus_right = 0;
+  479   2                      road_type.on_annulus_left = 0;
+  480   2                      road_type.on_annulus_right = 0;
+  481   2                      road_type.out_annulus = 0;
+  482   2                      annulus_t = 0;
+  483   2      
+  484   2                      // 启动出环后直走阶段
+  485   2                      road_type.post_annulus = 1;
+  486   2                      annulus_post = 0; // 初始化出环后直走积分
+  487   2                      BUZZ_OFF;
+  488   2                      //                                      while(1)//出环7
+  489   2                      //                                      {
+  490   2                      //                                              go_motor(0,0);
+  491   2                      //                                      }
+  492   2              }
+  493   1      }
+  494          /*************************根据赛道类型选择不同的方向偏差计算方法**********************
              -***
-  493          函数：  int16 Direction_error(void)
-  494          功能：  根据赛道类型选择不同的方向偏差
-  495          参数：  无
-  496          说明：  根据赛道类型选择不同的方向偏差
-  497          返回值：error--返回赛道偏差
-  498          ****************************************************************************************/
-  499          float Direction_error(void)
-  500          {
-  501   1              float error = 0;
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 9   
+  495          函数：  int16 Direction_error(void)
+  496          功能：  根据赛道类型选择不同的方向偏差
+  497          参数：  无
+  498          说明：  根据赛道类型选择不同的方向偏差
+  499          返回值：error--返回赛道偏差
+  500          ****************************************************************************************/
+  501          float Direction_error(void)
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 9   
 
-  502   1      
-  503   1              // 环岛方向偏差计算
-  504   1              if (road_type.annulus == 1)
-  505   1              {
-  506   2                      // 准备入环岛方向偏差计算
-  507   2                      //        if(road_type.annulus==1&&road_type.in_annulus_left==0 && road_type.in_annulus_right==0 && roa
+  502          {
+  503   1              float error = 0;
+  504   1      
+  505   1              // 环岛方向偏差计算
+  506   1              if (road_type.annulus == 1)
+  507   1              {
+  508   2                      // 准备入环岛方向偏差计算
+  509   2                      //        if(road_type.annulus==1&&road_type.in_annulus_left==0 && road_type.in_annulus_right==0 && roa
              -d_type.on_annulus_left==0 && road_type.on_annulus_right==0 && road_type.out_annulus==0)
-  508   2                      //                              {
-  509   2                      //                                      error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
-  510   2                      //        //入左环岛方向偏差计算
-  511   2                      //        if(road_type.in_annulus_left ==1 && road_type.on_annulus_left==0 )
-  512   2                      //                              {
-  513   2                      //                                  //error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
-  514   2                      //                                        error = -15;
-  515   2                      //                                      road_type.annulus=0;//出环岛标志位清零
-  516   2                      //                              }
-  517   2                      // 入右环岛方向偏差计算
-  518   2                      if (road_type.in_annulus_right == 1 && road_type.on_annulus_right == 0 && road_type.out_annulus == 0)
-  519   2                      {
-  520   3                              // error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;                                        // error = 3;
-  521   3                              error = 3.3; // 逻辑相反与循迹
-  522   3      
-  523   3                              //                              while(1)//打角节点2
-  524   3                              //                                      {
-  525   3                              //                                              go_motor(0,0);
-  526   3                              //                                      }
-  527   3                      }
-  528   2                      // 在环岛偏差
-  529   2                      if (road_type.on_annulus_right == 1)
-  530   2                      {
-  531   3                              // road_type.annulus = 0; // 入环岛标志位清零
-  532   3                              road_type.in_annulus_right = 0;
-  533   3                              //                                      error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
-  534   3                              error = (Cha_bi_he(Right_Adc, Left_Adc, 20));
-  535   3      
-  536   3                              //                              while(1)//环内循迹节点4
-  537   3                              //                                      {
-  538   3                              //                                              go_motor(0,0);
-  539   3                              //                                      }
-  540   3                      }
-  541   2                      // 出环岛方向偏差计算
-  542   2                      if (road_type.out_annulus == 1)
-  543   2                      {
-  544   3                              //                                  error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*7;
-  545   3                              error = 2.8;
-  546   3                              //                                      error = Cha_bi_he(Right_Adc,Left_Adc,5);
-  547   3                              // road_type.annulus = 0; // 出环岛标志位清零
-  548   3                              //                              while(1)//出环节点6
-  549   3                              //                                      {
-  550   3                              //                                              go_motor(0,0);
-  551   3                              //                                      }
-  552   3                      }
-  553   2                      if (road_type.post_annulus == 1)
-  554   2                      {
-  555   3                              error = 0;
-  556   3                      }
-  557   2              }
-  558   1              // 避障误差处理
-  559   1      
-  560   1              else if (flag_obstacle == 1 && obstacle_number <= 1)
-  561   1              {
-  562   2                      P52 = 0;
-  563   2                      error = 6;
-  564   2      
-  565   2                      // go_motor(0,2000);
-  566   2                      if (obstacle_annulus_s1 > 400) //
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 10  
+  510   2                      //                              {
+  511   2                      //                                      error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
+  512   2                      //        //入左环岛方向偏差计算
+  513   2                      //        if(road_type.in_annulus_left ==1 && road_type.on_annulus_left==0 )
+  514   2                      //                              {
+  515   2                      //                                  //error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
+  516   2                      //                                        error = -15;
+  517   2                      //                                      road_type.annulus=0;//出环岛标志位清零
+  518   2                      //                              }
+  519   2                      // 入右环岛方向偏差计算
+  520   2                      if (road_type.in_annulus_right == 1 && road_type.on_annulus_right == 0 && road_type.out_annulus == 0)
+  521   2                      {
+  522   3                              // error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;                                        // error = 3;
+  523   3                              error = 2.5; // 逻辑相反与循迹
+  524   3      
+  525   3                              //                              while(1)//打角节点2
+  526   3                              //                                      {
+  527   3                              //                                              go_motor(0,0);
+  528   3                              //                                      }
+  529   3                      }
+  530   2                      // 在环岛偏差
+  531   2                      if (road_type.on_annulus_right == 1)
+  532   2                      {
+  533   3                              // road_type.annulus = 0; // 入环岛标志位清零
+  534   3                              road_type.in_annulus_right = 0;
+  535   3                              //                                      error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;
+  536   3                              error = (Cha_bi_he(Right_Adc, Left_Adc, 20));
+  537   3      
+  538   3                              //                              while(1)//环内循迹节点4
+  539   3                              //                                      {
+  540   3                              //                                              go_motor(0,0);
+  541   3                              //                                      }
+  542   3                      }
+  543   2                      // 出环岛方向偏差计算
+  544   2                      if (road_type.out_annulus == 1)
+  545   2                      {
+  546   3                              //                                  error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*7;
+  547   3                              error = 3;
+  548   3                              //                                      error = Cha_bi_he(Right_Adc,Left_Adc,5);
+  549   3                              // road_type.annulus = 0; // 出环岛标志位清零
+  550   3                              //                              while(1)//出环节点6
+  551   3                              //                                      {
+  552   3                              //                                              go_motor(0,0);
+  553   3                              //                                      }
+  554   3                      }
+  555   2                      if (road_type.post_annulus == 1)
+  556   2                      {
+  557   3                              error = 0;
+  558   3                      }
+  559   2              }
+  560   1              // 避障误差处理
+  561   1      
+  562   1              else if (flag_obstacle == 1 && obstacle_number <= 1)
+  563   1              {
+  564   2                      P52 = 0;
+  565   2                      error = 6;
+  566   2      
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 10  
 
-  567   2                      {
-  568   3      
-  569   3                              obstacle_switch_1 = 1;
-  570   3                              error = -8;
-  571   3                              //                              while(1)
-  572   3                              //                                      {
-  573   3                              //                                        go_motor(0,0);
-  574   3                              //                                      }
-  575   3                      }
-  576   2                      if (obstacle_annulus_s2 > 400)
-  577   2                      {
-  578   3                              obstacle_switch_2 = 1;
-  579   3                              error = -3.5;
-  580   3                      }
-  581   2                      if (obstacle_annulus_s3 > 150) // obstacle_annulus_z3>100&&     &&(Right_Adc+Left_Adc>30)
-  582   2                      {
-  583   3                              //                                      error = 3;
-  584   3      
-  585   3                              //                                      while(1)
-  586   3                              //                                      {
-  587   3                              //                                        go_motor(0,0);   //&&obstacle_annulus_s2>400
-  588   3                              //
-  589   3                              //                                      }
-  590   3                              obstacle_switch_1 = 0;
-  591   3                              obstacle_switch_2 = 0;
-  592   3                              obstacle_annulus_z1 = 0;
-  593   3                              obstacle_annulus_z2 = 0;
-  594   3                              obstacle_annulus_z3 = 0;
-  595   3                              obstacle_annulus_s1 = 0;
-  596   3                              obstacle_annulus_s2 = 0;
-  597   3                              obstacle_annulus_s3 = 0;
-  598   3                              BUZZ_OFF;
-  599   3      
-  600   3                              P52 = 1;
-  601   3                              flag_obstacle = 0; // 避障结束标志位清零
-  602   3                              obstacle_number++; // 避障只判断一次，发车时通过拨码开关选择出库方向先走避�
+  567   2                      // go_motor(0,2000);
+  568   2                      if (obstacle_annulus_s1 > 400) //
+  569   2                      {
+  570   3      
+  571   3                              obstacle_switch_1 = 1;
+  572   3                              error = -8;
+  573   3                              //                              while(1)
+  574   3                              //                                      {
+  575   3                              //                                        go_motor(0,0);
+  576   3                              //                                      }
+  577   3                      }
+  578   2                      if (obstacle_annulus_s2 > 400)
+  579   2                      {
+  580   3                              obstacle_switch_2 = 1;
+  581   3                              error = -3.5;
+  582   3                      }
+  583   2                      if (obstacle_annulus_s3 > 150) // obstacle_annulus_z3>100&&     &&(Right_Adc+Left_Adc>30)
+  584   2                      {
+  585   3                              //                                      error = 3;
+  586   3      
+  587   3                              //                                      while(1)
+  588   3                              //                                      {
+  589   3                              //                                        go_motor(0,0);   //&&obstacle_annulus_s2>400
+  590   3                              //
+  591   3                              //                                      }
+  592   3                              obstacle_switch_1 = 0;
+  593   3                              obstacle_switch_2 = 0;
+  594   3                              obstacle_annulus_z1 = 0;
+  595   3                              obstacle_annulus_z2 = 0;
+  596   3                              obstacle_annulus_z3 = 0;
+  597   3                              obstacle_annulus_s1 = 0;
+  598   3                              obstacle_annulus_s2 = 0;
+  599   3                              obstacle_annulus_s3 = 0;
+  600   3                              BUZZ_OFF;
+  601   3      
+  602   3                              P52 = 1;
+  603   3                              flag_obstacle = 0; // 避障结束标志位清零
+  604   3                              obstacle_number++; // 避障只判断一次，发车时通过拨码开关选择出库方向先走避�
              -�，只在直道判断避障，减小误判
-  603   3                                                                 //                                   while(1)
-  604   3                                                                 //                                   {
-  605   3                                                                 //                                           go_motor(0,0);
-  606   3                                                                 //                                   }
-  607   3                      }
-  608   2              }
-  609   1              else
-  610   1              {
-  611   2      
-  612   2                      //              aim_speed = ZxjsWdjs(Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc),400)+100;
-  613   2                      error = Cha_x_bi_he(Left_Adc, Left_Shu_Adc * 1, Right_Adc, Right_Shu_Adc * 1) * 20; // 屏幕显示的�
+  605   3                                                                 //                                   while(1)
+  606   3                                                                 //                                   {
+  607   3                                                                 //                                           go_motor(0,0);
+  608   3                                                                 //                                   }
+  609   3                      }
+  610   2              }
+  611   1              else
+  612   1              {
+  613   2      
+  614   2                      //              aim_speed = ZxjsWdjs(Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc),400)+100;
+  615   2                      error = Cha_x_bi_he(Left_Adc, Left_Shu_Adc * 1, Right_Adc, Right_Shu_Adc * 1) * 20; // 屏幕显示的�
              -��道偏差值
-  614   2                      errors = Cha_x_bi_he(Left_Adc, Left_Shu_Adc, Right_Adc, Right_Shu_Adc);                         // 归一化的标准赛道�
+  616   2                      errors = Cha_x_bi_he(Left_Adc, Left_Shu_Adc, Right_Adc, Right_Shu_Adc);                         // 归一化的标准赛道�
              -��差值
-  615   2      
-  616   2                      //                      errorh=1.0f/exp(errors*errors);                                                                                         //减速函数
-  617   2                      //                      aim_speedb=aim_speed*errorh;                                                                                            //动态期望速度（直道无衰减弯道衰减）
-  618   2                      aim_speedb = aim_speed; // 动态期望速度（直道无衰减弯道衰减）
-  619   2                                                                      //                      if(Left_Adc==0&&Left_Shu_Adc==0&&Right_Adc==0&&Right_Shu_Adc==0)
-  620   2                                                                      //                      {
-  621   2                                                                      //                      aim_speedb = -10;                                                                                                                       //丢线倒车
-  622   2                                                                      //                      }
-  623   2      
-  624   2                      //      }
-  625   2              }
-  626   1              return error;
-  627   1      }
-  628          
-  629          /**********************************电磁所有总处理***************************************
-C251 COMPILER V5.60.0,  ADC                                                                05/04/25  19:51:39  PAGE 11  
+  617   2      
+  618   2                      //                      errorh=1.0f/exp(errors*errors);                                                                                         //减速函数
+  619   2                      //                      aim_speedb=aim_speed*errorh;                                                                                            //动态期望速度（直道无衰减弯道衰减）
+  620   2                      aim_speedb = aim_speed; // 动态期望速度（直道无衰减弯道衰减）
+  621   2                                                                      //                      if(Left_Adc==0&&Left_Shu_Adc==0&&Right_Adc==0&&Right_Shu_Adc==0)
+  622   2                                                                      //                      {
+  623   2                                                                      //                      aim_speedb = -10;                                                                                                                       //丢线倒车
+  624   2                                                                      //                      }
+  625   2      
+  626   2                      //      }
+  627   2              }
+  628   1              return error;
+  629   1      }
+C251 COMPILER V5.60.0,  ADC                                                                05/04/25  21:33:17  PAGE 11  
 
-  630          函数：  void Get_deviation(void)
-  631          功能：  电磁所有总处理
-  632          参数：  无
-  633          说明：  放中断调用此函数即可
-  634          返回值：无
-  635          ****************************************************************************************/
-  636          void Get_deviation(void)
-  637          {
-  638   1      
-  639   1              ADC_Collect();                  // 电感原始值采值
-  640   1              Data_current_analyze(); // 电感值归一化函数
-  641   1              Annulus_handle();               // 环岛处理
-  642   1              Annulus_assist();               // 环岛辅助函数
-  643   1              obstacle_avoidance();   // 障碍物检测
-  644   1              Obstacle_assist();
-  645   1              Current_Dir = Direction_error(); // 获得赛道偏差
-  646   1      }
+  630          
+  631          /**********************************电磁所有总处理***************************************
+  632          函数：  void Get_deviation(void)
+  633          功能：  电磁所有总处理
+  634          参数：  无
+  635          说明：  放中断调用此函数即可
+  636          返回值：无
+  637          ****************************************************************************************/
+  638          void Get_deviation(void)
+  639          {
+  640   1      
+  641   1              ADC_Collect();                  // 电感原始值采值
+  642   1              Data_current_analyze(); // 电感值归一化函数
+  643   1              Annulus_handle();               // 环岛处理
+  644   1              Annulus_assist();               // 环岛辅助函数
+  645   1              obstacle_avoidance();   // 障碍物检测
+  646   1              Obstacle_assist();
+  647   1              Current_Dir = Direction_error(); // 获得赛道偏差
+  648   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1908     ------
+  code size            =      1904     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

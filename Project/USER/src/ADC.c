@@ -407,6 +407,8 @@ void Annulus_handle(void)
 			annulus_s = 0;
 			annulus_s2 = 0;
 			annulus_s3 = 0;
+			// Speed_pwm_left = Last_speed_pwm_left;
+			// Speed_pwm_right = Last_speed_pwm_right;
 			BUZZ_OFF;
 		}
 		return; // 在直走阶段不允许进入环岛，直接返回
@@ -518,7 +520,7 @@ float Direction_error(void)
 		if (road_type.in_annulus_right == 1 && road_type.on_annulus_right == 0 && road_type.out_annulus == 0)
 		{
 			// error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*20;					 // error = 3;
-			error = 3.3; // 逻辑相反与循迹
+			error = 2.5; // 逻辑相反与循迹
 
 			//				while(1)//打角节点2
 			//					{
@@ -542,7 +544,7 @@ float Direction_error(void)
 		if (road_type.out_annulus == 1)
 		{
 			//				    error = Cha_x_bi_he(Left_Adc,Left_Shu_Adc,Right_Adc,Right_Shu_Adc)*7;
-			error = 2.8;
+			error = 3;
 			//					error = Cha_bi_he(Right_Adc,Left_Adc,5);
 			// road_type.annulus = 0; // 出环岛标志位清零
 			//				while(1)//出环节点6

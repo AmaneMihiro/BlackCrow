@@ -19,11 +19,11 @@ void PID_int(void)
   //	SpeedPID.Ki=10 ;     //0.5                                  2.5
   //	SpeedPID.Kd=0;
 
-  L_SpeedPID.Kp = 360; // 4  //�����ٶȻ�PID�������ٶȻ�20ms����6��4.5
+  L_SpeedPID.Kp = 350; // 4  //�����ٶȻ�PID�������ٶȻ�20ms����6��4.5
   L_SpeedPID.Ki = 0.1; // 1
   L_SpeedPID.Kd = 0;
 
-  R_SpeedPID.Kp = 360; // ���ٶȻ�PID�������ٶȻ�20ms����6��5.5
+  R_SpeedPID.Kp = 350; // ���ٶȻ�PID�������ٶȻ�20ms����6��5.5
   R_SpeedPID.Ki = 0.1;
   R_SpeedPID.Kd = 0;
 
@@ -114,6 +114,7 @@ void TaskProcess(void)
 ***************************************************************************************/
 void Motor_output_control()
 {
+  static uint32 Inc_count = 0;
   //	P52=0;//���ж�Ƶ��
 
   // imu660ra_get_gyro();   //��ȡ660�����ǽ��ٶ�ֵ
@@ -146,6 +147,13 @@ void Motor_output_control()
 
   Speed_pwm_left += IncPIDCalc(&L_SpeedPID, aim_speedb + ADC_PWM, left_real_speed);
   Speed_pwm_right += IncPIDCalc(&R_SpeedPID, aim_speedb - ADC_PWM, right_real_speed);
+  Inc_count++;
+  if (Inc_count >= 25)
+  {
+    Speed_pwm_left *= 0.999;
+    Speed_pwm_right *= 0.999;
+    Inc_count = 0;
+  }
 
   //	  Speed_pwm_left=range_protect(Speed_pwm_left, -aim_speed, 2*aim_speed);//�����޷�����ֹ���ӷ�ת̫���¼������ٶȣ�
   //	  Speed_pwm_right=range_protect(Speed_pwm_right, -aim_speed,2*aim_speed);//�����޷�����ֹ���ӷ�ת̫���¼������ٶȣ�

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 1   
+C251 COMPILER V5.60.0,  park                                                               05/04/25  21:33:17  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE park
@@ -66,7 +66,7 @@ stmt  level    source
    55   3                                      //pwm_duty(PWMB_CH1_P74,STEER_MID);            //（C车用）
    56   3                               go_motor(1500, 1500);
    57   3                               if (T_outku >= T_OUT_PARK1) 
-C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 2   
+C251 COMPILER V5.60.0,  park                                                               05/04/25  21:33:17  PAGE 2   
 
    58   3                               {
    59   4                                       //pwm_duty(PWMB_CH1_P74,STEER_MID+STEER_LIM); //（C车用）
@@ -134,7 +134,7 @@ stmt  level    source
   121   4                                while(S_daoku>450)
   122   4                                {
   123   5                                              speed_measure();      //编码器测量
-C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 3   
+C251 COMPILER V5.60.0,  park                                                               05/04/25  21:33:17  PAGE 3   
 
   124   5                                        go_motor(1500,1500);
   125   5                                              S_daoku_2+= fabs(real_speed)*0.1;
@@ -203,7 +203,7 @@ Module Information          Static   Overlayable
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
-C251 COMPILER V5.60.0,  park                                                               05/04/25  18:26:13  PAGE 4   
+C251 COMPILER V5.60.0,  park                                                               05/04/25  21:33:17  PAGE 4   
 
   pdata size           =    ------     ------
   xdata size           =    ------     ------
