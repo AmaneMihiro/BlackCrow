@@ -1,687 +1,733 @@
 #include "debug.h"
 #include "math.h"
-/*************************Ê¹ÓÃËµÃ÷****************************************
-±¾Ð­ÒéÓë¡°Visual Scope¡±Èí¼þÐ­Òé¼æÈÝ£¬ÓÃ¹ýµÄ¿ÉÒÔÖ±½ÓÓÃÔ­À´µÄÏÂÎ»»úÐ­Òé¼´¿É
-Ê×´ÎÊ¹ÓÃÊ±£º
-1.½«¡°outputdata.c¡±ºÍ¡°outputdata.h¡±Ìí¼Óµ½ÄãµÄ¹¤³ÌÖÐ
-2.ÔÚ¡°outputdata.c¡±ÖÐ°üº¬ÄãÔ­³ÌÐòµÄ´®¿Ú·¢ËÍº¯ÊýÍ·ÎÄ¼þ
-3.½«uart_putchar(databuf[i]);Óï¾äÌæ»»ÎªÄãµÄ´®¿Ú×Ö½Ú·¢ËÍº¯Êý£¬Èçsend_char(databuf[i]);
-4.ÔÚÄãµÄ³ÌÐòÐèÒª·¢ËÍ²¨ÐÎÊý¾ÝµÄ.cÎÄ¼þÖÐÌí¼Ó°üº¬£º#include "outputdata.h"£¬²¢ÔÚ±¾ÎÄ¼þÖÐµ÷ÓÃº¯ÊýOutPut_Data(x,y,z,w);
-  ÆäÖÐÐÎ²Îx£¬y£¬z£¬w¾ÍÊÇ´«ÈëËÄ¸öshort int 16Î»Êý¾Ý£¬·Ö±ð¶ÔÓ¦Í¨µÀ1,2,3,4
+/*************************Ê¹ï¿½ï¿½Ëµï¿½ï¿½****************************************
+ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ë¡°Visual Scopeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ã¹ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ð­ï¿½é¼´ï¿½ï¿½
+ï¿½×´ï¿½Ê¹ï¿½ï¿½Ê±ï¿½ï¿½
+1.ï¿½ï¿½ï¿½ï¿½outputdata.cï¿½ï¿½ï¿½Í¡ï¿½outputdata.hï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½
+2.ï¿½Ú¡ï¿½outputdata.cï¿½ï¿½ï¿½Ð°ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½Ú·ï¿½ï¿½Íºï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½
+3.ï¿½ï¿½uart_putchar(databuf[i]);ï¿½ï¿½ï¿½ï¿½æ»»Îªï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½Ö½Ú·ï¿½ï¿½Íºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½send_char(databuf[i]);
+4.ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½.cï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½#include "outputdata.h"ï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½ï¿½Ãºï¿½ï¿½ï¿½OutPut_Data(x,y,z,w);
+  ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½xï¿½ï¿½yï¿½ï¿½zï¿½ï¿½wï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½short int 16Î»ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ö±ï¿½ï¿½Ó¦Í¨ï¿½ï¿½1,2,3,4
 ************************************************************************/
-//´Ë´¦Ìí¼ÓÄãµÄ´®¿ÚÍ·ÎÄ¼þ°üº¬£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
+// ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "zf_uart.h"
-//****************************ÒÆÖ²**************************//
+//****************************ï¿½ï¿½Ö²**************************//
 
-void Data_Send(UARTN_enum uratn,signed short int *pst)
+void Data_Send(UARTN_enum uratn, signed short int *pst)
 {
-		unsigned char _cnt=0; unsigned char sum = 0;
-    unsigned char data_to_send[23] = {0};         //·¢ËÍ»º´æ
+    unsigned char _cnt = 0;
+    unsigned char sum = 0;
+    unsigned char data_to_send[23] = {0}; // ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½
     unsigned char i;
-    data_to_send[_cnt++]=0xAA;
-    data_to_send[_cnt++]=0xAA;
-    data_to_send[_cnt++]=0x02;
-    data_to_send[_cnt++]=0;
-    data_to_send[_cnt++]=(unsigned char)(pst[0]>>8);  //¸ß8Î»
-    data_to_send[_cnt++]=(unsigned char)pst[0];  //µÍ8Î»
-    data_to_send[_cnt++]=(unsigned char)(pst[1]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[1];
-    data_to_send[_cnt++]=(unsigned char)(pst[2]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[2];
-    data_to_send[_cnt++]=(unsigned char)(pst[3]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[3];
-    data_to_send[_cnt++]=(unsigned char)(pst[4]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[4];
-    data_to_send[_cnt++]=(unsigned char)(pst[5]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[5];
-    data_to_send[_cnt++]=(unsigned char)(pst[6]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[6];
-    data_to_send[_cnt++]=(unsigned char)(pst[7]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[7];
-    data_to_send[_cnt++]=(unsigned char)(pst[8]>>8);
-    data_to_send[_cnt++]=(unsigned char)pst[8];
+    data_to_send[_cnt++] = 0xAA;
+    data_to_send[_cnt++] = 0xAA;
+    data_to_send[_cnt++] = 0x02;
+    data_to_send[_cnt++] = 0;
+    data_to_send[_cnt++] = (unsigned char)(pst[0] >> 8); // ï¿½ï¿½8Î»
+    data_to_send[_cnt++] = (unsigned char)pst[0];        // ï¿½ï¿½8Î»
+    data_to_send[_cnt++] = (unsigned char)(pst[1] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[1];
+    data_to_send[_cnt++] = (unsigned char)(pst[2] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[2];
+    data_to_send[_cnt++] = (unsigned char)(pst[3] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[3];
+    data_to_send[_cnt++] = (unsigned char)(pst[4] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[4];
+    data_to_send[_cnt++] = (unsigned char)(pst[5] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[5];
+    data_to_send[_cnt++] = (unsigned char)(pst[6] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[6];
+    data_to_send[_cnt++] = (unsigned char)(pst[7] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[7];
+    data_to_send[_cnt++] = (unsigned char)(pst[8] >> 8);
+    data_to_send[_cnt++] = (unsigned char)pst[8];
 
-
-    data_to_send[3] = _cnt-4;
+    data_to_send[3] = _cnt - 4;
 
     sum = 0;
-    for(i=0;i<_cnt;i++)
+    for (i = 0; i < _cnt; i++)
         sum += data_to_send[i];
 
     data_to_send[_cnt++] = sum;
 
-        for(i=0;i<_cnt;i++)
-    uart_putchar(uratn,data_to_send[i]);
+    for (i = 0; i < _cnt; i++)
+        uart_putchar(uratn, data_to_send[i]);
 }
 
-//===================================================ÉÏÎ»»úÏà¹ØµÄ==========================================================
+//===================================================ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Øµï¿½==========================================================
 //======================================================================================================================
-/****************Êý¾Ý´«Êä******************
-º¯Êý£ºvoid datasend()
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º ¿ÉÒÔÍ¬Ê±´«Êä6¸öÊý  icm_gyro_x   icm_acc_x ICM_Real.gyro.y  ICM_Real.acc.z   
-³£¿´µÄ±äÁ¿£ºicm_acc_x  icm_gyro_y  Angle  adc_date[0] Left_Adc
+/****************ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½******************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void datasend()
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½ï¿½ï¿½  icm_gyro_x   icm_acc_x ICM_Real.gyro.y  ICM_Real.acc.z
+ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½icm_acc_x  icm_gyro_y  Angle  adc_date[0] Left_Adc
 
-·µ»ØÖµ£ºÎÞ
-ÈÕÆÚ£º
-×÷Õß£º  */
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ú£ï¿½
+ï¿½ï¿½ï¿½ß£ï¿½  */
 void datasend()
-{  
-   short send_data[6];                      
+{
+    short send_data[6];
 
-   send_data[0]= aim_speed;//left_speed; ////////ICM_Start.acc.x 
-   send_data[1]= left_real_speed;//right_speed; //////////////////    MpuStart.gyro.x   Angle  
-   send_data[2]= aim_speed; //////////
-   send_data[3]= right_real_speed;//imu660ra_gyro_z; //
-   send_data[4]= 0;//GORY_Z;
-   send_data[5]= 0;
-	 //Data_Send(UART_4,send_data);
-   Data_Send(UART_User,send_data);
+    send_data[0] = aim_speed;        // left_speed; ////////ICM_Start.acc.x
+    send_data[1] = left_real_speed;  // right_speed; //////////////////    MpuStart.gyro.x   Angle
+    send_data[2] = aim_speed;        //////////
+    send_data[3] = right_real_speed; // imu660ra_gyro_z; //
+    send_data[4] = 0;                // GORY_Z;
+    send_data[5] = 0;
+    // Data_Send(UART_4,send_data);
+    Data_Send(UART_User, send_data);
 }
 
 float StrToDouble(const char *s)
 {
-	int i = 0;
-	int k = 0;
-	float j;
-	int flag =1;
-	float result = 0.0;
-	if (s[i] == '+')
-	{
-		i++;
-	}
-	if (s[i] == '-')
-	{
-		i++;
-		flag = -1;
-	}
-	while (s[i] != '\0' && s[i] != '.')
-	{
-		j = (s[i] - '0')*1.0;
-		result = result * 10 + j;
-		i++;
-	}
-	if (s[i] == '.')
-	{
-		i++;
-		while (s[i] != '\0'&&s[i] != ' ')
-		{
-			k++;
-			j = s[i] - '0';
-			result = result + (1.0 * j) / pow(10.0, k);   
-			i++;
-		}
-	}
-	result = flag * result;
-	return result;
+    int i = 0;
+    int k = 0;
+    float j;
+    int flag = 1;
+    float result = 0.0;
+    if (s[i] == '+')
+    {
+        i++;
+    }
+    if (s[i] == '-')
+    {
+        i++;
+        flag = -1;
+    }
+    while (s[i] != '\0' && s[i] != '.')
+    {
+        j = (s[i] - '0') * 1.0;
+        result = result * 10 + j;
+        i++;
+    }
+    if (s[i] == '.')
+    {
+        i++;
+        while (s[i] != '\0' && s[i] != ' ')
+        {
+            k++;
+            j = s[i] - '0';
+            result = result + (1.0 * j) / pow(10.0, k);
+            i++;
+        }
+    }
+    result = flag * result;
+    return result;
 }
 
-void extern_iap_write_float(double dat,uint8 num,uint8 pointnum,uint16 addr)
+void extern_iap_write_float(double dat, uint8 num, uint8 pointnum, uint16 addr)
 {
-  uint8   length;
-	int8    buff[34];
-	int8    start,end,point;
+    uint8 length;
+    int8 buff[34];
+    int8 start, end, point;
 
-	if(0>dat)   length = zf_sprintf( &buff[0],"%f",dat);//¸ºÊý
-	else
-	{
-		length = zf_sprintf( &buff[1],"%f",dat);
-		length++;
-	}
-	point = length - 7;         //¼ÆËãÐ¡ÊýµãÎ»ÖÃ
-	start = point - num - 1;    //¼ÆËãÆðÊ¼Î»
-	end = point + pointnum + 1; //¼ÆËã½áÊøÎ»
-	while(0>start)//ÕûÊýÎ»²»¹»  Ä©Î²Ó¦¸ÃÌî³ä¿Õ¸ñ
-	{
-		buff[end] = ' ';
-		end++;
-		start++;
-	}
-    
-	if(0>dat)   buff[start] = '-';
-  else        buff[start] = '+';
-    
-	buff[end] = '\0';
+    if (0 > dat)
+        length = zf_sprintf(&buff[0], "%f", dat); // ï¿½ï¿½ï¿½ï¿½
+    else
+    {
+        length = zf_sprintf(&buff[1], "%f", dat);
+        length++;
+    }
+    point = length - 7;         // ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+    start = point - num - 1;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Î»
+    end = point + pointnum + 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
+    while (0 > start)           // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½  Ä©Î²Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Õ¸ï¿½
+    {
+        buff[end] = ' ';
+        end++;
+        start++;
+    }
 
-	extern_iap_write_bytes(addr,(uint8 *)buff,num+pointnum+3);
+    if (0 > dat)
+        buff[start] = '-';
+    else
+        buff[start] = '+';
+
+    buff[end] = '\0';
+
+    extern_iap_write_bytes(addr, (uint8 *)buff, num + pointnum + 3);
 }
 
 float iap_read_float(uint8 len, uint16 addr)
 {
-	uint8 buf[34];
-	iap_read_bytes(addr, buf, len);
-	
-	return StrToDouble(buf);
+    uint8 buf[34];
+    iap_read_bytes(addr, buf, len);
+
+    return StrToDouble(buf);
 }
 
-void EEROM_CanshuInit() //PID³õÊ¼»¯
+void EEROM_CanshuInit() // PIDï¿½ï¿½Ê¼ï¿½ï¿½
 {
-//ÏòeepromÐ´ÈëÊý¾Ý£¬ÔÚÐ´ÈëµÄÊ±ºò¼ÇµÃ°Ñ²Á³ýeepromÇø¹´ÉÏ
-//	extern_iap_write_float(30,3,1,0x00);//(30,3,1,0x00)ÖÐµÄ30´ú±íÒªÐ´ÈëµÄÊý£¬3´ú±íÕûÊýÎ»£¬1´ú±íÐ¡ÊýÎ»¡£Õâ¾ä»°µÄÒâË¼ÊÇ°Ñ30×ª»»Îª"+030.0"´æÈë0x00-0x06µØÖ·ÖÐ£¬ÒòÎª"+030.0"Õ¼Áù¸öµØÖ·£¬¼ÓÉÏ×Ö·û´®µÄ½áÊø×Ö·û'/0'£¬ËùÒÔÕ¼ÁËÆß¸öµØÖ·£¬ËùÒÔÊÇ0x00µ½0x06,ÏÂ¸öÊý¾ÝÒª´æÒÔµ½0x07ÎªÆðÊ¼µØÖ·¡£
-//	extern_iap_write_float(15,3,1,0x07);
-//	extern_iap_write_float(11000,5,1,0x0e);
-//	extern_iap_write_float(315,4,1,0x17);
-//	extern_iap_write_float(2.0,1,1,0x1f);
-//	extern_iap_write_float(1.5,1,1,0x24);
-//	extern_iap_write_float(680,3,1,0x29);
-	
-//´ÓeepromÖÐ¶ÁÈ¡Êý¾Ý£¬¼ÇµÃ²»Òª°Ñ²Á³ýeepromÇø¹´ÉÏ
-	  //SpeedPID.Kp=iap_read_float(7,0x00);
-	  //iap_read_bytes(0x00,SpeedPID.Kp,2);
-	  //TurnPID.Ki=iap_read_float(7,0x0e);
-//	TurnPID.Kp= iap_read_float(7,0x00);//Õâ¾ä»°µÄÒâË¼ÊÇ´Ó0x00µØÖ·¿ªÊ¼È¡³ö7¸öµØÖ·µÄÊý¾Ý£¬Ò²¾ÍÊÇ0x00µ½0x06¡£
-//  TurnPID.Ki = iap_read_float(7,0x07);
-//  TurnPID.Kd = iap_read_float(9,0x0e);
-	  //iap_read_bytes(0x00,(uint16 *)"350",2); //aim_speed=
-//  MotorPID.I = iap_read_float(8,0x17);
-//	Stright=iap_read_float(5,0x1f);
-//	Curve=iap_read_float(5,0x24);
-//	pout0=iap_read_float(7,0x29);
-}
-//====================================================ÆÁÄ»Ïà¹ØµÄ=(ÒÑÉ¾³ý)=============================================================
-//============================================================================================================================
-//sprintf(temp," date20=%d",date);
-//TFTSPI_P8X8Str(0,19,temp,BLACK,WHITE);break;
+    // ï¿½ï¿½eepromÐ´ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ÇµÃ°Ñ²ï¿½ï¿½ï¿½eepromï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //	extern_iap_write_float(30,3,1,0x00);//(30,3,1,0x00)ï¿½Ðµï¿½30ï¿½ï¿½ï¿½ï¿½ÒªÐ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ä»°ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½Ç°ï¿½30×ªï¿½ï¿½Îª"+030.0"ï¿½ï¿½ï¿½ï¿½0x00-0x06ï¿½ï¿½Ö·ï¿½Ð£ï¿½ï¿½ï¿½Îª"+030.0"Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½'/0'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0x00ï¿½ï¿½0x06,ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ôµï¿½0x07Îªï¿½ï¿½Ê¼ï¿½ï¿½Ö·ï¿½ï¿½
+    //	extern_iap_write_float(15,3,1,0x07);
+    //	extern_iap_write_float(11000,5,1,0x0e);
+    //	extern_iap_write_float(315,4,1,0x17);
+    //	extern_iap_write_float(2.0,1,1,0x1f);
+    //	extern_iap_write_float(1.5,1,1,0x24);
+    //	extern_iap_write_float(680,3,1,0x29);
 
-//==========================================================²¦Âë¿ª¹Ø¼°°´¼üÏà¹Ø=========================================================
+    // ï¿½ï¿½eepromï¿½Ð¶ï¿½È¡ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ÇµÃ²ï¿½Òªï¿½Ñ²ï¿½ï¿½ï¿½eepromï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // SpeedPID.Kp=iap_read_float(7,0x00);
+    // iap_read_bytes(0x00,SpeedPID.Kp,2);
+    // TurnPID.Ki=iap_read_float(7,0x0e);
+    //	TurnPID.Kp= iap_read_float(7,0x00);//ï¿½ï¿½ä»°ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½Ç´ï¿½0x00ï¿½ï¿½Ö·ï¿½ï¿½Ê¼È¡ï¿½ï¿½7ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Ò²ï¿½ï¿½ï¿½ï¿½0x00ï¿½ï¿½0x06ï¿½ï¿½
+    //  TurnPID.Ki = iap_read_float(7,0x07);
+    //  TurnPID.Kd = iap_read_float(9,0x0e);
+    // iap_read_bytes(0x00,(uint16 *)"350",2); //aim_speed=
+    //  MotorPID.I = iap_read_float(8,0x17);
+    //	Stright=iap_read_float(5,0x1f);
+    //	Curve=iap_read_float(5,0x24);
+    //	pout0=iap_read_float(7,0x29);
+}
+//====================================================ï¿½ï¿½Ä»ï¿½ï¿½Øµï¿½=(ï¿½ï¿½É¾ï¿½ï¿½)=============================================================
+//============================================================================================================================
+// sprintf(temp," date20=%d",date);
+// TFTSPI_P8X8Str(0,19,temp,BLACK,WHITE);break;
+
+//==========================================================ï¿½ï¿½ï¿½ë¿ªï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½=========================================================
 //====================================================================================================================================
 
-//²¦Âë¿ª¹ØÒý½Åºê¶¨Òå
-#define Switch_Pin_1       P75
-#define Switch_Pin_2       P76
-#define Switch_Pin_3       P11
-#define Switch_Pin_4       P61
-#define Switch_Pin_5       P14
-#define Switch_Pin_6       P15
-//¶¨Òå°´¼üÒý½Å
-#define KEY1    P70      
-#define KEY2    P71      
-#define KEY3    P72        
-#define KEY4    P73       
+// ï¿½ï¿½ï¿½ë¿ªï¿½ï¿½ï¿½ï¿½ï¿½Åºê¶¨ï¿½ï¿½
+#define Switch_Pin_1 P75
+#define Switch_Pin_2 P76
+#define Switch_Pin_3 P11
+#define Switch_Pin_4 P61
+#define Switch_Pin_5 P14
+#define Switch_Pin_6 P15
+// ï¿½ï¿½ï¿½å°´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define KEY1 P70
+#define KEY2 P71
+#define KEY3 P72
+#define KEY4 P73
 
-//***************º¯Êýºê¶¨Òå****(ÏÂÃæÕâÐ©º¯ÊýÇëÐÞ¸Äºê¶¨ÒåÎª¶ÔÓ¦µÄGPIO¿âº¯Êý²Ù×÷)***********
-#define KEY_INT(key_x)           gpio_pull_set(key_x,PULLUP)//ÅäÖÃÎªÉÏÀ­Êä³ö   
-#define SWITCH_INT(switch_x)     gpio_pull_set(switch_x,PULLUP)//ÅäÖÃÎªÉÏÀ­µç×è
-#define READ_GPIO(Pin_X)         Pin_X
-#define TiaoCan_DelayMs(M_S)     delay_ms(M_S)   //ÑÓÊ±
+//***************ï¿½ï¿½ï¿½ï¿½ï¿½ê¶¨ï¿½ï¿½****(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Äºê¶¨ï¿½ï¿½Îªï¿½ï¿½Ó¦ï¿½ï¿½GPIOï¿½âº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)***********
+#define KEY_INT(key_x) gpio_pull_set(key_x, PULLUP)          // ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define SWITCH_INT(switch_x) gpio_pull_set(switch_x, PULLUP) // ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define READ_GPIO(Pin_X) Pin_X
+#define TiaoCan_DelayMs(M_S) delay_ms(M_S) // ï¿½ï¿½Ê±
 
-unsigned char TiaoCan=0;////////////////////////µ÷²Î±êÖ¾Î»
-unsigned char TFT_SHOW=0;///////////////////////ÆÁÄ»¿ª¹Ø
-unsigned char Switch1=0,Switch2=0,Switch3=0,Switch4=0,Switch5=0,Switch6=0;//²¦Âë
-char parameter=0;//²ÎÊýÑ¡Ôñ
+unsigned char TiaoCan = 0;                                                                  ////////////////////////ï¿½ï¿½ï¿½Î±ï¿½Ö¾Î»
+unsigned char TFT_SHOW = 0;                                                                 ///////////////////////ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½
+unsigned char Switch1 = 0, Switch2 = 0, Switch3 = 0, Switch4 = 0, Switch5 = 0, Switch6 = 0; // ï¿½ï¿½ï¿½ï¿½
+char parameter = 0;                                                                         // ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½
 
-//¿ª¹Ø×´Ì¬±äÁ¿
-uint8 key1_status = 1,key2_status = 1,key3_status = 1, key4_status = 1,key5_status = 1;
-//ÉÏÒ»´Î¿ª¹Ø×´Ì¬±äÁ¿
-uint8 key1_last_status, key2_last_status, key3_last_status, key4_last_status,key5_last_status;
-//¿ª¹Ø±êÖ¾Î»
-uint8 key1_flag=0,key2_flag=0,key3_flag=0, key4_flag=0,key5_flag=0;
-/*****************²¦Âë¿ª¹Ø¼°°´¼ü³õÊ¼»¯*****************
-º¯Êý£ºvoid Switch_Key_init()
-¹¦ÄÜ£º³õÊ¼»¯IO
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º ³õÊ¼»¯IO¿Ú   gpio_init(D1, GPI, GPIO_HIGH, GPI_PULL_UP); GPO_PUSH_PULL
-·µ»ØÖµ£ºÎÞ*/
+// ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
+uint8 key1_status = 1, key2_status = 1, key3_status = 1, key4_status = 1, key5_status = 1;
+// ï¿½ï¿½Ò»ï¿½Î¿ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
+uint8 key1_last_status, key2_last_status, key3_last_status, key4_last_status, key5_last_status;
+// ï¿½ï¿½ï¿½Ø±ï¿½Ö¾Î»
+uint8 key1_flag = 0, key2_flag = 0, key3_flag = 0, key4_flag = 0, key5_flag = 0;
+/*****************ï¿½ï¿½ï¿½ë¿ªï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½*****************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void Switch_Key_init()
+ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½IO
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ê¼ï¿½ï¿½IOï¿½ï¿½   gpio_init(D1, GPI, GPIO_HIGH, GPI_PULL_UP); GPO_PUSH_PULL
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½*/
 void Switch_Key_init()
 {
 
-  //²¦Âë¿ª¹Ø³õÊ¼»¯  £¨ÎÞÐèÐÞ¸Ä£¬ÇëÎðÐÞ¸Ä£©
-	SWITCH_INT(Switch_Pin_1) ;
-	SWITCH_INT(Switch_Pin_2) ;
-	SWITCH_INT(Switch_Pin_3) ;
-	SWITCH_INT(Switch_Pin_4) ;
-	SWITCH_INT(Switch_Pin_5) ;
-	SWITCH_INT(Switch_Pin_6) ;
-    
-  //°´¼ü³õÊ¼»¯ £¨ÎÞÐèÐÞ¸Ä£¬ÇëÎðÐÞ¸Ä£©
-  KEY_INT(KEY1);
-	KEY_INT(KEY2);
-	KEY_INT(KEY3);
-	KEY_INT(KEY4);
+    // ï¿½ï¿½ï¿½ë¿ªï¿½Ø³ï¿½Ê¼ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä£ï¿½
+    SWITCH_INT(Switch_Pin_1);
+    SWITCH_INT(Switch_Pin_2);
+    SWITCH_INT(Switch_Pin_3);
+    SWITCH_INT(Switch_Pin_4);
+    SWITCH_INT(Switch_Pin_5);
+    SWITCH_INT(Switch_Pin_6);
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä£ï¿½
+    KEY_INT(KEY1);
+    KEY_INT(KEY2);
+    KEY_INT(KEY3);
+    KEY_INT(KEY4);
 }
 
-/*****************²¦Âë¿ª¹Ø²ßÂÔÑ¡Ôñ*****************
-º¯Êý£ºvoid Strategy_Slect()
-¹¦ÄÜ£ºÍ¨¹ý²¦Âë¿ª¹Øµ÷Õû²ßÂÔ
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º  6Î»²¦Âë¿ª¹Ø£¬Èç¹ûÓÐÔö¼Ó»òÕß¼õÉÙ¿É¶ÔÕÕÐÞ¸Ä,Èç¹û²»×ã6¸öÒ²²»ÒªÉ¾³ý¶àÓàµÄ£¬¶àÓàµÄÄãËæ±ãÒý½Å¸Ä¸öÃ»ÓÃµÄ¼´¿É
-        Ê¹ÓÃÄã¶¨ÒåµÄ¾ÍºÃÁË£¬ÆäËûÃ»ÓÐÓÃµ½µÄÎÞÐè¹ØÐÄ
-·µ»ØÖµ£ºÎÞ*/
+/*****************ï¿½ï¿½ï¿½ë¿ªï¿½Ø²ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½*****************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void Strategy_Slect()
+ï¿½ï¿½ï¿½Ü£ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ë¿ªï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½  6Î»ï¿½ï¿½ï¿½ë¿ªï¿½Ø£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ß¼ï¿½ï¿½Ù¿É¶ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½Ò²ï¿½ï¿½ÒªÉ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸Ä¸ï¿½Ã»ï¿½ÃµÄ¼ï¿½ï¿½ï¿½
+        Ê¹ï¿½ï¿½ï¿½ã¶¨ï¿½ï¿½Ä¾Íºï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½*/
 void Strategy_Slect()
 {
-      //¶ÁÈ¡²¦Âë¿ª¹Ø×´Ì¬
-      if(!READ_GPIO(Switch_Pin_1))//ÓÃ
-      {
-       Switch1=1;
-			 Annulus_selection=1;
-//			 //ÏÔÊ¾µç¸ÐÔ­Ê¼Öµ
-//			 ips114_showint16(0,0,adc_value[0]);
-//	     ips114_showint16(0,1,adc_value[1]);
-//	     ips114_showint16(0,2,adc_value[2]);
-//	     ips114_showint16(0,3,adc_value[3]);
-//				
-//			 //ÏÔÊ¾µç¸Ð¹éÒ»»¯Öµ
-//			 ips114_showuint8(80,0,Left_Adc);
-//	     ips114_showuint8(80,1,Left_Shu_Adc);
-//	     ips114_showuint8(80,2,Right_Shu_Adc);
-//	     ips114_showuint8(80,3,Right_Adc);
-//				
-//			 ips114_showfloat(0,5,Current_Dir,2,1);//ÏÔÊ¾¸¡µãÊý   ÕûÊýÏÔÊ¾2Î»   Ð¡ÊýÏÔÊ¾1Î»
-//				
-//			 ips114_showint16(130,0,left_speed);
-//  	   ips114_showint16(130,1,right_speed);
-      }
-      if(!READ_GPIO (Switch_Pin_2))//ÓÃ
-      {
-       Switch2=1;
-			 Library_selection=2;   //³ö¿âÑ¡Ôñ£¬Library_selectionÄ¬ÈÏÎª1£¬×ó³ö¿â£¬²¦ÏÂºó±ä³É2£¬ÓÒ³ö¿â
-      }
-      if(!READ_GPIO (Switch_Pin_3))
-      {
-       Switch3=1;
-			 
-      }
-      if(!READ_GPIO (Switch_Pin_4))
-      {
-       Switch4=1;
-
-      }
-      if(!READ_GPIO (Switch_Pin_5))
-      {
-       Switch5=1;
-
-      }
-      if(!READ_GPIO (Switch_Pin_6))
-      {
-       Switch6=1;
- 
-      }
-	
+    // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ë¿ªï¿½ï¿½×´Ì¬
+    if (!READ_GPIO(Switch_Pin_1)) // ï¿½ï¿½
+    {
+        Switch1 = 1;
+        Annulus_selection = 1;
+        //			 //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ô­Ê¼Öµ
+        //			 ips114_showint16(0,0,adc_value[0]);
+        //	     ips114_showint16(0,1,adc_value[1]);
+        //	     ips114_showint16(0,2,adc_value[2]);
+        //	     ips114_showint16(0,3,adc_value[3]);
+        //
+        //			 //ï¿½ï¿½Ê¾ï¿½ï¿½Ð¹ï¿½Ò»ï¿½ï¿½Öµ
+        //			 ips114_showuint8(80,0,Left_Adc);
+        //	     ips114_showuint8(80,1,Left_Shu_Adc);
+        //	     ips114_showuint8(80,2,Right_Shu_Adc);
+        //	     ips114_showuint8(80,3,Right_Adc);
+        //
+        //			 ips114_showfloat(0,5,Current_Dir,2,1);//ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾2Î»   Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾1Î»
+        //
+        //			 ips114_showint16(130,0,left_speed);
+        //  	   ips114_showint16(130,1,right_speed);
+    }
+    if (!READ_GPIO(Switch_Pin_2)) // ï¿½ï¿½
+    {
+        Switch2 = 1;
+        Library_selection = 2; // ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Library_selectionÄ¬ï¿½ï¿½Îª1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½Âºï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½
+    }
+    if (!READ_GPIO(Switch_Pin_3))
+    {
+        Switch3 = 1;
+    }
+    if (!READ_GPIO(Switch_Pin_4))
+    {
+        Switch4 = 1;
+    }
+    if (!READ_GPIO(Switch_Pin_5))
+    {
+        Switch5 = 1;
+    }
+    if (!READ_GPIO(Switch_Pin_6))
+    {
+        Switch6 = 1;
+    }
 }
 
-/*****************°´¼üÉ¨Ãè¶ÁÈ¡*****************
-º¯Êý£ºvoid  Key_Scan_Deal ()
-¹¦ÄÜ£º¶ÁÈ¡°´¼ü²¢Ö´ÐÐ¶ÔÓ¦²Ù×÷
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º ²Î¿¼Öð·ÉÀý³Ì £¬5Î»°´¼ü£¬Èç¹ûÓÐÔö¼Ó»òÕß¼õÉÙ¿É¶ÔÕÕÐÞ¸Ä
-      // 1ºÅÎª×óÒÆ¼ü£¬2ºÅÎªÉÏ¼ü£¬3ºÅÎªÓÒÒÆ¼ü£¬4ºÅÎªÖÐ¼üÅÌ£¬5ºÅÎªÏÂ¼ü
-     //±¾´Î³ÌÐòÃ»ÓÐÊ¹ÓÃµ÷²Î£¬stcµ¥Æ¬»úÏÂÔØ³ÌÐòÒ²¿ì£¬¸ÄÁËÉÕ¾Í¿ÉÒÔ£¬Èç¹ûÒª¼ÓµÄ»°×Ô¼º¸ù¾ÝÏÂÃæµÄ×Ô¼º¼Ó¾Í¿ÉÒÔ
-·µ»ØÖµ£ºÎÞ     */
-uint8 gogo=0;
-void  Key_Scan_Deal ()
+/*****************ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½È¡*****************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void  Key_Scan_Deal ()
+ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½5Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ß¼ï¿½ï¿½Ù¿É¶ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
+      // 1ï¿½ï¿½Îªï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½2ï¿½ï¿½Îªï¿½Ï¼ï¿½ï¿½ï¿½3ï¿½ï¿½Îªï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½4ï¿½ï¿½Îªï¿½Ð¼ï¿½ï¿½Ì£ï¿½5ï¿½ï¿½Îªï¿½Â¼ï¿½
+     //ï¿½ï¿½ï¿½Î³ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½Î£ï¿½stcï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½Ò²ï¿½ì£¬ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾Í¿ï¿½ï¿½Ô£ï¿½ï¿½ï¿½ï¿½Òªï¿½ÓµÄ»ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ó¾Í¿ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½     */
+uint8 gogo = 0;
+void Key_Scan_Deal()
 {
-	while(gogo<=2)
-	{
-    //Ê¹ÓÃ´Ë·½·¨ÓÅµãÔÚÓÚ£¬²»ÐèÒªÊ¹ÓÃwhile(1) µÈ´ý£¬±ÜÃâ´¦ÀíÆ÷×ÊÔ´ÀË·Ñ
-    //±£´æ°´¼ü×´Ì¬
-    key1_last_status = key1_status;
-    key2_last_status = key2_status;
-    key3_last_status = key3_status;
-    key4_last_status = key4_status;
-    //¶ÁÈ¡µ±Ç°°´¼ü×´Ì¬
-    key1_status = READ_GPIO(KEY1);
-    key2_status = READ_GPIO(KEY2);
-    key3_status = READ_GPIO(KEY3);
-    key4_status = READ_GPIO(KEY4);
-    //¼ì²âµ½°´¼ü°´ÏÂÖ®ºó  ²¢·Å¿ªÖÃÎ»±êÖ¾Î»
-    if(key1_status && !key1_last_status)    key1_flag = 1;
-    if(key2_status && !key2_last_status)    key2_flag = 1;
-    if(key3_status && !key3_last_status)    key3_flag = 1;
-    if(key4_status && !key4_last_status)    key4_flag = 1;
-    if(key5_status && !key5_last_status)    key5_flag = 1;
-    //±êÖ¾Î»ÖÃÎ»Ö®ºó£¬¿ÉÒÔÊ¹ÓÃ±êÖ¾Î»Ö´ÐÐ×Ô¼ºÏëÒª×öµÄÊÂ¼þ
- 
-    if(key1_flag) //S1¼ü£¬²ÎÊý¼Ó
+    while (gogo <= 2)
     {
-      key1_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
-      /*ÒÔÏÂÎªÓÃ»§ÈÎÎñ  */
-      switch(parameter)
-      {
-      //-----------------------µ÷²ÎÇëÐÞ¸ÄÏÂÃæ--£¨×¢ÒâÐÞ¸Ä¶ÔÓ¦µÄÏÔÊ¾£©----------------------------------------------------------------
-      //µÚÒ»Ò³ÏÔÊ¾µÄ¶«Î÷
-        case 0:TurnPID.Kp+=1; break;//extern_iap_write_float(TurnPID.Kp,3,2,0x00);      break;
-        case 1:TurnPID.Ki+=0.1;  break;//extern_iap_write_float(TurnPID.Ki,3,2,0x07);			 break;
-        case 2:TurnPID.Kd+=0.1;  break;//extern_iap_write_float(TurnPID.Kd,3,2,0x0e);			 break;
-        case 3:;TurnPID.K_gory+=1;  break;
-        case 4:;  break;
-        case 5:;  break;
-      /// case 6:  ; break;//Õâ¸ö²»ÄÜ¼ÓÈÎºÎ²Ù×÷ÔÚÕâÀïÁË£¬·­Ò³Ê¹ÓÃÀ² extern_iap_write_bytes(0x00,&aim_speed,2);
-      //µÚ¶þÒ³ÏÔÊ¾µÄ¶«Î÷
-        case 7:SpeedPID.Kp+=1;   break;
-				case 8:SpeedPID.Ki+=0.1; break;
-				case 9:SpeedPID.Kd+=0.1; break;
-				case 10:aim_speed+=10;   break;
-        case 11: break;
-        case 12: break;
-       //--------------------µ÷²ÎÇëÐÞ¸ÄÉÏÃæ------------------------------------------------------------------
-       }
-     }
-     if(key2_flag)//S2¼ü£¬²ÎÊý¼õ
-     {
-       key2_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
-      /*  ÒÔÏÂÎªÓÃ»§ÈÎÎñ  */
-       switch(parameter)
-       {
-       //----------------------µ÷²ÎÇëÐÞ¸ÄÏÂÃæ--£¨×¢ÒâÐÞ¸Ä¶ÔÓ¦µÄÏÔÊ¾£©--------------------------------------------------------------
-       //µÚÒ»Ò³ÏÔÊ¾µÄ¶«Î÷
-        case 0:TurnPID.Kp-=20;       break;
-        case 1:TurnPID.Ki-=5;        break;
-        case 2:TurnPID.Kd-=5;        break;
-				case 3:;  TurnPID.K_gory-=5;break;
-        case 4:;  break;
-        case 5:;  break;
-        //case 6:ips114_showstr(0,0,"FANYE_ing");  ; break;//Õâ¸ö²»ÄÜ¼ÓÈÎºÎ²Ù×÷ÔÚÕâÀïÁË£¬·­Ò³Ê¹ÓÃÀ²
-       //µÚ¶þÒ³ÏÔÊ¾µÄ¶«Î÷ 
-				case 7:SpeedPID.Kp-=1;   break;
-				case 8:SpeedPID.Ki-=0.1; break;
-				case 9:SpeedPID.Kd-=0.1; break;
-				case 10:aim_speed-=50;   break;
-				case 11: break;
-				case 12: break;
-       //--------------------µ÷²ÎÇëÐÞ¸ÄÉÏÃæ------------------------------------------------------------------
-       } 
-      }
-      if(key3_flag)//S3¼ü£¬Ñ¡Ôñµ÷²ÎµÄ²ÎÊý
-      {
-        key3_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»               
-        parameter++;
-				ips114_clear(WHITE);
-				if(parameter>=11) parameter=0;
-      }
-      if(key4_flag)//S4¼ü£¬È·ÈÏ°´¼ü£¬°´ÈýÏÂÍË³öµ÷²Î
-      {
-        key4_flag = 0;//Ê¹ÓÃ°´¼üÖ®ºó£¬Ó¦¸ÃÇå³ý±êÖ¾Î»
-        gogo++;
-      }
-    //*******************************ÆÁÄ»ÏÔÊ¾µÚÒ»Ò³***********************
+        // Ê¹ï¿½Ã´Ë·ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½while(1) ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â´¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Ë·ï¿½
+        // ï¿½ï¿½ï¿½æ°´ï¿½ï¿½×´Ì¬
+        key1_last_status = key1_status;
+        key2_last_status = key2_status;
+        key3_last_status = key3_status;
+        key4_last_status = key4_status;
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½×´Ì¬
+        key1_status = READ_GPIO(KEY1);
+        key2_status = READ_GPIO(KEY2);
+        key3_status = READ_GPIO(KEY3);
+        key4_status = READ_GPIO(KEY4);
+        // ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½  ï¿½ï¿½ï¿½Å¿ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ö¾Î»
+        if (key1_status && !key1_last_status)
+            key1_flag = 1;
+        if (key2_status && !key2_last_status)
+            key2_flag = 1;
+        if (key3_status && !key3_last_status)
+            key3_flag = 1;
+        if (key4_status && !key4_last_status)
+            key4_flag = 1;
+        if (key5_status && !key5_last_status)
+            key5_flag = 1;
+        // ï¿½ï¿½Ö¾Î»ï¿½ï¿½Î»Ö®ï¿½ó£¬¿ï¿½ï¿½ï¿½Ê¹ï¿½Ã±ï¿½Ö¾Î»Ö´ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
 
-    if(parameter<6)//ÏÔÊ¾²ÎÊý0µ½5£¬Êµ¼ÊÏÔÊ¾1µ½6
-    {
-			ips114_showstr(0,parameter+1,"->");
-			ips114_showstr(20,0,"parameter->");    ips114_showint8(150,0,parameter);//xÎªint8ÀàÐÍ
-      //ÏÔÊ¾µ÷²Î¹ý³Ì   ÐÐºÅ×îºóÒ»ÐÐÎª9   Ö»ÄÜÏÔÊ¾ÕâÃ´¶à£¬¸ü¶àÖØÐÂ·­Ò³ÏÔÊ¾  Ò»Ò³µ÷6¸ö²ÎÊý
-      ips114_showstr(20,1,"TurnPID.Kp=");    ips114_showfloat(150,1,TurnPID.Kp,3,2);//ÏÔÊ¾¸¡µãÊý  
-      ips114_showstr(20,2,"TurnPID.Ki=");    ips114_showfloat(150,2,TurnPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý   
-      ips114_showstr(20,3,"TurnPID.Kd=");    ips114_showfloat(150,3,TurnPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý   
-		  ips114_showstr(20,4,"TurnPID.K_gory=");      ips114_showint16(150,4,TurnPID.K_gory);
-		        
+        if (key1_flag) // S1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        {
+            key1_flag = 0; // Ê¹ï¿½Ã°ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+            /*ï¿½ï¿½ï¿½ï¿½Îªï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½  */
+            switch (parameter)
+            {
+                //-----------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½--ï¿½ï¿½×¢ï¿½ï¿½ï¿½Þ¸Ä¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½----------------------------------------------------------------
+                // ï¿½ï¿½Ò»Ò³ï¿½ï¿½Ê¾ï¿½Ä¶ï¿½ï¿½ï¿½
+            case 0:
+                TurnPID.Kp += 1;
+                break; // extern_iap_write_float(TurnPID.Kp,3,2,0x00);      break;
+            case 1:
+                TurnPID.Ki += 0.1;
+                break; // extern_iap_write_float(TurnPID.Ki,3,2,0x07);			 break;
+            case 2:
+                TurnPID.Kd += 0.1;
+                break; // extern_iap_write_float(TurnPID.Kd,3,2,0x0e);			 break;
+            case 3:;
+                TurnPID.K_gory += 1;
+                break;
+            case 4:;
+                break;
+            case 5:;
+                break;
+                /// case 6:  ; break;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¼ï¿½ï¿½ÎºÎ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ò³Ê¹ï¿½ï¿½ï¿½ï¿½ extern_iap_write_bytes(0x00,&aim_speed,2);
+                // ï¿½Ú¶ï¿½Ò³ï¿½ï¿½Ê¾ï¿½Ä¶ï¿½ï¿½ï¿½
+            case 7:
+                SpeedPID.Kp += 1;
+                break;
+            case 8:
+                SpeedPID.Ki += 0.1;
+                break;
+            case 9:
+                SpeedPID.Kd += 0.1;
+                break;
+            case 10:
+                aim_speed += 10;
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+                //--------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½------------------------------------------------------------------
+            }
+        }
+        if (key2_flag) // S2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        {
+            key2_flag = 0; // Ê¹ï¿½Ã°ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+            /*  ï¿½ï¿½ï¿½ï¿½Îªï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½  */
+            switch (parameter)
+            {
+                //----------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½--ï¿½ï¿½×¢ï¿½ï¿½ï¿½Þ¸Ä¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½--------------------------------------------------------------
+                // ï¿½ï¿½Ò»Ò³ï¿½ï¿½Ê¾ï¿½Ä¶ï¿½ï¿½ï¿½
+            case 0:
+                TurnPID.Kp -= 20;
+                break;
+            case 1:
+                TurnPID.Ki -= 5;
+                break;
+            case 2:
+                TurnPID.Kd -= 5;
+                break;
+            case 3:;
+                TurnPID.K_gory -= 5;
+                break;
+            case 4:;
+                break;
+            case 5:;
+                break;
+                // case 6:ips114_showstr(0,0,"FANYE_ing");  ; break;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¼ï¿½ï¿½ÎºÎ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ò³Ê¹ï¿½ï¿½ï¿½ï¿½
+                // ï¿½Ú¶ï¿½Ò³ï¿½ï¿½Ê¾ï¿½Ä¶ï¿½ï¿½ï¿½
+            case 7:
+                SpeedPID.Kp -= 1;
+                break;
+            case 8:
+                SpeedPID.Ki -= 0.1;
+                break;
+            case 9:
+                SpeedPID.Kd -= 0.1;
+                break;
+            case 10:
+                aim_speed -= 50;
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+                //--------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½------------------------------------------------------------------
+            }
+        }
+        if (key3_flag) // S3ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ÎµÄ²ï¿½ï¿½ï¿½
+        {
+            key3_flag = 0; // Ê¹ï¿½Ã°ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+            parameter++;
+            ips114_clear(WHITE);
+            if (parameter >= 11)
+                parameter = 0;
+        }
+        if (key4_flag) // S4ï¿½ï¿½ï¿½ï¿½È·ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½
+        {
+            key4_flag = 0; // Ê¹ï¿½Ã°ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+            gogo++;
+        }
+        //*******************************ï¿½ï¿½Ä»ï¿½ï¿½Ê¾ï¿½ï¿½Ò»Ò³***********************
+
+        if (parameter < 6) // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½5ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ê¾1ï¿½ï¿½6
+        {
+            ips114_showstr(0, parameter + 1, "->");
+            ips114_showstr(20, 0, "parameter->");
+            ips114_showint8(150, 0, parameter); // xÎªint8ï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Î¹ï¿½ï¿½ï¿½   ï¿½Ðºï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Îª9   Ö»ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ã´ï¿½à£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½Ò³ï¿½ï¿½Ê¾  Ò»Ò³ï¿½ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 1, "TurnPID.Kp=");
+            ips114_showfloat(150, 1, TurnPID.Kp, 3, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 2, "TurnPID.Ki=");
+            ips114_showfloat(150, 2, TurnPID.Ki, 2, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 3, "TurnPID.Kd=");
+            ips114_showfloat(150, 3, TurnPID.Kd, 2, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 4, "TurnPID.K_gory=");
+            ips114_showint16(150, 4, TurnPID.K_gory);
+        }
+        //*******************************ï¿½ï¿½Ä»ï¿½ï¿½Ê¾ï¿½Ú¶ï¿½Ò³**************************************************
+        if (parameter > 6 && parameter < 11) // ï¿½ï¿½ï¿½ï¿½ï¿½ÐºÅ´ï¿½4ï¿½ï¿½9   Ò»Ò³ï¿½ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½7ï¿½ï¿½5ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ê¾7ï¿½ï¿½12
+        {
+            ips114_showstr(0, parameter - 6, "->");
+            ips114_showstr(20, 0, "parameter->");
+            ips114_showint8(150, 0, parameter); // xÎªint8ï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Î¹ï¿½ï¿½ï¿½   ï¿½Ðºï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Îª9   Ö»ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ã´ï¿½à£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½Ò³ï¿½ï¿½Ê¾  Ò»Ò³ï¿½ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 1, "SpeedPID.Kp=");
+            ips114_showfloat(150, 1, SpeedPID.Kp, 2, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 2, "SpeedPID.Ki=");
+            ips114_showfloat(150, 2, SpeedPID.Ki, 2, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 3, "SpeedPID.Kd=");
+            ips114_showfloat(150, 3, SpeedPID.Kd, 2, 2); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ips114_showstr(20, 4, "aim_speed=");
+            ips114_showint16(150, 4, aim_speed);
+            //		  ips114_showstr(20,5,"Turn_NeiPID.Ki=");ips114_showfloat(150,5,Turn_NeiPID.Ki,2,2);//ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            //		  ips114_showstr(20,6,"Turn_NeiPID.Kd=");ips114_showfloat(150,6,Turn_NeiPID.Kd,2,2);//ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        }
+        //*******************************ï¿½ï¿½Ä»ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ò³**************************************************
+        //    if(parameter>13&&parameter<20)
+        //    {
+        //
+        //    }
+        // ###########ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Í¿ï¿½ï¿½Ô¿ï¿½######################ï¿½ï¿½ï¿½ï¿½Í²ï¿½Ð´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        if (parameter == 6 || parameter == 13 || parameter == 20) // ï¿½ï¿½Ò³×¼ï¿½ï¿½
+        {
+            ips114_showstr(0, 0, "Ready to turn the page...");
+            ips114_showstr(0, 1, "Press the button to display ");
+            ips114_showstr(0, 2, "the second page...");
+            // ips114_clear(WHITE);
+        } // ï¿½ï¿½ï¿½ï¿½
+        if (gogo > 2)
+        {
+            ips114_clear(WHITE);
+        }
     }
-    //*******************************ÆÁÄ»ÏÔÊ¾µÚ¶þÒ³**************************************************
-    if(parameter>6&&parameter<11)//ÕâÀïÐÐºÅ´Ó4µ½9   Ò»Ò³µ÷6¸ö²ÎÊý  //ÏÔÊ¾²ÎÊý7µ½5£¬Êµ¼ÊÏÔÊ¾7µ½12
-    {
-      ips114_showstr(0,parameter-6,"->");
-			ips114_showstr(20,0,"parameter->");    ips114_showint8(150,0,parameter);//xÎªint8ÀàÐÍ
-      //ÏÔÊ¾µ÷²Î¹ý³Ì   ÐÐºÅ×îºóÒ»ÐÐÎª9   Ö»ÄÜÏÔÊ¾ÕâÃ´¶à£¬¸ü¶àÖØÐÂ·­Ò³ÏÔÊ¾  Ò»Ò³µ÷6¸ö²ÎÊý
-      ips114_showstr(20,1,"SpeedPID.Kp=");    ips114_showfloat(150,1,SpeedPID.Kp,2,2);//ÏÔÊ¾¸¡µãÊý  
-      ips114_showstr(20,2,"SpeedPID.Ki=");    ips114_showfloat(150,2,SpeedPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý   
-      ips114_showstr(20,3,"SpeedPID.Kd=");    ips114_showfloat(150,3,SpeedPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý   
-		  ips114_showstr(20,4,"aim_speed=");      ips114_showint16(150,4,aim_speed); 
-//		  ips114_showstr(20,5,"Turn_NeiPID.Ki=");ips114_showfloat(150,5,Turn_NeiPID.Ki,2,2);//ÏÔÊ¾¸¡µãÊý 
-//		  ips114_showstr(20,6,"Turn_NeiPID.Kd=");ips114_showfloat(150,6,Turn_NeiPID.Kd,2,2);//ÏÔÊ¾¸¡µãÊý    
-    }
-    //*******************************ÆÁÄ»ÏÔÊ¾µÚÈýÒ³**************************************************
-//    if(parameter>13&&parameter<20)
-//    {
-//                  
-//    }
-    //###########»¹ÐèÒª¸ü¶àÒ³·ÂÕÕ×ÅÐ´¾Í¿ÉÒÔ¿©######################ÕâÀï¾Í²»Ð´ÁË ½áÊø
-    if(parameter==6||parameter==13||parameter==20)  //·­Ò³×¼±¸
-    {
-			 ips114_showstr(0,0,"Ready to turn the page...");
-			 ips114_showstr(0,1,"Press the button to display ");
-			 ips114_showstr(0,2,"the second page...");
-      // ips114_clear(WHITE);              
-    }//ÇåÆÁ
-		if(gogo>2)
-    {
-		  ips114_clear(WHITE); 
-    }
-	}
 }
-//===============================================µ÷ÊÔ»·µºÆÁÄ»ÏÔÊ¾=============================================
+//===============================================ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ê¾=============================================
 //============================================================================================================
-/************************************************µ÷ÊÔ»·µºÆÁÄ»ÏÔÊ¾*********************************************
-º¯Êý£ºvoid Roundabout_debugshow(void)
-¹¦ÄÜ£ºµ÷ÊÔ»·µºÊ±ÏÔÊ¾ÏàÓ¦µÄ±êÖ¾Î»£¬·½±ãµ÷ÊÔ
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º
-·µ»ØÖµ£ºÎÞ 
+/************************************************ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ê¾*********************************************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void Roundabout_debugshow(void)
+ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½Ó¦ï¿½Ä±ï¿½Ö¾Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 **************************************************************************************************************/
 void Roundabout_debugshow(void)
 {
-	ips114_showuint8(0,0,Left_Adc);      //×óºáµç¸ÐÖµ
-  ips114_showuint8(0,1,Left_Shu_Adc);  //×óÊúµç¸ÐÖµ
-  ips114_showuint8(0,2,Right_Shu_Adc); //ÓÒÊúµç¸ÐÖµ
-  ips114_showuint8(0,3,Right_Adc);     //ÓÒºáµç¸ÐÖµ
-	ips114_showfloat(0,5,Current_Dir,2,1);//ÏÔÊ¾¸¡µãÊý   ÕûÊýÏÔÊ¾2Î»   Ð¡ÊýÏÔÊ¾1Î»	
-	
-	ips114_showuint8(50,0,road_type.annulus);         //»·µº±êÖ¾Î»
-	ips114_showint16(50,1,annulus_s);                 //¹ý»·µºÈý½ÇÇø±àÂëÆ÷»ý·Ö¾àÀë
-  ips114_showuint8(50,2,road_type.in_annulus_left); //×ó»·µº½ø»·´ò½Ç±êÖ¾Î»
-	ips114_showint16(50,3,annulus_z);                 //½ø»·´ò½ÇÍÓÂÝÒÇ»ý·Ö½Ç¶ÈÖµ
-	ips114_showint16(50,4,annulus_s2);                 
-	ips114_showuint8(50,5,road_type.on_annulus_left); //ÔÚ×ó»·µº±êÖ¾Î»£¨ÈÏÎªÐ¡³µÒÑ¾­Èë»·£©
-	ips114_showuint8(50,6,road_type.out_annulus);     //³ö»·µº±êÖ¾Î»
-	ips114_showint16(50,7,annulus_t);                 //³ö»·µº¶¨Ê±Çå0Ê±¼ä
-	
-	
-	ips114_showuint8(100,0,road_type.annulus);          //»·µº±êÖ¾Î»
-	ips114_showint16(100,1,annulus_s);                  //¹ý»·µºÈý½ÇÇø±àÂëÆ÷»ý·Ö¾àÀë
-	ips114_showuint8(100,2,road_type.in_annulus_right); //×ó»·µº½ø»·´ò½Ç±êÖ¾Î»
-	ips114_showint16(100,3,annulus_z);                  //½ø»·´ò½ÇÍÓÂÝÒÇ»ý·Ö½Ç¶ÈÖµ
-	ips114_showuint8(100,4,road_type.on_annulus_right); //ÔÚÓÒ»·µº±êÖ¾Î»£¨ÈÏÎªÐ¡³µÒÑ¾­Èë»·£©
-	ips114_showuint8(100,5,road_type.out_annulus);      //³ö»·µº±êÖ¾Î»
-	ips114_showint16(100,6,annulus_t);                  //³ö»·µº¶¨Ê±Çå0Ê±¼ä
+    ips114_showuint8(0, 0, Left_Adc);          // ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    ips114_showuint8(0, 1, Left_Shu_Adc);      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    ips114_showuint8(0, 2, Right_Shu_Adc);     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    ips114_showuint8(0, 3, Right_Adc);         // ï¿½Òºï¿½ï¿½ï¿½Öµ
+    ips114_showfloat(0, 5, Current_Dir, 2, 1); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾2Î»   Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾1Î»
+
+    ips114_showuint8(50, 0, road_type.annulus);         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+    ips114_showint16(50, 1, annulus_s);                 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½
+    ips114_showuint8(50, 2, road_type.in_annulus_left); // ï¿½ó»·µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½Ö¾Î»
+    ips114_showint16(50, 3, annulus_z);                 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½ï¿½Ö½Ç¶ï¿½Öµ
+    ips114_showint16(50, 4, annulus_s2);
+    ips114_showuint8(50, 5, road_type.on_annulus_left); // ï¿½ï¿½ï¿½ó»·µï¿½ï¿½ï¿½Ö¾Î»ï¿½ï¿½ï¿½ï¿½ÎªÐ¡ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ë»·ï¿½ï¿½
+    ips114_showuint8(50, 6, road_type.out_annulus);     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+    ips114_showint16(50, 7, annulus_t);                 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½0Ê±ï¿½ï¿½
+
+    ips114_showuint8(100, 0, road_type.annulus);          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+    ips114_showint16(100, 1, annulus_s);                  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½
+    ips114_showuint8(100, 2, road_type.in_annulus_right); // ï¿½ó»·µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½Ö¾Î»
+    ips114_showint16(100, 3, annulus_z);                  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½ï¿½Ö½Ç¶ï¿½Öµ
+    ips114_showuint8(100, 4, road_type.on_annulus_right); // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»ï¿½ï¿½ï¿½ï¿½ÎªÐ¡ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ë»·ï¿½ï¿½
+    ips114_showuint8(100, 5, road_type.out_annulus);      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+    ips114_showint16(100, 6, annulus_t);                  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½0Ê±ï¿½ï¿½
 }
 
-//===============================================µ÷ÊÔËÙ¶È»·Ä»ÏÔÊ¾=============================================
+//===============================================ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½Ä»ï¿½ï¿½Ê¾=============================================
 //============================================================================================================
-/************************************************µ÷ÊÔËÙ¶È»·Ä»ÏÔÊ¾*********************************************
-º¯Êý£ºSpeed_debugshow(void)
-¹¦ÄÜ£ºµ÷ÊÔËÙ¶È»·Ê±ÏÔÊ¾ÏàÓ¦×óÓÒ±àÂëÆ÷µÄÖµ£¬·½±ãµ÷ÊÔ£¨ËÙ¶È»·ÍÆ¼öÓÃÉÏÎ»»ú¿´²¨ÐÎµ÷ÊÔ£©
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º
-·µ»ØÖµ£ºÎÞ 
+/************************************************ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½Ä»ï¿½ï¿½Ê¾*********************************************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Speed_debugshow(void)
+ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½Ù¶È»ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ï¿½Ô£ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 **************************************************************************************************************/
 void Speed_debugshow(void)
 {
-	ips114_showint16(0,0,left_real_speed);  //×ó±àÂëÆ÷µÄÖµ
-  ips114_showint16(0,1,right_real_speed); //ÓÒ±àÂëÆ÷µÄÖµ
-  ips114_showint16(0,2,real_speed);       //×óÓÒÂÖÆ½¾ùÖµ
-	
-	
+    ips114_showint16(0, 0, left_real_speed);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    ips114_showint16(0, 1, right_real_speed); // ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    ips114_showint16(0, 2, real_speed);       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½Öµ
 }
-//===============================================·äÃùÆ÷Ïà¹Ø=============================================
+//===============================================ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½=============================================
 //=====================================================================================================
 
-//·äÃùÆ÷¿ªºÍ¹Ø ±»Ð´ÔÚ¶ÔÓ¦Í·ÎÄ¼þÈ¥ÁË£¬È¥HÎÄ¼þ²é¿´
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ ï¿½ï¿½Ð´ï¿½Ú¶ï¿½Ó¦Í·ï¿½Ä¼ï¿½È¥ï¿½Ë£ï¿½È¥Hï¿½Ä¼ï¿½ï¿½é¿´
 
-/*****************·äÃùÆ÷µÎµÎµÎ*****************
-º¯Êý£ºvoid BUZZ_DiDiDi()
-¹¦ÄÜ£º·äÃùÆ÷µÎµÎµÎ
-²ÎÊý£º  ÎÞ
-ËµÃ÷£º
-·µ»ØÖµ£ºÎÞ */
+/*****************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎµÎµï¿½*****************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void BUZZ_DiDiDi()
+ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎµÎµï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½
+Ëµï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ */
 void BUZZ_DiDiDi(uint16 PinLV)
 {
-  BUZZ_ON;
-  TiaoCan_DelayMs(PinLV);
-  BUZZ_OFF;
+    BUZZ_ON;
+    TiaoCan_DelayMs(PinLV);
+    BUZZ_OFF;
 }
 
-
-/***************************²âÊÔÍê±Ï**********************************************
- *  º¯ÊýÃû³Æ£ºTest_Servo(void)
- *  ¹¦ÄÜËµÃ÷£º¶æ»úPWM³õÊ¼»¯£¬²âÊÔ±ê¶¨Êä³öPWM¿ØÖÆSD5/S3010¶æ»ú
- *  ²ÎÊýËµÃ÷£ºÎÞ
- *  º¯Êý·µ»Ø£ºÎÞ
- *  ÐÞ¸ÄÊ±¼ä£º
- *  ±¸    ×¢£º²Î¿¼ÁúÇñ¿âÌá¹©µÄ£¡£¡£¡£¡
- ¡¾×¢ÒâÊÂÏî¡¿×¢Òâ£¬Ò»¶¨Òª¶Ô¶æ»ú´ò½Ç½øÐÐÏÞÖÆ
- Ê¹ÓÃÁúÇñÄ¸°å²âÊÔÁ÷³Ì£º
- 1.ÏÈÊ¹ÓÃÍòÓÃ±í²âÁ¿µç³ØµçÑ¹£¬Îñ±Ø±£Ö¤µç³ØµçÑ¹ÔÚ7VÒÔÉÏ£¬·ñÔòÎÞÁ¦²»·´Ó¦£¡
- 2.È»ºóÈ·¶¨¶æ»ú¹©µçµçÑ¹£¬SD5¶æ»úÓÃ5V¹©µç£¬S3010ÓÃ6-7V¹©µç£¬SD012¶æ»úÓÃ5V¹©µç£¡£¡£¡
- 3.°Ñ¶æ»úµÄ¶æÅÌÈ¥µô£¬ÈÃ¶æ»ú¿ÉÒÔ×ÔÓÉ×ª¶¯£»
- 4.ÉÕÐ´³ÌÐò²¢ÔËÐÐ£¬ÈÃ¶æ»ú×ª¶¯µ½ÖÐÖµ¸½½ü£»Èç¹ûÃ»·´Ó¦ÖØ¸´1-2²½£¬»òÕßµ÷Õû¶æ»úµÄPWMÆµÂÊ¼ÆÕ¼¿Õ±È£¬ÄÜÊÜ¿ØÎª×¼£»
- 5.¶æ»úÊÜ¿ØºóÓÃÊÖÇá×ª£¬¶æ»ú»áÖ¨Ö¨Ïì£¬¶Ô¿¹×ª¶¯£¬´ËÊ±¿ÉÒÔ×°ÉÏ¶æÅÌ£»
- 6.°´¼üK0/K1È·¶¨¶æ»úµÄ×óÓÒ×ª¶¯¼«ÏÞ£¬²¢¼ÇÏÂÀ´£¬×÷ÎªºóÐøÏÞ·ù·ÀÖ¹¶æ»ú¶Â×ªÉÕ»Ù£¡
+/***************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Test_Servo(void)
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PWMï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ê¶¨ï¿½ï¿½ï¿½PWMï¿½ï¿½ï¿½ï¿½SD5/S3010ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½
+ *  ï¿½Þ¸ï¿½Ê±ï¿½ä£º
+ *  ï¿½ï¿½    ×¢ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹©ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½î¡¿×¢ï¿½â£¬Ò»ï¿½ï¿½Òªï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½
+ 1.ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ö¤ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½7Vï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
+ 2.È»ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½SD5ï¿½ï¿½ï¿½ï¿½ï¿½5Vï¿½ï¿½ï¿½ç£¬S3010ï¿½ï¿½6-7Vï¿½ï¿½ï¿½ç£¬SD012ï¿½ï¿½ï¿½ï¿½ï¿½5Vï¿½ï¿½ï¿½ç£¡ï¿½ï¿½ï¿½ï¿½
+ 3.ï¿½Ñ¶ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
+ 4.ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Ã¶ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ó¦ï¿½Ø¸ï¿½1-2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PWMÆµï¿½Ê¼ï¿½Õ¼ï¿½Õ±È£ï¿½ï¿½ï¿½ï¿½Ü¿ï¿½Îª×¼ï¿½ï¿½
+ 5.ï¿½ï¿½ï¿½ï¿½Ü¿Øºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¨Ö¨ï¿½ì£¬ï¿½Ô¿ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×°ï¿½Ï¶ï¿½ï¿½Ì£ï¿½
+ 6.ï¿½ï¿½ï¿½ï¿½K0/K1È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½Þ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Õ»Ù£ï¿½
  *************************************************************************/
-void Test_Servo_Hardware (void)
+void Test_Servo_Hardware(void)
 {
     char txt[16] = "X:";
-    unsigned int  duty = Steer_Duty_Midle;
+    unsigned int duty = Steer_Duty_Midle;
 
-    ips114_clear(YELLOW);  //³õÊ¼ÇåÆÁ
-	  ips114_showstr(0, 0, "Test_Servo_Hardware:");
-   	pwm_init(Steer_Pin, 50, Steer_Duty_Midle);     //³õÊ¼»¯¶æ»ú  Êä³öPWMÆµÂÊ200HZ£¬²¢ÉèÖÃÖÐÖµ
+    ips114_clear(YELLOW); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    ips114_showstr(0, 0, "Test_Servo_Hardware:");
+    pwm_init(Steer_Pin, 50, Steer_Duty_Midle); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½PWMÆµï¿½ï¿½200HZï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
     pwm_duty(Steer_Pin, Steer_Duty_Midle);
     while (1)
     {
         if (!READ_GPIO(KEY1))
         {
-            if (duty > 100)  		//·ÀÖ¹duty³¬
+            if (duty > 100) // ï¿½ï¿½Ö¹dutyï¿½ï¿½
             {
-                duty += 10;     //±ê¶¨µÄÊ±ºò£¬¿ÉÒÔ°Ñ²½³¤¸ÄÐ¡µã£¬±ÈÈç10
+                duty += 10; // ï¿½ê¶¨ï¿½ï¿½Ê±ï¿½ò£¬¿ï¿½ï¿½Ô°Ñ²ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½10
             }
         }
-        if (! READ_GPIO(KEY3))
+        if (!READ_GPIO(KEY3))
         {
             duty = Steer_Duty_Midle;
         }
-        if (! READ_GPIO(KEY2))
+        if (!READ_GPIO(KEY2))
         {
             duty -= 10;
         }
-			  pwm_duty(Steer_Pin, duty);
-				sprintf(txt, "Servo:%05d ", duty);
-				ips114_showstr(1, 2, txt); //ÏÔÊ¾
-				TiaoCan_DelayMs(100);        
+        pwm_duty(Steer_Pin, duty);
+        sprintf(txt, "Servo:%05d ", duty);
+        ips114_showstr(1, 2, txt); // ï¿½ï¿½Ê¾
+        TiaoCan_DelayMs(100);
     }
 }
 
-/****************************²âÊÔÍê±Ï*********************************************
- *  º¯ÊýÃû³Æ£ºTestMotor(void)
- *  ¹¦ÄÜËµÃ÷£º²âÊÔ±ê¶¨Êä³öPWM¿ØÖÆµç»ú
- *  ²ÎÊýËµÃ÷£ºÎÞ
- *  º¯Êý·µ»Ø£ºÎÞ
- *  ÐÞ¸ÄÊ±¼ä£º
- *  ±¸    ×¢£ºÇý¶¯2¸öµç»ú
- ¡¾×¢ÒâÊÂÏî¡¿×¢Òâ£¬Ò»¶¨Òª¶Ôµç»úÊä³ö½øÐÐÏÞÖÆ
- Ê¹ÓÃÁúÇñÄ¸°å²âÊÔÁ÷³Ì£º
- 1.ÏÈÊ¹ÓÃÍòÓÃ±í²âÁ¿µç³ØµçÑ¹£¬Îñ±Ø±£Ö¤µç³ØµçÑ¹ÔÚ7VÒÔÉÏ£¬·ñÔòÎÞÁ¦²»·´Ó¦£¡
- 2.½ÓºÃÄ¸°åµ½Çý¶¯°åµÄÐÅºÅÏß¼°µçÔ´Ïß£»
- 3.½ÓºÃÇý¶¯°åµ½µç»úµÄµ¼Ïß£»
- 4.ÉÕÐ´³ÌÐò²¢ÔËÐÐ£¬È·¶¨µç»úÄÜÕý³£×ª¶¯ºó£¬¿ªÆôÇý¶¯°åµçÔ´¿ª¹Ø£»
- 5.°´¼üK0/K1È·¶¨µç»ú×ª¶¯ËÙ¶È¼°·½Ïò£»
- 6.Èç¹û³öÏÖ·è×ª£¬°´ÏÂK1¼ü·µ»ØµÍËÙÄ£Ê½£¬»òÕßÖ±½Ó¹Ø±ÕÇý¶¯°åµçÔ´£¡
+/****************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*********************************************
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½TestMotor(void)
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ê¶¨ï¿½ï¿½ï¿½PWMï¿½ï¿½ï¿½Æµï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½
+ *  ï¿½Þ¸ï¿½Ê±ï¿½ä£º
+ *  ï¿½ï¿½    ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½
+ ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½î¡¿×¢ï¿½â£¬Ò»ï¿½ï¿½Òªï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½
+ 1.ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ö¤ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½7Vï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
+ 2.ï¿½Óºï¿½Ä¸ï¿½åµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ô´ï¿½ß£ï¿½
+ 3.ï¿½Óºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åµ½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ß£ï¿½
+ 4.ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ó£¬¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ø£ï¿½
+ 5.ï¿½ï¿½ï¿½ï¿½K0/K1È·ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Ù¶È¼ï¿½ï¿½ï¿½ï¿½ï¿½
+ 6.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½K1ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó¹Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½
  *************************************************************************/
-void Test_Motor_Hardware (void)
+void Test_Motor_Hardware(void)
 {
-    int16 motor_duty = 3000;
-    lcd_clear(YELLOW);  //³õÊ¼ÇåÆÁ
-	  lcd_showstr(2, 0, "Test_Motor_Hardware:");
+    static int16 motor_duty = 3000;
+    lcd_clear(YELLOW); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    lcd_showstr(2, 0, "Test_Motor_Hardware:");
     init_PWM(MOTOR_MODE_SELECT);
-	
+
     while (1)
     {
-    if (!READ_GPIO(KEY1))   //°´ÏÂKEY1¼ü   ×óÂÖµ¥¶ÀÕý×ª
+        if (!READ_GPIO(KEY1)) // ï¿½ï¿½ï¿½ï¿½KEY1ï¿½ï¿½   ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½×ª
         {
-           go_motor (motor_duty,0);
-					 lcd_showstr(0, 4, "Left  Front");   //×Ö·û´®ÏÔÊ¾
+            go_motor(motor_duty, 0);
+            lcd_showstr(0, 4, "Left  Front"); // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
         }
-       if (!READ_GPIO(KEY3)) //°´ÏÂKEY2¼ü£¬×óÓÒÂÖÍ¬Ê±·´×ª
+        if (!READ_GPIO(KEY3)) // ï¿½ï¿½ï¿½ï¿½KEY2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½×ª
         {
-          	 go_motor (-motor_duty,-motor_duty);
-					   lcd_showstr(0, 4, "All  Black");   //×Ö·û´®ÏÔÊ¾
-           	  	 
+            go_motor(-motor_duty, -motor_duty);
+            lcd_showstr(0, 4, "All  Black"); // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
         }
-       if (!READ_GPIO(KEY2))      //°´ÏÂKEY3¼ü  ÓÒÂÖµ¥¶ÀÕý×ª
+        if (!READ_GPIO(KEY2)) // ï¿½ï¿½ï¿½ï¿½KEY3ï¿½ï¿½  ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½×ª
         {
-           	 go_motor (0,motor_duty);
-						 lcd_showstr(0, 4, "Right Front");   //×Ö·û´®ÏÔÊ¾
+            go_motor(0, motor_duty);
+            lcd_showstr(0, 4, "Right Front"); // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
         }
-				if((READ_GPIO(KEY1))&&(READ_GPIO(KEY2))&&(READ_GPIO(KEY3)))
-        go_motor (0,0);
-      	TiaoCan_DelayMs(100);  
+        if ((READ_GPIO(KEY1)) && (READ_GPIO(KEY2)) && (READ_GPIO(KEY3)))
+            go_motor(0, 0);
+        TiaoCan_DelayMs(100);
     }
 }
 
-/****************************²âÊÔÍê±Ï*********************************************
- *  º¯ÊýÃû³Æ£ºvoid Test_Electric_Hardware (void)
- *  ¹¦ÄÜËµÃ÷£º²âÊÔµç´Åµç¸ÐÓ²¼þ
- *  ²ÎÊýËµÃ÷£ºÎÞ
- *  º¯Êý·µ»Ø£ºÎÞ
- *  ±¸    ×¢£º
- ¡¾×¢ÒâÊÂÏî¡¿
+/****************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*********************************************
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½void Test_Electric_Hardware (void)
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½Åµï¿½ï¿½Ó²ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½    ×¢ï¿½ï¿½
+ ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½î¡¿
  *************************************************************************/
-void Test_Electric_Hardware (void)
+void Test_Electric_Hardware(void)
 {
-	char txt[16];
-	ips114_clear(YELLOW);  //³õÊ¼ÇåÆÁ
-	ips114_showstr(2, 0, "Test_Electric_Hardware:");
-	ADC_int();
-	while(1)
-	{
-//		    if (!READ_GPIO(KEY1)) //°´ÏÂKEY1¼ü
-//        {
-					lcd_showstr(2, 1, "Normalize_Deal....");   //×Ö·û´®ÏÔÊ¾
-					ADC_Collect();  //µç¸Ð²ÉÖµ
-					
-					sprintf(txt,"adc0= %05d",adc_value[0]);
-					lcd_showstr(1, 2, txt); //ÏÔÊ¾
-					sprintf(txt,"adc1= %05d",adc_value[1]);
-					lcd_showstr(1, 3, txt); //ÏÔÊ¾
-					sprintf(txt,"adc2= %05d",adc_value[2]);
-					lcd_showstr(1, 4, txt); //ÏÔÊ¾
-					sprintf(txt,"adc3= %05d",adc_value[3]);
-					lcd_showstr(1, 5, txt); //ÏÔÊ¾				  	  	 
-//        }
-				if(!READ_GPIO(KEY2)) //°´ÏÂKEY2¼ü
-				{
-					lcd_showstr(2, 1, "GYH_Normalize_Deal....");   //×Ö·û´®ÏÔÊ¾
-					ADC_Collect();  //µç¸Ð²ÉÖµ
-	        Data_current_analyze();  //µç¸ÐÖµ¹éÒ»»¯º¯Êý
-					Current_Dir=Cha_bi_he(Left_Adc,Right_Adc,100);
-					
-					sprintf(txt,"adc0= %05d",Left_Adc);
-					lcd_showstr(1, 2, txt); //ÏÔÊ¾
-					sprintf(txt,"adc1= %05d",Left_Shu_Adc);
-					lcd_showstr(1, 3, txt); //ÏÔÊ¾
-					sprintf(txt,"adc2= %05d",Right_Shu_Adc);
-					lcd_showstr(1, 4, txt); //ÏÔÊ¾
-					sprintf(txt,"adc3= %05d",Right_Adc);
-					lcd_showstr(1, 5, txt); //ÏÔÊ¾
-					sprintf(txt,"Current_Dir= %05d",Current_Dir);
-					lcd_showstr(1, 6, txt); //ÏÔÊ¾
+    char txt[16];
+    ips114_clear(YELLOW); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    ips114_showstr(2, 0, "Test_Electric_Hardware:");
+    ADC_int();
+    while (1)
+    {
+        //		    if (!READ_GPIO(KEY1)) //ï¿½ï¿½ï¿½ï¿½KEY1ï¿½ï¿½
+        //        {
+        lcd_showstr(2, 1, "Normalize_Deal...."); // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+        ADC_Collect();                           // ï¿½ï¿½Ð²ï¿½Öµ
+
+        sprintf(txt, "adc0= %05d", adc_value[0]);
+        lcd_showstr(1, 2, txt); // ï¿½ï¿½Ê¾
+        sprintf(txt, "adc1= %05d", adc_value[1]);
+        lcd_showstr(1, 3, txt); // ï¿½ï¿½Ê¾
+        sprintf(txt, "adc2= %05d", adc_value[2]);
+        lcd_showstr(1, 4, txt); // ï¿½ï¿½Ê¾
+        sprintf(txt, "adc3= %05d", adc_value[3]);
+        lcd_showstr(1, 5, txt); // ï¿½ï¿½Ê¾
+        //        }
+        if (!READ_GPIO(KEY2)) // ï¿½ï¿½ï¿½ï¿½KEY2ï¿½ï¿½
+        {
+            lcd_showstr(2, 1, "GYH_Normalize_Deal...."); // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+            ADC_Collect();                               // ï¿½ï¿½Ð²ï¿½Öµ
+            Data_current_analyze();                      // ï¿½ï¿½ï¿½Öµï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            Current_Dir = Cha_bi_he(Left_Adc, Right_Adc, 100);
+
+            sprintf(txt, "adc0= %05d", Left_Adc);
+            lcd_showstr(1, 2, txt); // ï¿½ï¿½Ê¾
+            sprintf(txt, "adc1= %05d", Left_Shu_Adc);
+            lcd_showstr(1, 3, txt); // ï¿½ï¿½Ê¾
+            sprintf(txt, "adc2= %05d", Right_Shu_Adc);
+            lcd_showstr(1, 4, txt); // ï¿½ï¿½Ê¾
+            sprintf(txt, "adc3= %05d", Right_Adc);
+            lcd_showstr(1, 5, txt); // ï¿½ï¿½Ê¾
+            sprintf(txt, "Current_Dir= %05d", Current_Dir);
+            lcd_showstr(1, 6, txt); // ï¿½ï¿½Ê¾
         }
-  }	
+    }
 }
-/****************************²âÊÔÍê±Ï*********************************************
- *  º¯ÊýÃû³Æ£ºvoid Test_Encoder(void)
- *  ¹¦ÄÜËµÃ÷£º²âÊÔ±àÂëÆ÷
- *  ²ÎÊýËµÃ÷£ºÎÞ
- *  º¯Êý·µ»Ø£ºÎÞ
- *  ÐÞ¸ÄÊ±¼ä£º
- *  ±¸    ×¢£º
- ¡¾×¢ÒâÊÂÏî¡¿
+/****************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*********************************************
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½void Test_Encoder(void)
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½
+ *  ï¿½Þ¸ï¿½Ê±ï¿½ä£º
+ *  ï¿½ï¿½    ×¢ï¿½ï¿½
+ ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½î¡¿
  *************************************************************************/
 void Test_Encoder(void)
 {
-	 char txt[16];
-   encoder_init();//±àÂëÆ÷³õÊ¼»¯
-	 lcd_clear(YELLOW);  //³õÊ¼ÇåÆÁ
-	 lcd_showstr(2, 0, "Test_Encoder:"); 					
-	 while(1)
-	 {
-		  speed_measure();
-		  delay_ms(50);
-			sprintf(txt,"Left_Speed  = %05d",left_speed);
-		  lcd_showstr(1, 3, txt); //ÏÔÊ¾
-			sprintf(txt,"Right_Speed = %05d",right_speed);
-		  lcd_showstr(1, 4, txt); //ÏÔÊ¾
-		  sprintf(txt,"Real_Speed = %05d",real_speed);
-		  lcd_showstr(1, 5, txt); //ÏÔÊ¾
-	 }
+    char txt[16];
+    encoder_init();    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
+    lcd_clear(YELLOW); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    lcd_showstr(2, 0, "Test_Encoder:");
+    while (1)
+    {
+        speed_measure();
+        delay_ms(50);
+        sprintf(txt, "Left_Speed  = %05d", left_speed);
+        lcd_showstr(1, 3, txt); // ï¿½ï¿½Ê¾
+        sprintf(txt, "Right_Speed = %05d", right_speed);
+        lcd_showstr(1, 4, txt); // ï¿½ï¿½Ê¾
+        sprintf(txt, "Real_Speed = %05d", real_speed);
+        lcd_showstr(1, 5, txt); // ï¿½ï¿½Ê¾
+    }
 }
-
-

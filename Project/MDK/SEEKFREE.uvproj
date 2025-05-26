@@ -264,7 +264,7 @@
             <uUch>0</uUch>
             <uFlt64>0</uFlt64>
             <Fuzzy>3</Fuzzy>
-            <Optim>7</Optim>
+            <Optim>5</Optim>
             <wLevel>3</wLevel>
             <SizSpd>1</SizSpd>
             <AcaOpt>0</AcaOpt>
@@ -272,7 +272,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src</IncludePath>
+              <IncludePath>..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+</IncludePath>
             </VariousControls>
           </C251>
           <Ax51>
@@ -763,6 +763,16 @@
               <FileName>park.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\USER\inc\park.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>vofa+</GroupName>
+          <Files>
+            <File>
+              <FileName>vofa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\vofa+\vofa.c</FilePath>
             </File>
           </Files>
         </Group>

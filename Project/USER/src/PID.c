@@ -1,10 +1,10 @@
 #include "PID.h"
 #include "math.h"
 /************************************************
-��������IncPIDInit(PID *sptr)
-��  �ܣ�PID������ʼ��
-��  ����
-����ֵ��void
+函数名：IncPIDInit(PID *sptr)
+功  能：PID参数初始化
+参  数：
+返回值：void
 ************************************************/
 void IncPIDInit(PID *sptr)
 {
@@ -18,67 +18,71 @@ void IncPIDInit(PID *sptr)
 }
 
 /************************************************
-��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-��  �ܣ�λ��ʽPID����
-��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-����ֵ��float
+函数名：LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+功  能：位置式PID控制
+参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+返回值：float
 ************************************************/
 int16 LocP_DCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
 {
     int16 iError, dError;
     int16 output;
 
-    iError = Setpoint - Turepoint;                // ƫ��
-    sptr->SumError += iError;                     // ����(����ʱ��ܶ�ʱ����һ�ײ�ִ���һ��΢�֣����ۼӴ������)
-    dError = (int16)(iError - (sptr->LastError)); // ΢��
+    iError = Setpoint - Turepoint;                // 偏差
+    sptr->SumError += iError;                     // 积分(由于时间较短时，可能一次并不执行完一次微分，积累大的误差)
+    dError = (int16)(iError - (sptr->LastError)); // 微分
     sptr->LastError = iError;
     if (sptr->SumError > 2000)
-        sptr->SumError = 2000; // �����޷�
+        sptr->SumError = 2000; // 积分限幅
     if (sptr->SumError < -2000)
         sptr->SumError = -2000;
-    output = (int16)(sptr->Kp * iError             // ������
-                     + (sptr->Ki * sptr->SumError) // ������
-                     + sptr->Kd * dError);         // ΢����
+    output = (int16)(sptr->Kp * iError             // 比例项
+                     + (sptr->Ki * sptr->SumError) // 积分项
+                     + sptr->Kd * dError);         // 微分项
     return (output);
 }
 /************************************************
-��������IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-��  �ܣ�����ʽPID����
-��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-����ֵ��int32 iIncpid
+函数名：IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+功  能：增量式PID控制
+参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+返回值：int32 iIncpid
 ************************************************/
-int16 IncPIDCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
+int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
 {
-    int16 iError, iIncpid;
-    // ��ǰ���
-    iError = Setpoint - Turepoint; // ƫ��
+    uint8 enable_Ki;
+    float Error, output;
+    static float LastSetpoint;
+    // 当前误差
+    Error = Setpoint - Turepoint; // 偏差
 
-    iIncpid = sptr->Kp * (iError - sptr->LastError) + sptr->Ki * iError;
-    //    //�����������´μ���
-    // if (iIncpid >= 2000) // ÿ����������޷�
-    // {
-    //     iIncpid = 2000;
-    // }
-    // if (iIncpid <= -2000)
-    // {
-    //     iIncpid = -2000;
-    // }
-    sptr->LastError = iError;
-    return (iIncpid);
+    if (fabs(Error) < 6)
+    {
+        enable_Ki = 1;
+    }
+    else
+    {
+        enable_Ki = 0;
+    }
+
+    output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastSetpoint);
+
+    sptr->LastError = Error;
+    LastSetpoint = Setpoint;
+    return (output);
 }
 /************************************************
-��������PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
-��  �ܣ���̬λ��ʽPID���� (һ������ת�����)
-��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-����ֵ��int32 Actual
+函数名：PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
+功  能：动态位置式PID控制 (一般用于转向控制)
+参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+返回值：int32 Actual
 ************************************************/
 int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
 {
     int16 iError, Actual;
-    float KP; // ��̬P��ע����Kp����
+    float KP; // 动态P，注意与Kp区分
 
     iError = Setpoint - Turepiont;
-    KP = (iError)*sptr->Ki + sptr->Kp; // ��̬P�ļ���
+    KP = (iError)*sptr->Ki + sptr->Kp; // 动态P的计算
     // sptr->SumError+=iError;
 
     Actual = KP * iError + sptr->Kd * (iError - sptr->LastError);
@@ -87,30 +91,30 @@ int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
     return Actual;
 }
 /************************************************
-��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-��  �ܣ�D��λ��ʽPID���ƣ�����������
-��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-����ֵ��float
+函数名：LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+功  能：D型位置式PID控制，带角速度项
+参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+返回值：float
 ************************************************/
-int16 PID_Turn_DT(PID *sptr, int16 Error, int16 Gory_z)
+float PID_Turn_DT(PID *sptr, float Error, int16 Gory_z)
 {
-    int16 iError, dError, gory_z;
-    float KP; // ��̬P��ע����Kp����
-    int16 output;
+    uint8 enable_Kd;
+    float output;
 
-    iError = Error; // ƫ��
-    gory_z = Gory_z;
+    if (fabs(Error) < 2)
+    {
+        enable_Kd = 1;
+    }
+    else
+    {
+        enable_Kd = 0;
+    }
 
-    // KP = (iError * iError) * sptr->Ki + sptr->Kp; // ��̬P�ļ��/�
-    KP = sptr->Kp + fabs(iError) * sptr->Ki; // 线性增加而非二次方增加
+    output = sptr->Kp * Error                                   // 比例项(动态p)
+             + enable_Kd * sptr->Kd * (Error - sptr->LastError) // 微分项
+             + sptr->K_gory * Gory_z;                           // 角速度项
 
-    dError = (iError - (sptr->LastError)); // ΢��
-
-    output = KP * iError              // ������(��̬p)
-             + sptr->Kd * dError      // ΢����
-             + sptr->K_gory * gory_z; // ����������
-
-    sptr->LastError = iError;
+    sptr->LastError = Error;
 
     return (output);
 }

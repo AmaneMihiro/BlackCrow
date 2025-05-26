@@ -1,12 +1,12 @@
-C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   05/04/25  21:33:16  PAGE 1   
+C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   26/05/25  22:46:20  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE SEEKFREE_TSL1401
 OBJECT MODULE PLACED IN .\Out_File\SEEKFREE_TSL1401.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_peripheral\SEEKFREE_TSL1401.c XSMALL INTR2 WA
-                    -RNINGLEVEL(3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_periph
-                    -eral;..\CODE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\SEEKFREE_TSL1401.lst) OBJECT(.\Out_File\SEEKFREE_TSL1401.ob
-                    -j) 
+                    -RNINGLEVEL(3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Librari
+                    -es\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\SEEKFREE_TSL1401.lst) OBJECT(
+                    -.\Out_File\SEEKFREE_TSL1401.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    50   1          adc_init(AD_CHANNEL,0X01);
    51   1          //adc_init(AD_CHANNEL_CH2,0X01);     
    52   1              pit_timer_ms(TIM_4,10);
-C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   05/04/25  21:33:16  PAGE 2   
+C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   26/05/25  22:46:20  PAGE 2   
 
    53   1      }
    54          
@@ -130,12 +130,12 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       187     ------
+  code size            =       208     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   05/04/25  21:33:16  PAGE 3   
+C251 COMPILER V5.60.0,  SEEKFREE_TSL1401                                                   26/05/25  22:46:20  PAGE 3   
 
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------

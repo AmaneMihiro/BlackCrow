@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 1   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE SEEKFREE_PRINTF
 OBJECT MODULE PLACED IN .\Out_File\SEEKFREE_PRINTF.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_peripheral\SEEKFREE_PRINTF.c XSMALL INTR2 WAR
-                    -NINGLEVEL(3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_periphe
-                    -ral;..\CODE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\SEEKFREE_PRINTF.lst) OBJECT(.\Out_File\SEEKFREE_PRINTF.obj) 
+                    -NINGLEVEL(3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Librarie
+                    -s\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\SEEKFREE_PRINTF.lst) OBJECT(.\
+                    -Out_File\SEEKFREE_PRINTF.obj) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
    51   3                  temp_data = pos_dat%radix;
    52   3                  if(10 <= temp_data) temp_data += 'A'-10;
    53   3                  else                temp_data += '0';
-   54   3                  
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 2   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 2   
 
+   54   3                  
    55   3                  *p = temp_data;
    56   3                  
    57   3                  pos_dat = pos_dat/radix;
@@ -133,9 +134,9 @@ stmt  level    source
   117          //                }break;
   118          //                
   119          //                case 'f':// 浮点数，输出小数点后六位  不能指定输出精度
-  120          //                case 'F':// 浮点数，输出小数点后六位  不能指定输出精度
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 3   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 3   
 
+  120          //                case 'F':// 浮点数，输出小数点后六位  不能指定输出精度
   121          //                {
   122          //                    int8 vstr[33];
   123          //                    double ival = (double)va_arg(arg, double);
@@ -201,9 +202,9 @@ stmt  level    source
   183          //                {
   184          //                    int8 vstr[33];
   185          //                    uint32 ival = (uint32)va_arg(arg, uint32);
-  186          //                    uint8 vlen = number_conversion_ascii(ival, vstr, 0, 16);
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 4   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 4   
 
+  186          //                    uint8 vlen = number_conversion_ascii(ival, vstr, 0, 16);
   187          //                    printf_reverse_order(vstr,8);
   188          //                    uart_putbuff(DEBUG_UART, (uint8 *)vstr,8);
   189          //                            
@@ -269,9 +270,9 @@ stmt  level    source
   249   5                          if(ival<0)  
   250   5                          {
   251   6                              vstr[vlen] = '-';
-  252   6                              vlen++;
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 5   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 5   
 
+  252   6                              vlen++;
   253   6                          }
   254   5                          printf_reverse_order(vstr,vlen);
   255   5                          memcpy(buff,vstr,vlen);
@@ -337,9 +338,9 @@ stmt  level    source
   315   5                          buff_len += vlen;
   316   5                      }break;
   317   4                      
-  318   4                      case 'o':// 无符号八进制整数 
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 6   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 6   
 
+  318   4                      case 'o':// 无符号八进制整数 
   319   4                      {
   320   5                          int8 vstr[33];
   321   5                          uint32 ival = (uint32)va_arg(arg, uint32);
@@ -405,9 +406,9 @@ stmt  level    source
   381   3                      }
   382   2                      else
   383   2                      {
-  384   3                  *buff = (int8)(*format);
-C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    05/04/25  21:33:16  PAGE 7   
+C251 COMPILER V5.60.0,  SEEKFREE_PRINTF                                                    26/05/25  22:46:20  PAGE 7   
 
+  384   3                  *buff = (int8)(*format);
   385   3                  buff++;
   386   3                  buff_len++;
   387   3                      }
@@ -421,7 +422,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1482     ------
+  code size            =      1593     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

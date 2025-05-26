@@ -37,7 +37,8 @@
 ".\Out_File\fuse.obj",
 ".\Out_File\debug.obj",
 ".\Out_File\ADC.obj",
-".\Out_File\park.obj" 
+".\Out_File\park.obj",
+".\Out_File\vofa.obj" 
 TO ".\Out_File\SEEKFREE" 
 PRINT(".\Out_File\SEEKFREE.map") CASE DISABLEWARNING (16,57) 
 REMOVEUNUSED 

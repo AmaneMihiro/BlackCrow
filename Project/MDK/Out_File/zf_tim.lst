@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  zf_tim                                                             05/04/25  21:33:15  PAGE 1   
+C251 COMPILER V5.60.0,  zf_tim                                                             26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE zf_tim
 OBJECT MODULE PLACED IN .\Out_File\zf_tim.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_libraries\zf_tim.c XSMALL INTR2 WARNINGLEVEL(
-                    -3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\COD
-                    -E;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\zf_tim.lst) OBJECT(.\Out_File\zf_tim.obj) 
+                    -3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree
+                    -_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\zf_tim.lst) OBJECT(.\Out_File\zf_tim.obj
+                    -) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
    50   3                              break;
    51   3                      }
    52   2                      
-   53   2                      case CTIM1_P35:
-C251 COMPILER V5.60.0,  zf_tim                                                             05/04/25  21:33:15  PAGE 2   
+C251 COMPILER V5.60.0,  zf_tim                                                             26/05/25  22:46:19  PAGE 2   
 
+   53   2                      case CTIM1_P35:
    54   2                      {
    55   3                              TL1 = 0x00;
    56   3                              TH1 = 0x00;
@@ -133,9 +134,9 @@ stmt  level    source
   114   2                      {
   115   3                              dat = (uint16)T2H << 8;
   116   3                              dat = ((uint8)T2L) | dat;
-  117   3                              break;
-C251 COMPILER V5.60.0,  zf_tim                                                             05/04/25  21:33:15  PAGE 3   
+C251 COMPILER V5.60.0,  zf_tim                                                             26/05/25  22:46:19  PAGE 3   
 
+  117   3                              break;
   118   3                      }
   119   2                      case CTIM3_P04:
   120   2                      {
@@ -201,9 +202,9 @@ stmt  level    source
   178   3                      }
   179   2                      case CTIM4_P06:
   180   2                      {
-  181   3                              T4T3M &= ~(1<<7);
-C251 COMPILER V5.60.0,  zf_tim                                                             05/04/25  21:33:15  PAGE 4   
+C251 COMPILER V5.60.0,  zf_tim                                                             26/05/25  22:46:19  PAGE 4   
 
+  181   3                              T4T3M &= ~(1<<7);
   182   3                              T4H = 0;
   183   3                              T4L = 0;
   184   3                              T4T3M |= (1<<7);
@@ -270,9 +271,9 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       380     ------
-C251 COMPILER V5.60.0,  zf_tim                                                             05/04/25  21:33:15  PAGE 5   
+C251 COMPILER V5.60.0,  zf_tim                                                             26/05/25  22:46:19  PAGE 5   
 
+  code size            =       420     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

@@ -1,28 +1,31 @@
-C251 COMPILER V5.60.0,  isr                                                                05/04/25  21:33:16  PAGE 1   
+C251 COMPILER V5.60.0,  isr                                                                26/05/25  22:51:45  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE isr
 OBJECT MODULE PLACED IN .\Out_File\isr.obj
-COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\isr.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\Lib
-                    -raries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src)
-                    - DEBUG PRINT(.\Out_File\isr.lst) OBJECT(.\Out_File\isr.obj) 
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\isr.c XSMALL INTR2 WARNINGLEVEL(3) OPTIMIZE(5,SPEED) BROWS
+                    -E INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USE
+                    -R\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\isr.lst) OBJECT(.\Out_File\isr.obj) 
 
 stmt  level    source
 
     1          ///******************************************************************************************************
              -***************
     2          // * COPYRIGHT NOTICE
-    3          // * Copyright (c) 2020,÷∑…ø∆ºº
+    3          // * Copyright (c) 2020,ÔøΩÔøΩ…ø∆ºÔøΩ
     4          // * All rights reserved.
-    5          // * ºº ıÃ÷¬€QQ»∫£∫“ª»∫£∫179029047(“—¬˙)  ∂˛»∫£∫244861897(“—¬˙)  »˝»∫£∫824575535
+    5          // * ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩQQ»∫ÔøΩÔøΩ“ª»∫ÔøΩÔøΩ179029047(ÔøΩÔøΩÔøΩÔøΩ)  ÔøΩÔøΩ»∫ÔøΩÔøΩ244861897(ÔøΩÔøΩÔ
+             -øΩÔøΩ)  ÔøΩÔøΩ»∫ÔøΩÔøΩ824575535
     6          // *
-    7          // * “‘œ¬À˘”–ƒ⁄»›∞Ê»®æ˘ Ù÷∑…ø∆ººÀ˘”–£¨Œ¥æ≠‘ –Ì≤ªµ√”√”⁄…Ã“µ”√Õæ£¨
-    8          // * ª∂”≠∏˜Œª π”√≤¢¥´≤•±æ≥Ã–Ú£¨–ﬁ∏ƒƒ⁄»› ±±ÿ–Î±£¡Ù÷∑…ø∆ººµƒ∞Ê»®…˘√˜°£
+    7          // * ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ›∞ÔøΩ»®ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ…ø∆ºÔøΩÔøΩÔøΩÔøΩ–£ÔøΩŒ¥ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔ
+             -øΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ“µÔøΩÔøΩÕæÔøΩÔøΩ
+    8          // * ÔøΩÔøΩ”≠ÔøΩÔøΩŒª πÔøΩ√≤ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩﬁ∏ÔøΩÔøΩÔøΩÔøΩÔøΩ ±ÔøΩÔøΩÔøΩÎ±£ÔøΩÔøΩÔøΩÔ
+             -øΩ…ø∆ºÔøΩÔøΩƒ∞ÔøΩ»®ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
     9          // *
    10          // * @file                      isr
-   11          // * @company                   ≥…∂º÷∑…ø∆ºº”–œﬁπ´Àæ
-   12          // * @author                    ÷∑…ø∆ºº(QQ790875685)
-   13          // * @version                   ≤Èø¥docƒ⁄versionŒƒº˛ ∞Ê±æÀµ√˜
+   11          // * @company                   ÔøΩ…∂ÔøΩÔøΩÔøΩ…ø∆ºÔøΩÔøΩÔøΩÔøΩﬁπÔøΩÀæ
+   12          // * @author                    ÔøΩÔøΩ…ø∆ºÔøΩ(QQ790875685)
+   13          // * @version                   ÔøΩÈø¥docÔøΩÔøΩversionÔøΩƒºÔøΩ ÔøΩÊ±æÀµÔøΩÔøΩ
    14          // * @Software                  MDK FOR C251 V5.60
    15          // * @Target core               STC32G12K128
    16          // * @Taobao                    https://seekfree.taobao.com/
@@ -31,24 +34,24 @@ stmt  level    source
              -**************/
    19          #include "headfile.h"
    20          
-   21          //UART1÷–∂œ
+   21          // UART1ÔøΩ–∂ÔøΩ
    22          void UART1_Isr() interrupt 4
    23          {
    24   1          uint8 res;
-   25   1              static uint8 dwon_count;
-   26   1          if(UART1_GET_TX_FLAG)
+   25   1          static uint8 dwon_count;
+   26   1          if (UART1_GET_TX_FLAG)
    27   1          {
    28   2              UART1_CLEAR_TX_FLAG;
    29   2              busy[1] = 0;
    30   2          }
-   31   1          if(UART1_GET_RX_FLAG)
+   31   1          if (UART1_GET_RX_FLAG)
    32   1          {
    33   2              UART1_CLEAR_RX_FLAG;
    34   2              res = SBUF;
-   35   2              //≥Ã–Ú◊‘∂Øœ¬‘ÿ
-   36   2              if(res == 0x7F)
+   35   2              // ÔøΩÔøΩÔøΩÔøΩÔøΩ‘∂ÔøΩÔøΩÔøΩÔøΩÔøΩ
+   36   2              if (res == 0x7F)
    37   2              {
-   38   3                  if(dwon_count++ > 20)
+   38   3                  if (dwon_count++ > 20)
    39   3                      IAP_CONTR = 0x60;
    40   3              }
    41   2              else
@@ -58,158 +61,141 @@ stmt  level    source
    45   2          }
    46   1      }
    47          
-   48          //UART2÷–∂œ
+   48          // UART2ÔøΩ–∂ÔøΩ
    49          void UART2_Isr() interrupt 8
    50          {
-   51   1          if(UART2_GET_TX_FLAG)
-   52   1              {
+   51   1          if (UART2_GET_TX_FLAG)
+   52   1          {
+C251 COMPILER V5.60.0,  isr                                                                26/05/25  22:51:45  PAGE 2   
+
    53   2              UART2_CLEAR_TX_FLAG;
-   54   2                      busy[2] = 0;
-   55   2              }
-C251 COMPILER V5.60.0,  isr                                                                05/04/25  21:33:16  PAGE 2   
-
-   56   1          if(UART2_GET_RX_FLAG)
-   57   1              {
+   54   2              busy[2] = 0;
+   55   2          }
+   56   1          if (UART2_GET_RX_FLAG)
+   57   1          {
    58   2              UART2_CLEAR_RX_FLAG;
-   59   2                      //Ω” ’ ˝æ›ºƒ¥Ê∆˜Œ™£∫S2BUF
-   60   2      
-   61   2              }
-   62   1      }
-   63          
-   64          
-   65          //UART3÷–∂œ
-   66          void UART3_Isr() interrupt 17
-   67          {
-   68   1          if(UART3_GET_TX_FLAG)
-   69   1              {
-   70   2              UART3_CLEAR_TX_FLAG;
-   71   2                      busy[3] = 0;
-   72   2              }
-   73   1          if(UART3_GET_RX_FLAG)
-   74   1              {
-   75   2              UART3_CLEAR_RX_FLAG;
-   76   2                      //Ω” ’ ˝æ›ºƒ¥Ê∆˜Œ™£∫S3BUF
-   77   2      
-   78   2              }
-   79   1      }
-   80          
-   81          
-   82          //UART4÷–∂œ
-   83          void UART4_Isr() interrupt 18
-   84          {
-   85   1          if(UART4_GET_TX_FLAG)
-   86   1              {
-   87   2              UART4_CLEAR_TX_FLAG;
-   88   2                      busy[4] = 0;
-   89   2              }
-   90   1          if(UART4_GET_RX_FLAG)
-   91   1              {
-   92   2              UART4_CLEAR_RX_FLAG;
-   93   2      
-   94   2                      //Ω” ’ ˝æ›ºƒ¥Ê∆˜Œ™£∫S4BUF;
-   95   2                      if(wireless_type == WIRELESS_SI24R1)
+   59   2              // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ›ºƒ¥ÔøΩÔøΩÔøΩŒ™ÔøΩÔøΩS2BUF
+   60   2          }
+   61   1      }
+   62          
+   63          // UART3ÔøΩ–∂ÔøΩ
+   64          void UART3_Isr() interrupt 17
+   65          {
+   66   1          if (UART3_GET_TX_FLAG)
+   67   1          {
+   68   2              UART3_CLEAR_TX_FLAG;
+   69   2              busy[3] = 0;
+   70   2          }
+   71   1          if (UART3_GET_RX_FLAG)
+   72   1          {
+   73   2              UART3_CLEAR_RX_FLAG;
+   74   2              // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ›ºƒ¥ÔøΩÔøΩÔøΩŒ™ÔøΩÔøΩS3BUF
+   75   2          }
+   76   1      }
+   77          
+   78          // UART4ÔøΩ–∂ÔøΩ
+   79          void UART4_Isr() interrupt 18
+   80          {
+   81   1          if (UART4_GET_TX_FLAG)
+   82   1          {
+   83   2              UART4_CLEAR_TX_FLAG;
+   84   2              busy[4] = 0;
+   85   2          }
+   86   1          if (UART4_GET_RX_FLAG)
+   87   1          {
+   88   2              UART4_CLEAR_RX_FLAG;
+   89   2      
+   90   2              // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ›ºƒ¥ÔøΩÔøΩÔøΩŒ™ÔøΩÔøΩS4BUF;
+   91   2              if (wireless_type == WIRELESS_SI24R1)
+   92   2              {
+   93   3                  wireless_uart_callback(); // ÔøΩÔøΩÔøΩÔøΩ◊™ÔøΩÔøΩÔøΩ⁄ªÿµÔøΩÔøΩÔøΩÔøΩÔøΩ
+   94   3              }
+   95   2              else if (wireless_type == WIRELESS_CH9141)
    96   2              {
-   97   3                  wireless_uart_callback();           //Œﬁœﬂ◊™¥Æø⁄ªÿµ˜∫Ø ˝
+   97   3                  bluetooth_ch9141_uart_callback(); // ÔøΩÔøΩÔøΩÔøΩ◊™ÔøΩÔøΩÔøΩ⁄ªÿµÔøΩÔøΩÔøΩÔøΩÔøΩ
    98   3              }
-   99   2              else if(wireless_type == WIRELESS_CH9141)
+   99   2              else if (wireless_type == WIRELESS_CH573)
   100   2              {
-  101   3                  bluetooth_ch9141_uart_callback();   //¿∂—¿◊™¥Æø⁄ªÿµ˜∫Ø ˝
+  101   3                  wireless_ch573_callback(); // CH573ÔøΩÔøΩÔøΩÔøΩƒ£ÔøΩÔøΩÿµÔøΩÔøΩÔøΩÔøΩÔøΩ
   102   3              }
-  103   2              else if(wireless_type == WIRELESS_CH573)
-  104   2              {
-  105   3                  wireless_ch573_callback();          //CH573Œﬁœﬂƒ£øÈªÿµ˜∫Ø ˝
-  106   3              }
-  107   2              }
-  108   1      }
-  109          
-  110          #define LED P52
-  111          void INT0_Isr() interrupt 0
+  103   2          }
+  104   1      }
+  105          
+  106          #define LED P52
+  107          void INT0_Isr() interrupt 0
+  108          {
+  109   1          LED = 0; // ÔøΩÔøΩÔøΩÔøΩLED
+  110   1      }
+  111          void INT1_Isr() interrupt 2
   112          {
-  113   1              LED = 0;        //µ„¡¡LED
-  114   1      }
-  115          void INT1_Isr() interrupt 2
-  116          {
-  117   1      
-  118   1      }
-  119          void INT2_Isr() interrupt 10
-  120          {
-  121   1              INT2_CLEAR_FLAG;  //«Â≥˝÷–∂œ±Í÷æ
-C251 COMPILER V5.60.0,  isr                                                                05/04/25  21:33:16  PAGE 3   
+  113   1      }
+  114          void INT2_Isr() interrupt 10
+  115          {
+  116   1          INT2_CLEAR_FLAG; // ÔøΩÔøΩÔøΩÔøΩ–∂œ±ÔøΩ÷æ
+  117   1      }
+  118          void INT3_Isr() interrupt 11
+C251 COMPILER V5.60.0,  isr                                                                26/05/25  22:51:45  PAGE 3   
 
-  122   1      }
-  123          void INT3_Isr() interrupt 11
+  119          {
+  120   1          INT3_CLEAR_FLAG; // ÔøΩÔøΩÔøΩÔøΩ–∂œ±ÔøΩ÷æ
+  121   1      }
+  122          
+  123          void INT4_Isr() interrupt 16
   124          {
-  125   1              INT3_CLEAR_FLAG;  //«Â≥˝÷–∂œ±Í÷æ
+  125   1          INT4_CLEAR_FLAG; // ÔøΩÔøΩÔøΩÔøΩ–∂œ±ÔøΩ÷æ
   126   1      }
   127          
-  128          void INT4_Isr() interrupt 16
+  128          void TM0_Isr() interrupt 1
   129          {
-  130   1              INT4_CLEAR_FLAG;  //«Â≥˝÷–∂œ±Í÷æ
-  131   1      }
-  132          
-  133          void TM0_Isr() interrupt 1
-  134          {
-  135   1      
-  136   1      }
-  137          //-------------------------------”√µƒ∂® ±∆˜1÷–∂œ------------------------------------
-  138          void TM1_Isr() interrupt 3
-  139          {
-  140   1      //      TaskRemarks();
-  141   1              Motor_output_control();
-  142   1              if( flag_start == 0)
-  143   1              {
-  144   2                T_outku=T_outku+5;
-  145   2              
-  146   2              }
-  147   1      }
-  148          void TM2_Isr() interrupt 12
-  149          {
-  150   1              TIM2_CLEAR_FLAG;  //«Â≥˝÷–∂œ±Í÷æ
-  151   1              
-  152   1      }
-  153          void TM3_Isr() interrupt 19
-  154          {
-  155   1              TIM3_CLEAR_FLAG; //«Â≥˝÷–∂œ±Í÷æ
-  156   1              
-  157   1      }
-  158          
-  159          void TM4_Isr() interrupt 20
-  160          {
-  161   1              TIM4_CLEAR_FLAG; //«Â≥˝÷–∂œ±Í÷æ
-  162   1      //      ccd_collect();   //CCD≤…ºØ ˝æ›
-  163   1      
-  164   1      }
-  165          
-  166          //void  INT0_Isr()  interrupt 0;
-  167          //void  TM0_Isr()   interrupt 1;
-  168          //void  INT1_Isr()  interrupt 2;
-  169          //void  TM1_Isr()   interrupt 3;
-  170          //void  UART1_Isr() interrupt 4;
-  171          //void  ADC_Isr()   interrupt 5;
-  172          //void  LVD_Isr()   interrupt 6;
-  173          //void  PCA_Isr()   interrupt 7;
-  174          //void  UART2_Isr() interrupt 8;
-  175          //void  SPI_Isr()   interrupt 9;
-  176          //void  INT2_Isr()  interrupt 10;
-  177          //void  INT3_Isr()  interrupt 11;
-  178          //void  TM2_Isr()   interrupt 12;
-  179          //void  INT4_Isr()  interrupt 16;
-  180          //void  UART3_Isr() interrupt 17;
-  181          //void  UART4_Isr() interrupt 18;
-  182          //void  TM3_Isr()   interrupt 19;
-  183          //void  TM4_Isr()   interrupt 20;
-  184          //void  CMP_Isr()   interrupt 21;
-  185          //void  I2C_Isr()   interrupt 24;
-  186          //void  USB_Isr()   interrupt 25;
-  187          //void  PWM1_Isr()  interrupt 26;
-C251 COMPILER V5.60.0,  isr                                                                05/04/25  21:33:16  PAGE 4   
-
-  188          //void  PWM2_Isr()  interrupt 27;
+  130   1      }
+  131          //-------------------------------Ëé∑ÂèñÂÆöÊó∂1‰∏≠Êñ≠------------------------------------
+  132          void TM1_Isr() interrupt 3
+  133          {
+  134   1          Motor_output_control();
+  135   1      }
+  136          void TM2_Isr() interrupt 12
+  137          {
+  138   1          TIM2_CLEAR_FLAG; // Ê∏ÖÈô§ÂÆöÊó∂Âô®Ê†áÂøó
+  139   1      }
+  140          void TM3_Isr() interrupt 19
+  141          {
+  142   1          TIM3_CLEAR_FLAG; // ÔøΩÔøΩÔøΩÔøΩ–∂œ±ÔøΩ÷æ
+  143   1      }
+  144          
+  145          void TM4_Isr() interrupt 20
+  146          {
+  147   1          TIM4_CLEAR_FLAG; // ÔøΩÔøΩÔøΩÔøΩ–∂œ±ÔøΩ÷æ
+  148   1          //  ccd_collect();   //CCDÔøΩ…ºÔøΩÔøΩÔøΩÔøΩÔøΩ
+  149   1      }
+  150          
+  151          // void  INT0_Isr()  interrupt 0;
+  152          // void  TM0_Isr()   interrupt 1;
+  153          // void  INT1_Isr()  interrupt 2;
+  154          // void  TM1_Isr()   interrupt 3;
+  155          // void  UART1_Isr() interrupt 4;
+  156          // void  ADC_Isr()   interrupt 5;
+  157          // void  LVD_Isr()   interrupt 6;
+  158          // void  PCA_Isr()   interrupt 7;
+  159          // void  UART2_Isr() interrupt 8;
+  160          // void  SPI_Isr()   interrupt 9;
+  161          // void  INT2_Isr()  interrupt 10;
+  162          // void  INT3_Isr()  interrupt 11;
+  163          // void  TM2_Isr()   interrupt 12;
+  164          // void  INT4_Isr()  interrupt 16;
+  165          // void  UART3_Isr() interrupt 17;
+  166          // void  UART4_Isr() interrupt 18;
+  167          // void  TM3_Isr()   interrupt 19;
+  168          // void  TM4_Isr()   interrupt 20;
+  169          // void  CMP_Isr()   interrupt 21;
+  170          // void  I2C_Isr()   interrupt 24;
+  171          // void  USB_Isr()   interrupt 25;
+  172          // void  PWM1_Isr()  interrupt 26;
+  173          // void  PWM2_Isr()  interrupt 27;
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       391     ------
+  code size            =       373     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
@@ -217,6 +203,8 @@ Module Information          Static   Overlayable
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
   edata size           =         1     ------
+C251 COMPILER V5.60.0,  isr                                                                26/05/25  22:51:45  PAGE 4   
+
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

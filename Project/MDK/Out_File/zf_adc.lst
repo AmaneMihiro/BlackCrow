@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  zf_adc                                                             05/04/25  21:33:15  PAGE 1   
+C251 COMPILER V5.60.0,  zf_adc                                                             26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE zf_adc
 OBJECT MODULE PLACED IN .\Out_File\zf_adc.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_libraries\zf_adc.c XSMALL INTR2 WARNINGLEVEL(
-                    -3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\COD
-                    -E;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\zf_adc.lst) OBJECT(.\Out_File\zf_adc.obj) 
+                    -3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree
+                    -_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\zf_adc.lst) OBJECT(.\Out_File\zf_adc.obj
+                    -) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
    49   2                  P1M1 |= (1 << (adcn & 0x07));
    50   2              }
    51   1      
-   52   1              ADCCFG |= speed&0x0F;                   //ADC时钟频率SYSclk/2/speed&0x0F;
-C251 COMPILER V5.60.0,  zf_adc                                                             05/04/25  21:33:15  PAGE 2   
+C251 COMPILER V5.60.0,  zf_adc                                                             26/05/25  22:46:19  PAGE 2   
 
+   52   1              ADCCFG |= speed&0x0F;                   //ADC时钟频率SYSclk/2/speed&0x0F;
    53   1              
    54   1              ADCCFG |= 1<<5;                                 //转换结果右对齐。 ADC_RES 保存结果的高 2 位， ADC_RESL 保存结果的低 8 位。
    55   1      }
@@ -110,7 +111,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       140     ------
+  code size            =       146     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

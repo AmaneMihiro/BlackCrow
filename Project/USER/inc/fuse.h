@@ -3,7 +3,7 @@
 
 #include "headfile.h"
 
-//结构体定义
+//锟结构锟藉定锟斤拷
 typedef struct
 {
       uint8 Run;                 
@@ -12,7 +12,7 @@ typedef struct
       void (*TaskHook)(void);   
 }TASK_COMPONENTS;
 
-// 任务清单
+// 锟斤拷锟斤拷锟藉单
 typedef enum _TASK_LIST
 {
     TAST_Motor_output_control,            
@@ -23,9 +23,12 @@ typedef enum _TASK_LIST
 }TASK_LIST;
 
 extern int16 GORY_Z;
+extern uint8 outline_stop;
+extern float temp_left;
+extern float temp_right;
 
-//函数声明
-int16 range_protect(int16 duty, int16 min, int16 max);
+//锟斤拷锟斤拷锟斤拷锟斤拷
+float range_protect(float duty, float min, float max);
 void TaskRemarks(void);
 void TaskProcess(void);
 void Motor_output_control(void);

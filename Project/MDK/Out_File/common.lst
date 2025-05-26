@@ -1,11 +1,11 @@
-C251 COMPILER V5.60.0,  common                                                             05/04/25  21:33:14  PAGE 1   
+C251 COMPILER V5.60.0,  common                                                             26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE common
 OBJECT MODULE PLACED IN .\Out_File\common.obj
-COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\libraries\common.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE
-                    - INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER
-                    -\inc;..\USER\src) DEBUG PRINT(.\Out_File\common.lst) OBJECT(.\Out_File\common.obj) 
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\libraries\common.c XSMALL INTR2 WARNINGLEVEL(3) OPTIMI
+                    -ZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripher
+                    -al;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\common.lst) OBJECT(.\Out_File\common.obj) 
 
 stmt  level    source
 

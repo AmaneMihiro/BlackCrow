@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  zf_fifo                                                            05/04/25  21:33:15  PAGE 1   
+C251 COMPILER V5.60.0,  zf_fifo                                                            26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE zf_fifo
 OBJECT MODULE PLACED IN .\Out_File\zf_fifo.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_libraries\zf_fifo.c XSMALL INTR2 WARNINGLEVEL
-                    -(3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CO
-                    -DE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\zf_fifo.lst) OBJECT(.\Out_File\zf_fifo.obj) 
+                    -(3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfre
+                    -e_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\zf_fifo.lst) OBJECT(.\Out_File\zf_fifo.
+                    -obj) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
    50   1          fifo->max       = size;
    51   1          return FIFO_SUCCESS;
    52   1      }
-   53          
-C251 COMPILER V5.60.0,  zf_fifo                                                            05/04/25  21:33:15  PAGE 2   
+C251 COMPILER V5.60.0,  zf_fifo                                                            26/05/25  22:46:19  PAGE 2   
 
+   53          
    54          //-------------------------------------------------------------------------------------------------------
              -------------
    55          // @brief       FIFO 头指针位移
@@ -133,9 +134,9 @@ stmt  level    source
              -------------
   107          uint32 fifo_used (fifo_struct *fifo)
   108          {
-  109   1          return (fifo->max - fifo->size);
-C251 COMPILER V5.60.0,  zf_fifo                                                            05/04/25  21:33:15  PAGE 3   
+C251 COMPILER V5.60.0,  zf_fifo                                                            26/05/25  22:46:19  PAGE 3   
 
+  109   1          return (fifo->max - fifo->size);
   110   1      }
   111          
   112          //-------------------------------------------------------------------------------------------------------
@@ -201,9 +202,9 @@ stmt  level    source
   163   1          uint8 data_check = 0;
   164   1          uint32 temp_length;
   165   1      
-  166   1          if(*length > fifo_used(fifo))
-C251 COMPILER V5.60.0,  zf_fifo                                                            05/04/25  21:33:15  PAGE 4   
+C251 COMPILER V5.60.0,  zf_fifo                                                            26/05/25  22:46:19  PAGE 4   
 
+  166   1          if(*length > fifo_used(fifo))
   167   1          {
   168   2              *length = (fifo->max - fifo->size);                                     // 纠正读取的长度
   169   2              data_check = 1;                                                         // 标志数据不够
@@ -238,7 +239,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       760     ------
+  code size            =       803     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

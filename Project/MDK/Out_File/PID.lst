@@ -1,21 +1,21 @@
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 1   
+C251 COMPILER V5.60.0,  PID                                                                26/05/25  22:51:45  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE PID
 OBJECT MODULE PLACED IN .\Out_File\PID.obj
-COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\PID.c XSMALL INTR2 WARNINGLEVEL(3) BROWSE INCDIR(..\..\Lib
-                    -raries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src)
-                    - DEBUG PRINT(.\Out_File\PID.lst) OBJECT(.\Out_File\PID.obj) 
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\PID.c XSMALL INTR2 WARNINGLEVEL(3) OPTIMIZE(5,SPEED) BROWS
+                    -E INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USE
+                    -R\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\PID.lst) OBJECT(.\Out_File\PID.obj) 
 
 stmt  level    source
 
     1          #include "PID.h"
     2          #include "math.h"
     3          /************************************************
-    4          ��������IncPIDInit(PID *sptr)
-    5          ��  �ܣ�PID������ʼ��
-    6          ��  ����
-    7          ����ֵ��void
+    4          函数名：IncPIDInit(PID *sptr)
+    5          功  能：PID参数初始化
+    6          参  数：
+    7          返回值：void
     8          ************************************************/
     9          void IncPIDInit(PID *sptr)
    10          {
@@ -29,119 +29,124 @@ stmt  level    source
    18   1      }
    19          
    20          /************************************************
-   21          ��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-   22          ��  �ܣ�λ��ʽPID����
-   23          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-   24          ����ֵ��float
+   21          函数名：LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   22          功  能：位置式PID控制
+   23          参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+   24          返回值：float
    25          ************************************************/
    26          int16 LocP_DCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
    27          {
    28   1          int16 iError, dError;
    29   1          int16 output;
    30   1      
-   31   1          iError = Setpoint - Turepoint;                // ƫ��
-   32   1          sptr->SumError += iError;                     // ����(����ʱ��ܶ�ʱ����
-             -һ�ײ�ִ���һ��΢�֣����ۼӴ������)
-   33   1          dError = (int16)(iError - (sptr->LastError)); // ΢��
+   31   1          iError = Setpoint - Turepoint;                // 偏差
+   32   1          sptr->SumError += iError;                     // 积分(由于时间较短时，可能一次并不执
+             -行完一次微分，积累大的误差)
+   33   1          dError = (int16)(iError - (sptr->LastError)); // 微分
    34   1          sptr->LastError = iError;
    35   1          if (sptr->SumError > 2000)
-   36   1              sptr->SumError = 2000; // �����޷�
+   36   1              sptr->SumError = 2000; // 积分限幅
    37   1          if (sptr->SumError < -2000)
    38   1              sptr->SumError = -2000;
-   39   1          output = (int16)(sptr->Kp * iError             // ������
-   40   1                           + (sptr->Ki * sptr->SumError) // ������
-   41   1                           + sptr->Kd * dError);         // ΢����
+   39   1          output = (int16)(sptr->Kp * iError             // 比例项
+   40   1                           + (sptr->Ki * sptr->SumError) // 积分项
+   41   1                           + sptr->Kd * dError);         // 微分项
    42   1          return (output);
    43   1      }
    44          /************************************************
-   45          ��������IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-   46          ��  �ܣ�����ʽPID����
-   47          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-   48          ����ֵ��int32 iIncpid
+   45          函数名：IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   46          功  能：增量式PID控制
+   47          参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+   48          返回值：int32 iIncpid
    49          ************************************************/
-   50          int16 IncPIDCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
+   50          int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
    51          {
-   52   1          int16 iError, iIncpid;
-   53   1          // ��ǰ���
-   54   1          iError = Setpoint - Turepoint; // ƫ��
-   55   1      
-   56   1          iIncpid = sptr->Kp * (iError - sptr->LastError) + sptr->Ki * iError;
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 2   
+   52   1          uint8 enable_Ki;
+   53   1          float Error, output;
+   54   1          static float LastSetpoint;
+   55   1          // 当前误差
+   56   1          Error = Setpoint - Turepoint; // 偏差
+C251 COMPILER V5.60.0,  PID                                                                26/05/25  22:51:45  PAGE 2   
 
-   57   1          //    //�����������´μ���
-   58   1          // if (iIncpid >= 2000) // ÿ����������޷�
-   59   1          // {
-   60   1          //     iIncpid = 2000;
-   61   1          // }
-   62   1          // if (iIncpid <= -2000)
-   63   1          // {
-   64   1          //     iIncpid = -2000;
-   65   1          // }
-   66   1          sptr->LastError = iError;
-   67   1          return (iIncpid);
-   68   1      }
-   69          /************************************************
-   70          ��������PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
-   71          ��  �ܣ���̬λ��ʽPID���� (һ������ת�����)
-   72          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-   73          ����ֵ��int32 Actual
-   74          ************************************************/
-   75          int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
-   76          {
-   77   1          int16 iError, Actual;
-   78   1          float KP; // ��̬P��ע����Kp����
-   79   1      
-   80   1          iError = Setpoint - Turepiont;
-   81   1          KP = (iError)*sptr->Ki + sptr->Kp; // ��̬P�ļ���
-   82   1          // sptr->SumError+=iError;
+   57   1      
+   58   1          if (fabs(Error) < 6)
+   59   1          {
+   60   2              enable_Ki = 1;
+   61   2          }
+   62   1          else
+   63   1          {
+   64   2              enable_Ki = 0;
+   65   2          }
+   66   1      
+   67   1          output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastS
+             -etpoint);
+   68   1      
+   69   1          sptr->LastError = Error;
+   70   1          LastSetpoint = Setpoint;
+   71   1          return (output);
+   72   1      }
+   73          /************************************************
+   74          函数名：PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
+   75          功  能：动态位置式PID控制 (一般用于转向控制)
+   76          参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+   77          返回值：int32 Actual
+   78          ************************************************/
+   79          int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
+   80          {
+   81   1          int16 iError, Actual;
+   82   1          float KP; // 动态P，注意与Kp区分
    83   1      
-   84   1          Actual = KP * iError + sptr->Kd * (iError - sptr->LastError);
-   85   1      
-   86   1          sptr->LastError = iError;
-   87   1          return Actual;
-   88   1      }
-   89          /************************************************
-   90          ��������LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-   91          ��  �ܣ�D��λ��ʽPID���ƣ�����������
-   92          ��  ����PID *sptr,int16 Setpoint,int16 Turepoint
-   93          ����ֵ��float
-   94          ************************************************/
-   95          int16 PID_Turn_DT(PID *sptr, int16 Error, int16 Gory_z)
-   96          {
-   97   1          int16 iError, dError, gory_z;
-   98   1          float KP; // ��̬P��ע����Kp����
-   99   1          int16 output;
-  100   1      
-  101   1          iError = Error; // ƫ��
-  102   1          gory_z = Gory_z;
+   84   1          iError = Setpoint - Turepiont;
+   85   1          KP = (iError)*sptr->Ki + sptr->Kp; // 动态P的计算
+   86   1          // sptr->SumError+=iError;
+   87   1      
+   88   1          Actual = KP * iError + sptr->Kd * (iError - sptr->LastError);
+   89   1      
+   90   1          sptr->LastError = iError;
+   91   1          return Actual;
+   92   1      }
+   93          /************************************************
+   94          函数名：LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
+   95          功  能：D型位置式PID控制，带角速度项
+   96          参  数：PID *sptr,int16 Setpoint,int16 Turepoint
+   97          返回值：float
+   98          ************************************************/
+   99          float PID_Turn_DT(PID *sptr, float Error, int16 Gory_z)
+  100          {
+  101   1          uint8 enable_Kd;
+  102   1          float output;
   103   1      
-  104   1          // KP = (iError * iError) * sptr->Ki + sptr->Kp; // ��̬P�ļ��/�
-  105   1          KP = sptr->Kp + fabs(iError) * sptr->Ki; // 线性增加而非二次方增加
-  106   1      
-  107   1          dError = (iError - (sptr->LastError)); // ΢��
-  108   1      
-  109   1          output = KP * iError              // ������(��̬p)
-  110   1                   + sptr->Kd * dError      // ΢����
-  111   1                   + sptr->K_gory * gory_z; // ����������
+  104   1          if (fabs(Error) < 2)
+  105   1          {
+  106   2              enable_Kd = 1;
+  107   2          }
+  108   1          else
+  109   1          {
+  110   2              enable_Kd = 0;
+  111   2          }
   112   1      
-  113   1          sptr->LastError = iError;
-  114   1      
-  115   1          return (output);
-  116   1      }
+  113   1          output = sptr->Kp * Error                                   // 比例项(动态p)
+  114   1                   + enable_Kd * sptr->Kd * (Error - sptr->LastError) // 微分项
+  115   1                   + sptr->K_gory * Gory_z;                           // 角速度项
+  116   1      
+  117   1          sptr->LastError = Error;
+  118   1      
+  119   1          return (output);
+  120   1      }
+
+C251 COMPILER V5.60.0,  PID                                                                26/05/25  22:51:45  PAGE 3   
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       580     ------
+  code size            =       660     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
-C251 COMPILER V5.60.0,  PID                                                                05/04/25  21:33:16  PAGE 3   
-
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =    ------          4
+  edata size           =         4         24
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

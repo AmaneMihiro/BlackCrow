@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 1   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE zf_pwm
 OBJECT MODULE PLACED IN .\Out_File\zf_pwm.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_libraries\zf_pwm.c XSMALL INTR2 WARNINGLEVEL(
-                    -3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\COD
-                    -E;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\zf_pwm.lst) OBJECT(.\Out_File\zf_pwm.obj) 
+                    -3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree
+                    -_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\zf_pwm.lst) OBJECT(.\Out_File\zf_pwm.obj
+                    -) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
    50          {
    51   1              switch(pwmch)
    52   1              {
-   53   2                      case PWMA_CH1P_P10:
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 2   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 2   
 
+   53   2                      case PWMA_CH1P_P10:
    54   2                      {
    55   3                              gpio_mode(P1_0,GPO_PP);
    56   3                              break;
@@ -133,9 +134,9 @@ stmt  level    source
   116   2                      {
   117   3                              gpio_mode(P1_4,GPO_PP);
   118   3                              break;
-  119   3                      }
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 3   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 3   
 
+  119   3                      }
   120   2                      case PWMA_CH3N_P15:
   121   2                      {
   122   3                              gpio_mode(P1_5,GPO_PP);
@@ -201,9 +202,9 @@ stmt  level    source
   182   2                      case PWMA_CH4N_P33:
   183   2                      {
   184   3                              gpio_mode(P3_3,GPO_PP);
-  185   3                              break;
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 4   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 4   
 
+  185   3                              break;
   186   3                      }
   187   2                      
   188   2                      
@@ -269,9 +270,9 @@ stmt  level    source
   248   2                      {
   249   3                              gpio_mode(P7_6,GPO_PP);
   250   3                              break;
-  251   3                      }
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 5   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 5   
 
+  251   3                      }
   252   2      
   253   2                      
   254   2                      case PWMB_CH4_P23:
@@ -337,9 +338,9 @@ stmt  level    source
   311   2                      match_temp = period_temp * ((float)duty / PWM_DUTY_MAX);        // Õ¼¿Õ±È                       
   312   2              }
   313   1              else
-  314   1              {
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 6   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 6   
 
+  314   1              {
   315   2                      match_temp = period_temp + 1;                                                           // dutyÎª100%
   316   2              }
   317   1      
@@ -405,9 +406,9 @@ stmt  level    source
   374          //  Sample usage:           pwm_duty(PWM0_P00, 5000);     //³õÊ¼»¯PWM0  Ê¹ÓÃÒý½ÅP0.0  Êä³öPWMÆµÂÊ50HZ   Õ
              -¼¿Õ±ÈÎª°Ù·ÖÖ® 5000/PWM_DUTY_MAX*100
   375          //                                                      PWM_DUTY_MAXÔÚfsl_pwm.hÎÄ¼þÖÐ Ä¬ÈÏÎª10000
-  376          //-------------------------------------------------------------------------------------------------------
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 7   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 7   
 
+  376          //-------------------------------------------------------------------------------------------------------
              -------------
   377          void pwm_duty(PWMCH_enum pwmch, uint32 duty)
   378          {
@@ -473,9 +474,9 @@ stmt  level    source
   434   1              
   435   1              
   436   1              
-  437   1      //      P_SW2 |= 0x80;
-C251 COMPILER V5.60.0,  zf_pwm                                                             05/04/25  21:33:15  PAGE 8   
+C251 COMPILER V5.60.0,  zf_pwm                                                             26/05/25  22:46:19  PAGE 8   
 
+  437   1      //      P_SW2 |= 0x80;
   438   1              
   439   1              if(PWMB_CH1_P20 <= pwmch)                               //PWM5-8
   440   1              {
@@ -506,7 +507,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1942     ------
+  code size            =      2282     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

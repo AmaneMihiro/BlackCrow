@@ -1,11 +1,12 @@
-C251 COMPILER V5.60.0,  zf_uart                                                            05/04/25  21:33:15  PAGE 1   
+C251 COMPILER V5.60.0,  zf_uart                                                            26/05/25  22:46:19  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE zf_uart
 OBJECT MODULE PLACED IN .\Out_File\zf_uart.obj
 COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\Libraries\seekfree_libraries\zf_uart.c XSMALL INTR2 WARNINGLEVEL
-                    -(3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CO
-                    -DE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\zf_uart.lst) OBJECT(.\Out_File\zf_uart.obj) 
+                    -(3) OPTIMIZE(5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfre
+                    -e_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\zf_uart.lst) OBJECT(.\Out_File\zf_uart.
+                    -obj) 
 
 stmt  level    source
 
@@ -65,9 +66,9 @@ stmt  level    source
              -num tim_n)
    49          {
    50   1          uint16 brt;
-   51   1      
-C251 COMPILER V5.60.0,  zf_uart                                                            05/04/25  21:33:15  PAGE 2   
+C251 COMPILER V5.60.0,  zf_uart                                                            26/05/25  22:46:19  PAGE 2   
 
+   51   1      
    52   1              brt = (uint16)(65536 - (sys_clk/baud/4));
    53   1      
    54   1      
@@ -133,9 +134,9 @@ stmt  level    source
   114   3                              {
   115   4                                      P_SW2 |= 0x01;
   116   4                              }
-  117   3                              
-C251 COMPILER V5.60.0,  zf_uart                                                            05/04/25  21:33:15  PAGE 3   
+C251 COMPILER V5.60.0,  zf_uart                                                            26/05/25  22:46:19  PAGE 3   
 
+  117   3                              
   118   3                              IE2 |= 0x01 << 0;       //允许串行口2中断
   119   3                              busy[2] = 0;
   120   3                              break;
@@ -201,9 +202,9 @@ stmt  level    source
   180   4                                      P5M1 = 0x01<<2;//P5.2 需要设置为高阻
   181   4                                      P_SW2 |= 0x04;
   182   4                              }
-  183   3                              IE2 |= 0x01<<4; //允许串行口4中断
-C251 COMPILER V5.60.0,  zf_uart                                                            05/04/25  21:33:15  PAGE 4   
+C251 COMPILER V5.60.0,  zf_uart                                                            26/05/25  22:46:19  PAGE 4   
 
+  183   3                              IE2 |= 0x01<<4; //允许串行口4中断
   184   3                              busy[4] = 0;
   185   3                              break;
   186   3                      }
@@ -269,9 +270,9 @@ stmt  level    source
   242          //-------------------------------------------------------------------------------------------------------
              -------------
   243          //  @brief      串口发送字符串
-  244          //  @param      uart_n          串口模块号(USART_1,USART_2,USART_3,USART_4)
-C251 COMPILER V5.60.0,  zf_uart                                                            05/04/25  21:33:15  PAGE 5   
+C251 COMPILER V5.60.0,  zf_uart                                                            26/05/25  22:46:19  PAGE 5   
 
+  244          //  @param      uart_n          串口模块号(USART_1,USART_2,USART_3,USART_4)
   245          //  @param      *str            要发送的字符串地址
   246          //  @return     void
   247          //  Sample usage:               uart_putstr(UART_1,"i lvoe you"); 
@@ -288,7 +289,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       606     ------
+  code size            =       628     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

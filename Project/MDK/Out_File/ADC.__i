@@ -1,1 +1,1 @@
-"..\USER\src\ADC.c" XSMALL INTR2 WARNINGLEVEL (3) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src) DEBUG PRINT(.\Out_File\ADC.lst) OBJECT(.\Out_File\ADC.obj)
+"..\USER\src\ADC.c" XSMALL INTR2 WARNINGLEVEL (3) OPTIMIZE (5,SPEED) BROWSE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\USER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\ADC.lst) OBJECT(.\Out_File\ADC.obj)

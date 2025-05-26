@@ -1,0 +1,154 @@
+C251 COMPILER V5.60.0,  vofa                                                               26/05/25  22:51:45  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE vofa
+OBJECT MODULE PLACED IN .\Out_File\vofa.obj
+COMPILER INVOKED BY: d:\Keil_v5\C251\BIN\C251.EXE ..\..\vofa+\vofa.c XSMALL INTR2 WARNINGLEVEL(3) OPTIMIZE(5,SPEED) BROW
+                    -SE INCDIR(..\..\Libraries\libraries;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_peripheral;..\CODE;..\US
+                    -ER\inc;..\USER\src;..\..\vofa+) DEBUG PRINT(.\Out_File\vofa.lst) OBJECT(.\Out_File\vofa.obj) 
+
+stmt  level    source
+
+    1          /*
+    2           * @file                vofa.c/h
+    3           * @brief           vofa+发送数据（调参） --- 奇怪的BUG(vofa发送的内容不能全为0，不然会
+             -跳出DEBUG测试(主要原因可能是缓冲数组存储满了))
+    4           * @history
+    5           *      版本                  作者                  编写日期                    内容
+    6           *      v1.0            冯俊玮               2024/9/10               向上位机vofa+发送数据
+    7           */
+    8          #include <stdio.h>
+    9          #include <stdarg.h>
+   10          #include "vofa.h"
+   11          #include "headfile.h"
+   12          
+   13          #define MAX_BUFFER_SIZE 128
+   14          
+   15          uint8 send_buf[MAX_BUFFER_SIZE];
+   16          uint16 cnt = 0;
+   17          int head = 0, tail = 0;
+   18          /**
+   19          ***********************************************************************
+   20          * @brief:      vofa_transmit(uint8* buf, uint16 len)
+   21          * @param:               void
+   22          * @retval:     void
+   23          * @details:    修改通信工具，USART或者USB
+   24          ***********************************************************************
+   25          **/
+   26          void vofa_transmit(uint8 *buf, uint16 len)
+   27          {
+   28   1          uart_putbuff(UART_2, buf, len);
+   29   1      }
+   30          /**
+   31          ***********************************************************************
+   32          * @brief:      vofa_send_data(float data)
+   33          * @param[in]:  num: 数据编号 data: 数据
+   34          * @retval:     void
+   35          * @details:    将浮点数据拆分成单字节
+   36          ***********************************************************************
+   37          **/
+   38          void vofa_send_data(float adata)
+   39          {
+   40   1              send_buf[cnt++] = byte3(adata);
+   41   1              send_buf[cnt++] = byte2(adata);
+   42   1              send_buf[cnt++] = byte1(adata);
+   43   1              send_buf[cnt++] = byte0(adata);
+   44   1      }
+   45          /**
+   46          ***********************************************************************
+   47          * @brief      vofa_sendframetail(void)
+   48          * @param      NULL
+   49          * @retval     void
+   50          * @details:   给数据包发送帧尾
+   51          ***********************************************************************
+   52          **/
+   53          void vofa_sendframetail(void)
+   54          {
+   55   1          send_buf[cnt++] = 0x00;
+   56   1          send_buf[cnt++] = 0x00;
+C251 COMPILER V5.60.0,  vofa                                                               26/05/25  22:51:45  PAGE 2   
+
+   57   1          send_buf[cnt++] = 0x80;
+   58   1          send_buf[cnt++] = 0x7f;
+   59   1      
+   60   1          /* 将数据和帧尾打包发送 */
+   61   1          vofa_transmit((uint8 *)send_buf, cnt);
+   62   1          cnt = 0; // 每次发送完帧尾都需要清零
+   63   1      }
+   64          /**
+   65          ***********************************************************************
+   66          * @brief      vofa_demo(void)
+   67          * @param      NULL
+   68          * @retval     void
+   69          * @details:   demo示例
+   70          ***********************************************************************
+   71          **/
+   72          void vofa_demo(float data1, float data2, float data3, float data4, float data5, float data6)
+   73          {
+   74   1      
+   75   1          // Call the function to store the data in the buffer
+   76   1          vofa_send_data(data1);
+   77   1          vofa_send_data(data2);
+   78   1          vofa_send_data(data3);
+   79   1          vofa_send_data(data4);
+   80   1          vofa_send_data(data5);
+   81   1          vofa_send_data(data6);
+   82   1          // Call the function to send the frame tail
+   83   1          vofa_sendframetail();
+   84   1      }
+   85          
+   86          void vofa_demo3(float data1, float data2, float data3)
+   87          {
+   88   1      
+   89   1          // Call the function to store the data in the buffer
+   90   1          vofa_send_data(data1);
+   91   1          vofa_send_data(data2);
+   92   1          vofa_send_data(data3);
+   93   1          // Call the function to send the frame tail
+   94   1          vofa_sendframetail();
+   95   1      }
+   96          
+   97          void vofa_demo2(float data1, float data2)
+   98          {
+   99   1      
+  100   1          // Call the function to store the data in the buffer
+  101   1          vofa_send_data(data1);
+  102   1          vofa_send_data(data2);
+  103   1          // Call the function to send the frame tail
+  104   1          vofa_sendframetail();
+  105   1      }
+  106          
+  107          void vofa_demo1(float data1)
+  108          {
+  109   1      
+  110   1          // Call the function to store the data in the buffer
+  111   1          vofa_send_data(data1);
+  112   1          // Call the function to send the frame tail
+  113   1          vofa_sendframetail();
+  114   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       315     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+C251 COMPILER V5.60.0,  vofa                                                               26/05/25  22:51:45  PAGE 3   
+
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =       134         24
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        18     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
