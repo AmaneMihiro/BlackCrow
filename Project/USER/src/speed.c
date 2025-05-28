@@ -1,7 +1,7 @@
 #include "speed.h"
 #include "math.h"
 
-float aim_speed = 30;   // 目标速度
+float aim_speed = 50;  // 目标速度
 float real_speed = 0;  // 车身中心平均速度
 float left_speed = 0;  // 左轮速度
 float right_speed = 0; // 右轮速度
@@ -77,6 +77,10 @@ void encoder_init()
 void speed_measure()
 {
     int16 temp_L, temp_R;
+    // float max_change = 20.0f; // 最大允许变化量
+    // float left_change = left_speed - left_last_speed;
+    // float right_change = right_speed - right_last_speed;
+
     temp_L = ctimer_count_read(Left_Ecoder_Pin1); // 获取左轮当前速度
     temp_R = ctimer_count_read(Right_Ecoder_Pin1);
 
@@ -92,16 +96,34 @@ void speed_measure()
     else
         right_speed = temp_R;
 
-    // left_real_speed = left_speed;
-    // right_real_speed = right_speed;
-    // real_speed = (right_real_speed + left_real_speed) / 2;
+    // // 组合滤波算法（限幅+低通）
 
-    left_real_speed = left_speed * 0.9 + left_last_speed * 0.1;
-    left_last_speed = left_real_speed;
+    // // 1. 限幅部分 - 防止突变噪声
 
-    right_real_speed = right_speed * 0.9 + right_last_speed * 0.1;
-    right_last_speed = right_real_speed;
+    // if (fabs(left_change) > max_change)
+    // {
+    //     // 限制变化幅度
+    //     left_speed = left_last_speed + (left_change > 0 ? max_change : -max_change);
+    // }
 
+    // if (fabs(right_change) > max_change)
+    // {
+    //     // 限制变化幅度
+    //     right_speed = right_last_speed + (right_change > 0 ? max_change : -max_change);
+    // }
+
+    // // 2. 低通滤波部分 - 平滑速度变化
+    // left_real_speed = left_speed * 0.9 + left_last_speed * 0.1;
+    // right_real_speed = right_speed * 0.9 + right_last_speed * 0.1;
+
+    // // 保存当前值用于下次计算
+    // left_last_speed = left_real_speed;
+    // right_last_speed = right_real_speed;
+
+    left_real_speed = left_speed;
+    right_real_speed = right_speed;
+
+    // 计算车身中心平均速度
     real_speed = (right_real_speed + left_real_speed) / 2;
 }
 /*******************************电机定时打开干货罐等***********************************
@@ -134,7 +156,7 @@ void timed_task(void)
       传入的参数为左右轮输出转动的大小转动方向由符号决定
 返回值：void
 ********************************************************************************/
-#define Duty_Max 6000 // 限幅最大值
+#define Duty_Max 20000 // 限幅最大值
 
 void go_motor(int32 left_PWM, int32 right_PWM)
 {

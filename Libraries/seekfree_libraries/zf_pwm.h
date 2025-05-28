@@ -22,7 +22,7 @@
 #include "common.h"
 
 
-#define PWM_DUTY_MAX 10000
+#define PWM_DUTY_MAX 20000
 
 
 

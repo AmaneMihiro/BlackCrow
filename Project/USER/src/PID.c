@@ -41,35 +41,7 @@ int16 LocP_DCalc(PID *sptr, int16 Setpoint, int16 Turepoint)
                      + sptr->Kd * dError);         // 微分项
     return (output);
 }
-/************************************************
-函数名：IncPIDCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
-功  能：增量式PID控制
-参  数：PID *sptr,int16 Setpoint,int16 Turepoint
-返回值：int32 iIncpid
-************************************************/
-int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
-{
-    uint8 enable_Ki;
-    float Error, output;
-    static float LastSetpoint;
-    // 当前误差
-    Error = Setpoint - Turepoint; // 偏差
 
-    if (fabs(Error) < 6)
-    {
-        enable_Ki = 1;
-    }
-    else
-    {
-        enable_Ki = 0;
-    }
-
-    output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastSetpoint);
-
-    sptr->LastError = Error;
-    LastSetpoint = Setpoint;
-    return (output);
-}
 /************************************************
 函数名：PlacePID_Control(PID *sptr, int16 Setpoint,int16 Turepiont)
 功  能：动态位置式PID控制 (一般用于转向控制)
@@ -90,6 +62,7 @@ int16 PlacePID_Control(PID *sptr, int16 Setpoint, int16 Turepiont)
     sptr->LastError = iError;
     return Actual;
 }
+
 /************************************************
 函数名：LocP_DCalc(PID *sptr,int16 Setpoint,int16 Turepoint)
 功  能：D型位置式PID控制，带角速度项
@@ -116,5 +89,37 @@ float PID_Turn_DT(PID *sptr, float Error, int16 Gory_z)
 
     sptr->LastError = Error;
 
+    return (output);
+}
+
+/************************************************
+函数名：IncPIDCalc(PID *sptr,float Setpoint,float Turepoint,float Kf)
+功  能：增量式PID控制
+参  数：PID *sptr,float Setpoint,float Turepoint,float Kf
+返回值：int32 iIncpid
+************************************************/
+int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
+{
+    uint8 enable_Ki;
+    float Error, output;
+    static float LastSetpoint = 0;
+    // 当前误差
+    Error = Setpoint - Turepoint; // 偏差
+
+    // if (fabs(Error) < 10)
+    // {
+    //     enable_Ki = 1;
+    // }
+    // else
+    // {
+    //     enable_Ki = 0;
+    // }
+
+    enable_Ki = 1;
+
+    output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastSetpoint);
+
+    sptr->LastError = Error;
+    LastSetpoint = Setpoint;
     return (output);
 }

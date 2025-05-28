@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               26/05/25  22:51:45  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               27/05/25  18:37:09  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -18,125 +18,107 @@ stmt  level    source
     7   1          board_init();       // 初始化寄存器,勿删除此句代码
     8   1          delay_ms(800);      // 硬件稍微延时一下
     9   1      
-   10   1          //  lcd_init();
-   11   1          //  ips114_init_simspi();
-   12   1          ips114_init(); // 1.14寸液晶屏初始化
-   13   1      
-   14   1          ADC_int();                                                    // ADC采集初始化
-   15   1          ips114_showstr(0, 0, (unsigned char *)"Electromagnetic-Car"); // 字符串显示
-   16   1          ips114_showstr(0, 1, "interlize...");
-   17   1          //  ips114_showstr_simspi(0,0,(unsigned char*)"Electromagnetic-Car");
-   18   1          //  ips114_showstr_simspi(0,1,"interlize...");
-   19   1          delay_ms(500);
-   20   1          //  init_Steer_PWM();                                          //舵机初始化
-   21   1          init_PWM(MOTOR_MODE_SELECT); // 初始化DRV驱动方式（1-DRV/0-BTN）
-   22   1          encoder_init();              // 编码器初始化
-   23   1          //  uart_init(UART_4, UART4_RX_P02, UART4_TX_P03, 115200, TIM_2);//初始化无线串口
-   24   1          //  pwm_init(PWMB_CH4_P77, 50, 750);                         //初始化无刺电机20%占空比
-   25   1          //  pwm_init(PWMB_CH3_P33, 50, 750);                         //(1.2ms/20ms * 10000)，10000是PWM的�
-             -�占空比时候的值） 10000为PWM最大值
-   26   1          delay_ms(500);                             // 延时让无刷电机先转起来
-   27   1          gpio_mode(Reed_Switch_Pin, GPI_IMPEDANCE); // 停车识别的干簧管IO初始化
-   28   1          PID_int();                                 // PID参数初始化
-   29   1          ips114_showstr(0, 2, "icm20602_int...");
-   30   1          icm20602_init();
-   31   1      
-   32   1          pit_timer_ms(TIM_1, 5);           // 初始化定时器1作为周期性触发源，5MS进一次中断
-   33   1          NVIC_SetPriority(TIMER1_IRQn, 3); // 设置定时器1的优先级为 3 级（最高级）
-   34   1      
-   35   1          gpio_mode(P6_7, GPO_PP); // 蜂鸣器初始化（改蜂鸣器引脚也要改这个对应的初始化�
+   10   1          ips114_init(); // 1.14寸液晶屏初始化
+   11   1      
+   12   1          ADC_int();                                                    // ADC采集初始化
+   13   1          ips114_showstr(0, 0, (unsigned char *)"Electromagnetic-Car"); // 字符串显示
+   14   1          ips114_showstr(0, 1, "interlize...");
+   15   1          delay_ms(500);
+   16   1          init_PWM(MOTOR_MODE_SELECT);               // 初始化DRV驱动方式（1-DRV/0-BTN）
+   17   1          encoder_init();                            // 编码器初始化
+   18   1          delay_ms(500);                             // 延时让无刷电机先转起来
+   19   1          gpio_mode(Reed_Switch_Pin, GPI_IMPEDANCE); // 停车识别的干簧管IO初始化
+   20   1          PID_int();                                 // PID参数初始化
+   21   1          ips114_showstr(0, 2, "icm20602_int...");
+   22   1          icm20602_init();
+   23   1      
+   24   1          pit_timer_ms(TIM_1, 5);           // 初始化定时器1作为周期性触发源，5MS进一次中断
+   25   1          NVIC_SetPriority(TIMER1_IRQn, 3); // 设置定时器1的优先级为 3 级（最高级）
+   26   1      
+   27   1          gpio_mode(P6_7, GPO_PP); // 蜂鸣器初始化（改蜂鸣器引脚也要改这个对应的初始化�
              -��
-   36   1          BUZZ_DiDiDi(250);        // 蜂鸣器滴一下
-   37   1      
-   38   1          ips114_showstr(0, 6, "intall_intok...");
-   39   1          delay_ms(500);
-   40   1          ips114_clear(BLUE);
-   41   1      
-   42   1          //  while(adc_valueM<6)
-   43   1          //  {
-   44   1          ////                        电源电压显示
-   45   1          //                  ips114_showstr(140,0,"Value:");
-   46   1          //                  ips114_showfloat(190,0,adc_valueM,2,2);
-   47   1          //  }
-   48   1      
-   49   1          //   Key_Scan_Deal();      //按键调参//
-   50   1          EnableGlobalIRQ(); // 初始化完毕，开启总中断
-   51   1          //                  串口调试
-   52   1          uart_init(UART_2, UART2_RX_P10, UART2_TX_P11, 115200, TIM_2);//初始化串口
-   53   1      
-   54   1          /****下面的测试函数只用测试用，测试结束后注释关闭，一次只允许开一个测
+   28   1          BUZZ_DiDiDi(250);        // 蜂鸣器滴一下
+   29   1      
+   30   1          ips114_showstr(0, 6, "intall_intok...");
+   31   1          delay_ms(500);
+   32   1          ips114_clear(BLUE);
+   33   1      
+   34   1          EnableGlobalIRQ(); // 初始化完毕，开启总中断
+   35   1      
+   36   1          //  串口调试
+   37   1          uart_init(UART_2, UART2_RX_P10, UART2_TX_P11, 115200, TIM_2); // 初始化串口
+   38   1      
+   39   1          /****下面的测试函数只用测试用，测试结束后注释关闭，一次只允许开一个测
              -试函数！！******/
-C251 COMPILER V5.60.0,  main                                                               26/05/25  22:51:45  PAGE 2   
-
-   55   1          //  Test_Servo_Hardware();//测试舵机调节
-   56   1          //  Test_Motor_Hardware();//调试电机使用
-   57   1          //  Test_Electric_Hardware();//测试电磁电感采集
-   58   1          //  Test_Encoder();//测试编码器采集//
-   59   1          /*********************************************************************************/
-   60   1      
-   61   1          while (1)
-   62   1          {
-   63   2              //                      串口调试
-   64   2      
-   65   2              //                      printf("%d,%d,%d\n",aim_speed,left_real_speed,right_real_speed);
-   66   2      
-   67   2              //       Strategy_Slect();     //拨码开关策略选择 1--显示电感值和赛道偏差 2--选择�
+   40   1          //  Test_Servo_Hardware();//测试舵机调节
+   41   1          //  Test_Motor_Hardware();//调试电机使用
+   42   1          //  Test_Electric_Hardware();//测试电磁电感采集
+   43   1          //  Test_Encoder();//测试编码器采集//
+   44   1          /*********************************************************************************/
+   45   1      
+   46   1          while (1)
+   47   1          {
+   48   2              //                      串口调试
+   49   2      
+   50   2              //                      printf("%d,%d,%d\n",aim_speed,left_real_speed,right_real_speed);
+   51   2      
+   52   2              //       Strategy_Slect();     //拨码开关策略选择 1--显示电感值和赛道偏差 2--选择�
              -��右出库 3--选择是否入环
-   68   2              //       Handle_Barn_Out(Library_selection);     //执行出库函数后flag_start标志位置一才�
+   53   2              //       Handle_Barn_Out(Library_selection);     //执行出库函数后flag_start标志位置一才�
              -�进中断
-   69   2      
-   70   2              //                      停车显示
-   71   2              //                      Reed();
-   72   2              //                      ips114_showint8(0,6,Reed_Switch_Pin);
-   73   2              //                      ips114_showint8(0,7,flag_end);
-   74   2      
-   75   2              //     Roundabout_debugshow();//环岛调试屏幕显示（调试环岛时打开）
-   76   2              // Speed_debugshow();     //速度环调试屏幕显示（调试速度环时打开，速度环建
+C251 COMPILER V5.60.0,  main                                                               27/05/25  18:37:09  PAGE 2   
+
+   54   2      
+   55   2              //                      停车显示
+   56   2              //                      Reed();
+   57   2              //                      ips114_showint8(0,6,Reed_Switch_Pin);
+   58   2              //                      ips114_showint8(0,7,flag_end);
+   59   2      
+   60   2              //     Roundabout_debugshow();//环岛调试屏幕显示（调试环岛时打开）
+   61   2              // Speed_debugshow();     //速度环调试屏幕显示（调试速度环时打开，速度环建
              -议用上位机看波形）
-   77   2              //                datasend();          //上位机发送数据
-   78   2      
-   79   2              ////                    速度显示
-   80   2              // ips114_showint16(50, 0, left_real_speed);
-   81   2              // ips114_showint16(50, 1, right_real_speed);
-   82   2              // ips114_showint16(50, 2, real_speed);
-   83   2              // ips114_showint16(50, 4, aim_speed);
-   84   2              // //
+   62   2              //                datasend();          //上位机发送数据
+   63   2      
+   64   2              ////                    速度显示
+   65   2              // ips114_showint16(50, 0, left_real_speed);
+   66   2              // ips114_showint16(50, 1, right_real_speed);
+   67   2              // ips114_showint16(50, 2, real_speed);
+   68   2              // ips114_showint16(50, 4, aim_speed);
+   69   2              // //
+   70   2              // //
+   71   2              // //
+   72   2              //          电感显示
+   73   2              // ips114_showint16(0, 0, Left_Adc);
+   74   2              // ips114_showint16(0, 1, Left_Shu_Adc);
+   75   2              // ips114_showint16(0, 2, Right_Shu_Adc);
+   76   2              // ips114_showint16(0, 3, Right_Adc);
+   77   2              // ips114_showint16(0, 0, adc_value[0]);
+   78   2              // ips114_showint16(0, 1, adc_value[1]);
+   79   2              // ips114_showint16(0, 2, adc_value[2]);
+   80   2              // ips114_showint16(0, 3, adc_value[3]);
+   81   2      
+   82   2              // ////                 测距显示（后面注释）
+   83   2              // //                   ips114_showuint16(100,5,dl1a_distance_mm);
+   84   2              // //                   ips114_showuint16(100,1,flag_obstacle);
    85   2              // //
-   86   2              // //
-   87   2              //          电感显示
-   88   2              // ips114_showint16(0, 0, Left_Adc);
-   89   2              // ips114_showint16(0, 1, Left_Shu_Adc);
-   90   2              // ips114_showint16(0, 2, Right_Shu_Adc);
-   91   2              // ips114_showint16(0, 3, Right_Adc);
-   92   2              // ips114_showint16(0, 0, adc_value[0]);
-   93   2              // ips114_showint16(0, 1, adc_value[1]);
-   94   2              // ips114_showint16(0, 2, adc_value[2]);
-   95   2              // ips114_showint16(0, 3, adc_value[3]);
-   96   2      
-   97   2              // ////                 测距显示（后面注释）
-   98   2              // //                   ips114_showuint16(100,5,dl1a_distance_mm);
-   99   2              // //                   ips114_showuint16(100,1,flag_obstacle);
-  100   2              // //
-  101   2              // ////                 赛道偏差显示
-  102   2              // ips114_showfloat(0, 5, Current_Dir, 2, 1); // 显示小点数   整数显示2位   小数显�
+   86   2              // ////                 赛道偏差显示
+   87   2              // ips114_showfloat(0, 5, Current_Dir, 2, 1); // 显示小点数   整数显示2位   小数显�
              -�1位
-  103   2              // //
-  104   2              // //
-  105   2              //                      电源电压显示
-  106   2              // ips114_showstr(140, 0, "Value:");
-  107   2              // ips114_showfloat(190, 0, adc_valueM, 2, 2);
-  108   2              vofa_demo2((float)left_real_speed, (float)right_real_speed);
-  109   2          }
-  110   1      }
+   88   2              // //
+   89   2              // //
+   90   2              //                      电源电压显示
+   91   2              // ips114_showstr(140, 0, "Value:");
+   92   2              // ips114_showfloat(190, 0, adc_valueM, 2, 2);
+   93   2              vofa_demo3((float)temp_right, (float)right_real_speed, (float)Current_Dir);
+   94   2          }
+   95   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       225     ------
+  code size            =       233     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
-C251 COMPILER V5.60.0,  main                                                               26/05/25  22:51:45  PAGE 3   
-
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------

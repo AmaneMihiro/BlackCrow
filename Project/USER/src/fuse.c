@@ -19,17 +19,17 @@ float temp_right = 0;
 ********************************************************************************/
 void PID_int(void)
 {
-    L_SpeedPID.Kp = 1000; // 左轮速度环PID参数
-    L_SpeedPID.Ki = 4;
+    L_SpeedPID.Kp = 2000; // 左轮速度环PID参数
+    L_SpeedPID.Ki = 10;
     L_SpeedPID.Kd = 0;
 
-    R_SpeedPID.Kp = 1000; // 右速度环PID参数
-    R_SpeedPID.Ki = 4;
+    R_SpeedPID.Kp = 2000; // 右速度环PID参数
+    R_SpeedPID.Ki = 10;
     R_SpeedPID.Kd = 0;
 
     TurnPID.Kp = 10;
     TurnPID.Ki = 0;
-    TurnPID.Kd = 0;
+    TurnPID.Kd = 10;
 
     TurnPID.K_gory = 0;
 }
@@ -122,8 +122,6 @@ void Motor_output_control()
 
     ADC_PWM = PID_Turn_DT(&TurnPID, Current_Dir, 0);
 
-
-
     if ((Left_Adc < 3 && Right_Adc < 3 && Left_Shu_Adc < 3 && Right_Shu_Adc < 3) || outline_stop == 1)
     {
         outline_stop = 1;
@@ -131,10 +129,16 @@ void Motor_output_control()
     }
     else
     {
-        // Speed_pwm_left += IncPIDCalc(&L_SpeedPID, aim_speed + ADC_PWM, left_real_speed, 0);
-        // Speed_pwm_right += IncPIDCalc(&R_SpeedPID, aim_speed - ADC_PWM, right_real_speed, 0);
-        temp_left = range_protect(aim_speed + ADC_PWM, 1.0f, 2 * aim_speed);
-        temp_right = range_protect(aim_speed - ADC_PWM, 1.0f, 2 * aim_speed);
+        if (ADC_PWM >= 0)
+        {
+            temp_left = aim_speed + 0.3f * ADC_PWM;
+            temp_right = aim_speed - 1.7f * ADC_PWM;
+        }
+        else
+        {
+            temp_left = aim_speed + 1.7f * ADC_PWM;
+            temp_right = aim_speed - 0.3f * ADC_PWM;
+        }
         Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
         Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);
         go_motor(Speed_pwm_left, Speed_pwm_right); // 动力输出

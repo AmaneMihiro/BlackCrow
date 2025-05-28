@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 1   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE debug
@@ -66,7 +66,7 @@ stmt  level    source
    50   1      
    51   1          data_to_send[_cnt++] = sum;
    52   1      
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 2   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 2   
 
    53   1          for (i = 0; i < _cnt; i++)
    54   1              uart_putchar(uratn, data_to_send[i]);
@@ -134,7 +134,7 @@ stmt  level    source
   113   3              }
   114   2          }
   115   1          result = flag * result;
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 3   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 3   
 
   116   1          return result;
   117   1      }
@@ -202,7 +202,7 @@ stmt  level    source
   175   1          //  TurnPID.Kp= iap_read_float(7,0x00);//��仰����˼�Ǵ�0x00��ַ��ʼȡ��7�
              -�����ַ�����ݣ�Ҳ����0x00��0x06��
   176   1          //  TurnPID.Ki = iap_read_float(7,0x07);
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 4   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 4   
 
   177   1          //  TurnPID.Kd = iap_read_float(9,0x0e);
   178   1          // iap_read_bytes(0x00,(uint16 *)"350",2); //aim_speed=
@@ -270,7 +270,7 @@ stmt  level    source
   231   1          // ���뿪�س�ʼ��  �������޸ģ������޸ģ�
   232   1          SWITCH_INT(Switch_Pin_1);
   233   1          SWITCH_INT(Switch_Pin_2);
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 5   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 5   
 
   234   1          SWITCH_INT(Switch_Pin_3);
   235   1          SWITCH_INT(Switch_Pin_4);
@@ -338,7 +338,7 @@ stmt  level    source
   293   2          }
   294   1          if (!READ_GPIO(Switch_Pin_6))
   295   1          {
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 6   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 6   
 
   296   2              Switch6 = 1;
   297   2          }
@@ -406,7 +406,7 @@ stmt  level    source
   354   4                  case 3:;
   355   4                      TurnPID.K_gory += 1;
   356   4                      break;
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 7   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 7   
 
   357   4                  case 4:;
   358   4                      break;
@@ -474,7 +474,7 @@ stmt  level    source
   416   4                      break;
   417   4                  case 10:
   418   4                      aim_speed -= 50;
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 8   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 8   
 
   419   4                      break;
   420   4                  case 11:
@@ -542,7 +542,7 @@ stmt  level    source
   475   2              //*******************************��Ļ��ʾ����ҳ**********************************
              -****************
   476   2              //    if(parameter>13&&parameter<20)
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 9   
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 9   
 
   477   2              //    {
   478   2              //
@@ -610,7 +610,7 @@ stmt  level    source
   528          
   529          //===============================================�����ٶȻ�Ļ��ʾ========================
              -=====================
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 10  
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 10  
 
   530          //=======================================================================================================
              -=====
@@ -678,7 +678,7 @@ stmt  level    source
   582   1      
   583   1          ips114_clear(YELLOW); // ��ʼ����
   584   1          ips114_showstr(0, 0, "Test_Servo_Hardware:");
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 11  
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 11  
 
   585   1          pwm_init(Steer_Pin, 50, Steer_Duty_Midle); // ��ʼ�����  ���PWMƵ��200HZ��
              -���������ֵ
@@ -746,7 +746,7 @@ stmt  level    source
   644   3                  lcd_showstr(0, 4, "All  Black"); // �ַ�����ʾ
   645   3              }
   646   2              if (!READ_GPIO(KEY2)) // ����KEY3��  ���ֵ�����ת
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 12  
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 12  
 
   647   2              {
   648   3                  go_motor(0, motor_duty);
@@ -814,7 +814,7 @@ stmt  level    source
   710           *  ����˵������
   711           *  �������أ���
   712           *  �޸�ʱ�䣺
-C251 COMPILER V5.60.0,  debug                                                              26/05/25  22:51:45  PAGE 13  
+C251 COMPILER V5.60.0,  debug                                                              27/05/25  18:37:09  PAGE 13  
 
   713           *  ��    ע��
   714           ��ע�����

@@ -371,7 +371,7 @@ float Direction_error(void)
     }
     else
     {
-        error = Cha_x_bi_he(Left_Adc, Left_Shu_Adc * 1, Right_Adc, Right_Shu_Adc * 1) * 5; // 屏幕显示方向偏差值
+        error = Cha_x_bi_he(Left_Adc, Left_Shu_Adc * 2, Right_Adc, Right_Shu_Adc * 2) * 5; // 屏幕显示方向偏差值
         errors = Cha_x_bi_he(Left_Adc, Left_Shu_Adc, Right_Adc, Right_Shu_Adc);             // 归一化的标准方向偏差值
     }
     return error;
