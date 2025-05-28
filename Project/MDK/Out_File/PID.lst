@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  PID                                                                27/05/25  18:52:57  PAGE 1   
+C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE PID
@@ -66,7 +66,7 @@ stmt  level    source
    54   1          float KP; // 动态P，注意与Kp区分
    55   1      
    56   1          iError = Setpoint - Turepiont;
-C251 COMPILER V5.60.0,  PID                                                                27/05/25  18:52:57  PAGE 2   
+C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 2   
 
    57   1          KP = (iError)*sptr->Ki + sptr->Kp; // 动态P的计算
    58   1          // sptr->SumError+=iError;
@@ -129,15 +129,17 @@ stmt  level    source
   115   2              enable_Ki = 0;
   116   2          }
   117   1      
-  118   1          output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastS
-             -etpoint);
+  118   1          // enable_Ki = 1;
   119   1      
-  120   1          sptr->LastError = Error;
-  121   1          LastSetpoint = Setpoint;
-C251 COMPILER V5.60.0,  PID                                                                27/05/25  18:52:57  PAGE 3   
+  120   1          output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastS
+             -etpoint);
+  121   1      
+C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 3   
 
-  122   1          return (output);
-  123   1      }
+  122   1          sptr->LastError = Error;
+  123   1          LastSetpoint = Setpoint;
+  124   1          return (output);
+  125   1      }
 
 
 Module Information          Static   Overlayable

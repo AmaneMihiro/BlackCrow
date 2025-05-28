@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               27/05/25  18:37:09  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               29/05/25  00:06:20  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -66,7 +66,7 @@ stmt  level    source
              -��右出库 3--选择是否入环
    53   2              //       Handle_Barn_Out(Library_selection);     //执行出库函数后flag_start标志位置一才�
              -�进中断
-C251 COMPILER V5.60.0,  main                                                               27/05/25  18:37:09  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               29/05/25  00:06:20  PAGE 2   
 
    54   2      
    55   2              //                      停车显示

@@ -20,16 +20,16 @@ float temp_right = 0;
 void PID_int(void)
 {
     L_SpeedPID.Kp = 2000; // 左轮速度环PID参数
-    L_SpeedPID.Ki = 10;
+    L_SpeedPID.Ki = 0;
     L_SpeedPID.Kd = 0;
 
     R_SpeedPID.Kp = 2000; // 右速度环PID参数
-    R_SpeedPID.Ki = 10;
+    R_SpeedPID.Ki = 0;
     R_SpeedPID.Kd = 0;
 
-    TurnPID.Kp = 10;
+    TurnPID.Kp = 15;
     TurnPID.Ki = 0;
-    TurnPID.Kd = 10;
+    TurnPID.Kd = 5;
 
     TurnPID.K_gory = 0;
 }
@@ -131,13 +131,13 @@ void Motor_output_control()
     {
         if (ADC_PWM >= 0)
         {
-            temp_left = aim_speed + 0.3f * ADC_PWM;
-            temp_right = aim_speed - 1.7f * ADC_PWM;
+            temp_left = aim_speed + 0.6f * ADC_PWM;
+            temp_right = aim_speed - 1.2f * ADC_PWM;
         }
         else
         {
-            temp_left = aim_speed + 1.7f * ADC_PWM;
-            temp_right = aim_speed - 0.3f * ADC_PWM;
+            temp_left = aim_speed + 1.2f * ADC_PWM;
+            temp_right = aim_speed - 0.6f * ADC_PWM;
         }
         Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
         Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);

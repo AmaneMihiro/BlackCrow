@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  speed                                                              27/05/25  19:07:47  PAGE 1   
+C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE speed
@@ -12,7 +12,7 @@ stmt  level    source
     1          #include "speed.h"
     2          #include "math.h"
     3          
-    4          float aim_speed = 75;  // 目标速度
+    4          float aim_speed = 50;  // 目标速度
     5          float real_speed = 0;  // 车身中心平均速度
     6          float left_speed = 0;  // 左轮速度
     7          float right_speed = 0; // 右轮速度
@@ -66,7 +66,7 @@ stmt  level    source
    54          /****************************编码器初始化****************************
    55          函数名  void encoder_init(void)
    56          功能    编码器初始化
-C251 COMPILER V5.60.0,  speed                                                              27/05/25  19:07:47  PAGE 2   
+C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 2   
 
    57          参数    无
    58          说明    ctimer_count_init(CTIM0_P34);
@@ -134,7 +134,7 @@ stmt  level    source
   120   1          // left_last_speed = left_real_speed;
   121   1          // right_last_speed = right_real_speed;
   122   1      
-C251 COMPILER V5.60.0,  speed                                                              27/05/25  19:07:47  PAGE 3   
+C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 3   
 
   123   1          left_real_speed = left_speed;
   124   1          right_real_speed = right_speed;
@@ -202,7 +202,7 @@ stmt  level    source
   186   3                  right_PWM = right_PWM >= -Duty_Max ? (-right_PWM) : Duty_Max;
   187   3                  pwm_duty(Right_Z_Pin, 1);
   188   3                  pwm_duty(Right_F_Pin, right_PWM); // 反转
-C251 COMPILER V5.60.0,  speed                                                              27/05/25  19:07:47  PAGE 4   
+C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 4   
 
   189   3              }
   190   2          }

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  fuse                                                               27/05/25  19:23:07  PAGE 1   
+C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE fuse
@@ -30,17 +30,17 @@ stmt  level    source
    19          ********************************************************************************/
    20          void PID_int(void)
    21          {
-   22   1          L_SpeedPID.Kp = 4500; // 左轮速度环PID参数
-   23   1          L_SpeedPID.Ki = 10;
+   22   1          L_SpeedPID.Kp = 2000; // 左轮速度环PID参数
+   23   1          L_SpeedPID.Ki = 0;
    24   1          L_SpeedPID.Kd = 0;
    25   1      
-   26   1          R_SpeedPID.Kp = 4500; // 右速度环PID参数
-   27   1          R_SpeedPID.Ki = 10;
+   26   1          R_SpeedPID.Kp = 2000; // 右速度环PID参数
+   27   1          R_SpeedPID.Ki = 0;
    28   1          R_SpeedPID.Kd = 0;
    29   1      
-   30   1          TurnPID.Kp = 25;
+   30   1          TurnPID.Kp = 15;
    31   1          TurnPID.Ki = 0;
-   32   1          TurnPID.Kd = 10;
+   32   1          TurnPID.Kd = 5;
    33   1      
    34   1          TurnPID.K_gory = 0;
    35   1      }
@@ -66,7 +66,7 @@ stmt  level    source
    55   2              if (TaskComps[i].Timer) // 时间不为0
    56   2              {
    57   3                  TaskComps[i].Timer--;        // 减去一个节拍
-C251 COMPILER V5.60.0,  fuse                                                               27/05/25  19:23:07  PAGE 2   
+C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 2   
 
    58   3                  if (TaskComps[i].Timer == 0) // 时间减完了
    59   3                  {
@@ -134,7 +134,7 @@ stmt  level    source
   121   1          Get_deviation();                                    // 电磁采集并获取赛道偏差
   122   1      
   123   1          ADC_PWM = PID_Turn_DT(&TurnPID, Current_Dir, 0);
-C251 COMPILER V5.60.0,  fuse                                                               27/05/25  19:23:07  PAGE 3   
+C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 3   
 
   124   1      
   125   1          if ((Left_Adc < 3 && Right_Adc < 3 && Left_Shu_Adc < 3 && Right_Shu_Adc < 3) || outline_stop == 1)
@@ -146,13 +146,13 @@ stmt  level    source
   131   1          {
   132   2              if (ADC_PWM >= 0)
   133   2              {
-  134   3                  temp_left = aim_speed + 0.3f * ADC_PWM;
-  135   3                  temp_right = aim_speed - 1.7f * ADC_PWM;
+  134   3                  temp_left = aim_speed + 0.6f * ADC_PWM;
+  135   3                  temp_right = aim_speed - 1.2f * ADC_PWM;
   136   3              }
   137   2              else
   138   2              {
-  139   3                  temp_left = aim_speed + 1.7f * ADC_PWM;
-  140   3                  temp_right = aim_speed - 0.3f * ADC_PWM;
+  139   3                  temp_left = aim_speed + 1.2f * ADC_PWM;
+  140   3                  temp_right = aim_speed - 0.6f * ADC_PWM;
   141   3              }
   142   2              Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
   143   2              Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);
@@ -165,7 +165,7 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       525     ------
+  code size            =       513     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
