@@ -101,21 +101,22 @@ float PID_Turn_DT(PID *sptr, float Error, int16 Gory_z)
 int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
 {
     uint8 enable_Ki;
-    float Error, output;
+    float Error;
+    int32 output;
     static float LastSetpoint = 0;
     // 当前误差
     Error = Setpoint - Turepoint; // 偏差
 
-    if (fabs(Error) < 10)
-    {
-        enable_Ki = 1;
-    }
-    else
-    {
-        enable_Ki = 0;
-    }
+    // if (fabs(Error) < 15)
+    // {
+    //     enable_Ki = 1;
+    // }
+    // else
+    // {
+    //     enable_Ki = 0;
+    // }
 
-    // enable_Ki = 1;
+    enable_Ki = 1;
 
     output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastSetpoint);
 

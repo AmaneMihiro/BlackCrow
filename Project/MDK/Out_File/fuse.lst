@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 1   
+C251 COMPILER V5.60.0,  fuse                                                               08/06/25  17:55:00  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE fuse
@@ -22,56 +22,59 @@ stmt  level    source
    11          uint8 outline_stop = 0;
    12          float temp_left = 0;
    13          float temp_right = 0;
-   14          /****************************PID²ÎÊý³õÊ¼»¯**************************************
-   15          º¯Êý£º  void PID_int(void)
-   16          ²ÎÊý£º  void
-   17          ËµÃ÷£º  PIDÃ¿¸ö»·²ÎÊý³õÊ¼»¯
-   18          ·µ»ØÖµ£ºvoid
+   14          /****************************PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½**************************************
+   15          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void PID_int(void)
+   16          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void
+   17          Ëµï¿½ï¿½ï¿½ï¿½  PIDÃ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
+   18          ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½void
    19          ********************************************************************************/
    20          void PID_int(void)
    21          {
-   22   1          L_SpeedPID.Kp = 2000; // ×óÂÖËÙ¶È»·PID²ÎÊý
+   22   1          L_SpeedPID.Kp = 800; // ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½PIDï¿½ï¿½ï¿½ï¿½
    23   1          L_SpeedPID.Ki = 0;
    24   1          L_SpeedPID.Kd = 0;
    25   1      
-   26   1          R_SpeedPID.Kp = 2000; // ÓÒËÙ¶È»·PID²ÎÊý
+   26   1          R_SpeedPID.Kp = 800; // ï¿½ï¿½ï¿½Ù¶È»ï¿½PIDï¿½ï¿½ï¿½ï¿½
    27   1          R_SpeedPID.Ki = 0;
    28   1          R_SpeedPID.Kd = 0;
    29   1      
    30   1          TurnPID.Kp = 15;
    31   1          TurnPID.Ki = 0;
-   32   1          TurnPID.Kd = 5;
+   32   1          TurnPID.Kd = 15;
    33   1      
    34   1          TurnPID.K_gory = 0;
    35   1      }
    36          
    37          static TASK_COMPONENTS TaskComps[] =
    38              {
-   39                  {0, 1, 1, Motor_output_control}, // ½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·2ms
-   40                                                   //    {0, 2, 2, Trailing_control},           //×ªÏòÍâ»·10ms
-   41                                                   //    {0, 4, 4, Speed_control},              //C³µËÙ¶È»·20ms
+   39                  {0, 1, 1, Motor_output_control}, // ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½2ms
+   40                                                   //    {0, 2, 2, Trailing_control},           //×ªï¿½ï¿½ï¿½â»·10m
+             -s
+   41                                                   //    {0, 4, 4, Speed_control},              //Cï¿½ï¿½ï¿½Ù¶È»ï¿½
+             -20ms
    42          };
    43          /**************************************************************************************
    44           * FunctionName   : TaskRemarks()
-   45           * Description    : ÈÎÎñ±êÖ¾´¦Àí
+   45           * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
    46           * EntryParameter : None
    47           * ReturnValue    : None
-   48           * attention      : ***ÔÚ¶¨Ê±Æ÷ÖÐ¶ÏÖÐµ÷ÓÃ´Ëº¯Êý¼´¿É***
+   48           * attention      : ***ï¿½Ú¶ï¿½Ê±ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ðµï¿½ï¿½Ã´Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½***
    49           **************************************************************************************/
    50          void TaskRemarks(void)
    51          {
    52   1          uint8 i;
-   53   1          for (i = 0; i < TASKS_MAX; i++) // Öð¸öÈÎÎñÊ±¼ä´¦Àí
+   53   1          for (i = 0; i < TASKS_MAX; i++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä´¦ï¿½ï¿½
    54   1          {
-   55   2              if (TaskComps[i].Timer) // Ê±¼ä²»Îª0
-   56   2              {
-   57   3                  TaskComps[i].Timer--;        // ¼õÈ¥Ò»¸ö½ÚÅÄ
-C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 2   
+   55   2              if (TaskComps[i].Timer) // Ê±ï¿½ä²»Îª0
+C251 COMPILER V5.60.0,  fuse                                                               08/06/25  17:55:00  PAGE 2   
 
-   58   3                  if (TaskComps[i].Timer == 0) // Ê±¼ä¼õÍêÁË
+   56   2              {
+   57   3                  TaskComps[i].Timer--;        // ï¿½ï¿½È¥Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   58   3                  if (TaskComps[i].Timer == 0) // Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    59   3                  {
-   60   4                      TaskComps[i].Timer = TaskComps[i].ItvTime; // »Ö¸´¼ÆÊ±Æ÷Öµ£¬´ÓÐÂÏÂÒ»´Î
-   61   4                      TaskComps[i].Run = 1;                      // ÈÎÎñ¿ÉÒÔÔËÐÐ
+   60   4                      TaskComps[i].Timer = TaskComps[i].ItvTime; // ï¿½Ö¸ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½Ò»ï¿½ï¿½
+   61   4                      TaskComps[i].Run = 1;                      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    62   4                  }
    63   3              }
    64   2          }
@@ -79,31 +82,31 @@ stmt  level    source
    66          
    67          /**************************************************************************************
    68           * FunctionName   : TaskProcess()
-   69           * Description    : ÈÎÎñ´¦Àí|ÅÐ¶ÏÊ²Ã´Ê±ºò¸ÃÖ´ÐÐÄÇÒ»¸öÈÎÎñ
+   69           * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½Ð¶ï¿½Ê²Ã´Ê±ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    70           * EntryParameter : None
    71           * ReturnValue    : None
-   72           * * attention      : ***·ÅÔÚmianµÄwhile(1)¼´¿É***
+   72           * * attention      : ***ï¿½ï¿½ï¿½ï¿½mianï¿½ï¿½while(1)ï¿½ï¿½ï¿½ï¿½***
    73           **************************************************************************************/
    74          void TaskProcess(void)
    75          {
    76   1          uint8 i;
-   77   1          for (i = 0; i < TASKS_MAX; i++) // Öð¸öÈÎÎñÊ±¼ä´¦Àí
+   77   1          for (i = 0; i < TASKS_MAX; i++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä´¦ï¿½ï¿½
    78   1          {
-   79   2              if (TaskComps[i].Run) // Ê±¼ä²»Îª0
+   79   2              if (TaskComps[i].Run) // Ê±ï¿½ä²»Îª0
    80   2              {
-   81   3                  TaskComps[i].TaskHook(); // ÔËÐÐÈÎÎñ
-   82   3                  TaskComps[i].Run = 0;    // ±êÖ¾Çå0
+   81   3                  TaskComps[i].TaskHook(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   82   3                  TaskComps[i].Run = 0;    // ï¿½ï¿½Ö¾ï¿½ï¿½0
    83   3              }
    84   2          }
    85   1      }
    86          
    87          /***************************************************************************************
-   88          º¯ÊýÃû£ºint16 range_protect(int16 duty, int16 min, int16 max)
-   89          ¹¦  ÄÜ£ºÏÞ·ù±£»¤
-   90          ²Î  Êý£º
-   91          ·µ»ØÖµ£ºduty
+   88          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½int16 range_protect(int16 duty, int16 min, int16 max)
+   89          ï¿½ï¿½  ï¿½Ü£ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½
+   90          ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½
+   91          ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½duty
    92          **************************************************************************************/
-   93          float range_protect(float duty, float min, float max) // ÏÞ·ù±£»¤
+   93          float range_protect(float duty, float min, float max) // ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½
    94          {
    95   1          if (duty >= max)
    96   1          {
@@ -119,53 +122,57 @@ stmt  level    source
   106   2          }
   107   1      }
   108          
-  109          /****************************½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·**************************************
-  110          º¯Êý£º  void Motor_output_control()
-  111          ²ÎÊý£º  void
-  112          ËµÃ÷£º  ½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·(D³µ/ÈýÂÖ³µ²Å»áÓÃ)
-  113          ·µ»ØÖµ£ºvoid
+  109          /****************************ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½*******************************
+             -*******
+  110          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void Motor_output_control()
+  111          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void
+  112          Ëµï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½(Dï¿½ï¿½/ï¿½ï¿½ï¿½Ö³ï¿½ï¿½Å»ï¿½ï¿½ï¿½)
+  113          ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½void
   114          ***************************************************************************************/
   115          void Motor_output_control()
   116          {
   117   1      
   118   1          icm20602_get_gyro();
-  119   1          GORY_Z = icm20602_gyro_transition(icm20602_gyro_z); // µ¥Î»Îª¡ã/s
-  120   1          speed_measure();                                    // ±àÂëÆ÷²âÁ¿
-  121   1          Get_deviation();                                    // µç´Å²É¼¯²¢»ñÈ¡ÈüµÀÆ«²î
+  119   1          GORY_Z = icm20602_gyro_transition(icm20602_gyro_z); // ï¿½ï¿½Î»Îªï¿½ï¿½/s
+C251 COMPILER V5.60.0,  fuse                                                               08/06/25  17:55:00  PAGE 3   
+
+  120   1          speed_measure();                                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  121   1          Get_deviation();                                    // ï¿½ï¿½Å²É¼ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿
+             -½
   122   1      
   123   1          ADC_PWM = PID_Turn_DT(&TurnPID, Current_Dir, 0);
-C251 COMPILER V5.60.0,  fuse                                                               29/05/25  00:08:26  PAGE 3   
-
   124   1      
   125   1          if ((Left_Adc < 3 && Right_Adc < 3 && Left_Shu_Adc < 3 && Right_Shu_Adc < 3) || outline_stop == 1)
   126   1          {
   127   2              outline_stop = 1;
-  128   2              go_motor(0, 0); // ¶¯Á¦Êä³ö
-  129   2          }
-  130   1          else
-  131   1          {
-  132   2              if (ADC_PWM >= 0)
-  133   2              {
-  134   3                  temp_left = aim_speed + 0.6f * ADC_PWM;
-  135   3                  temp_right = aim_speed - 1.2f * ADC_PWM;
-  136   3              }
-  137   2              else
-  138   2              {
-  139   3                  temp_left = aim_speed + 1.2f * ADC_PWM;
-  140   3                  temp_right = aim_speed - 0.6f * ADC_PWM;
-  141   3              }
-  142   2              Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
-  143   2              Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);
-  144   2              go_motor(Speed_pwm_left, Speed_pwm_right); // ¶¯Á¦Êä³ö
-  145   2          }
-  146   1      }
-  147          
-  148          
+  128   2              Speed_pwm_left += IncPIDCalc(&L_SpeedPID, 0, left_real_speed, 0);
+  129   2              Speed_pwm_right += IncPIDCalc(&R_SpeedPID, 0, right_real_speed, 0);
+  130   2              go_motor(Speed_pwm_left, Speed_pwm_right); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  131   2          }
+  132   1          else
+  133   1          {
+  134   2              if (ADC_PWM >= 0)
+  135   2              {
+  136   3                  temp_left = aim_speed + 0.6f * ADC_PWM;
+  137   3                  temp_right = aim_speed - 1.2f * ADC_PWM;
+  138   3              }
+  139   2              else
+  140   2              {
+  141   3                  temp_left = aim_speed + 1.2f * ADC_PWM;
+  142   3                  temp_right = aim_speed - 0.6f * ADC_PWM;
+  143   3              }
+  144   2              Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
+  145   2              Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);
+  146   2              go_motor(Speed_pwm_left, Speed_pwm_right); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  147   2          }
+  148   1      }
+  149          
+  150          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       513     ------
+  code size            =       583     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

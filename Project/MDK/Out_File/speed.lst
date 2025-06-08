@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 1   
+C251 COMPILER V5.60.0,  speed                                                              08/06/25  17:46:16  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE speed
@@ -49,16 +49,16 @@ stmt  level    source
    37   1          if (MOTOR_MODE == 0)
    38   1          {
    39   2              //-----MOS驱动-----------
-   40   2              pwm_init(Left_Z_Pin, 20000, 0); // 左轮初始化
-   41   2              pwm_init(Left_F_Pin, 20000, 0);
-   42   2              pwm_init(Right_Z_Pin, 20000, 0); // 右轮初始化
-   43   2              pwm_init(Right_F_Pin, 20000, 0);
+   40   2              pwm_init(Left_Z_Pin, 10000, 0); // 左轮初始化
+   41   2              pwm_init(Left_F_Pin, 10000, 0);
+   42   2              pwm_init(Right_Z_Pin, 10000, 0); // 右轮初始化
+   43   2              pwm_init(Right_F_Pin, 10000, 0);
    44   2          }
    45   1          else
    46   1          {
    47   2              //------DRV驱动-------------
-   48   2              pwm_init(Left_PWM_Pin, 20000, 0);  // 左轮驱动
-   49   2              pwm_init(Right_PWM_Pin, 20000, 0); // 右轮驱动
+   48   2              pwm_init(Left_PWM_Pin, 10000, 0);  // 左轮驱动
+   49   2              pwm_init(Right_PWM_Pin, 10000, 0); // 右轮驱动
    50   2              gpio_mode(P6_4, GPO_PP);           // 功能：  编码器初始化为输出模式
    51   2              gpio_mode(P6_0, GPO_PP);           // 功能：  编码器初始化为输出模式
    52   2          }
@@ -66,7 +66,7 @@ stmt  level    source
    54          /****************************编码器初始化****************************
    55          函数名  void encoder_init(void)
    56          功能    编码器初始化
-C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 2   
+C251 COMPILER V5.60.0,  speed                                                              08/06/25  17:46:16  PAGE 2   
 
    57          参数    无
    58          说明    ctimer_count_init(CTIM0_P34);
@@ -134,7 +134,7 @@ stmt  level    source
   120   1          // left_last_speed = left_real_speed;
   121   1          // right_last_speed = right_real_speed;
   122   1      
-C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 3   
+C251 COMPILER V5.60.0,  speed                                                              08/06/25  17:46:16  PAGE 3   
 
   123   1          left_real_speed = left_speed;
   124   1          right_real_speed = right_speed;
@@ -172,7 +172,7 @@ stmt  level    source
   156                传入的参数为左右轮输出转动的大小转动方向由符号决定
   157          返回值：void
   158          ********************************************************************************/
-  159          #define Duty_Max 20000 // 限幅最大值
+  159          #define Duty_Max 9000 // 限幅最大值
   160          
   161          void go_motor(int32 left_PWM, int32 right_PWM)
   162          {
@@ -202,7 +202,7 @@ stmt  level    source
   186   3                  right_PWM = right_PWM >= -Duty_Max ? (-right_PWM) : Duty_Max;
   187   3                  pwm_duty(Right_Z_Pin, 1);
   188   3                  pwm_duty(Right_F_Pin, right_PWM); // 反转
-C251 COMPILER V5.60.0,  speed                                                              29/05/25  00:06:20  PAGE 4   
+C251 COMPILER V5.60.0,  speed                                                              08/06/25  17:46:16  PAGE 4   
 
   189   3              }
   190   2          }

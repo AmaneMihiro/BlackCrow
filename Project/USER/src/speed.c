@@ -37,16 +37,16 @@ void init_PWM(unsigned char Motor_Set)
     if (MOTOR_MODE == 0)
     {
         //-----MOS驱动-----------
-        pwm_init(Left_Z_Pin, 20000, 0); // 左轮初始化
-        pwm_init(Left_F_Pin, 20000, 0);
-        pwm_init(Right_Z_Pin, 20000, 0); // 右轮初始化
-        pwm_init(Right_F_Pin, 20000, 0);
+        pwm_init(Left_Z_Pin, 10000, 0); // 左轮初始化
+        pwm_init(Left_F_Pin, 10000, 0);
+        pwm_init(Right_Z_Pin, 10000, 0); // 右轮初始化
+        pwm_init(Right_F_Pin, 10000, 0);
     }
     else
     {
         //------DRV驱动-------------
-        pwm_init(Left_PWM_Pin, 20000, 0);  // 左轮驱动
-        pwm_init(Right_PWM_Pin, 20000, 0); // 右轮驱动
+        pwm_init(Left_PWM_Pin, 10000, 0);  // 左轮驱动
+        pwm_init(Right_PWM_Pin, 10000, 0); // 右轮驱动
         gpio_mode(P6_4, GPO_PP);           // 功能：  编码器初始化为输出模式
         gpio_mode(P6_0, GPO_PP);           // 功能：  编码器初始化为输出模式
     }
@@ -156,7 +156,7 @@ void timed_task(void)
       传入的参数为左右轮输出转动的大小转动方向由符号决定
 返回值：void
 ********************************************************************************/
-#define Duty_Max 20000 // 限幅最大值
+#define Duty_Max 9000 // 限幅最大值
 
 void go_motor(int32 left_PWM, int32 right_PWM)
 {

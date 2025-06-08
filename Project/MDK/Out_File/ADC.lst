@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 1   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE ADC
@@ -66,7 +66,7 @@ stmt  level    source
    55          函数名：uint16 adc_mid(ADCN_enum adcn,ADCRES_enum ch)
    56          功能： 3次电感采值进行中值滤波
    57          参数： adcn        选择ADC通道       resolution      分辨率
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 2   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 2   
 
    58          说明： 8位ADC测量值0~255，2的8次方，将5v电压平均分成255份，分辨率为5/255=0.196
    59          返回值：k(uint8)中间那个值
@@ -134,7 +134,7 @@ stmt  level    source
   121          函数名：  void Data_current_analyze()
   122          功能：  电感采值原始值归一化（0~100）
   123          参数：  void
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 3   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 3   
 
   124          说明：  归一化处理
   125          返回值：void
@@ -202,7 +202,7 @@ stmt  level    source
   187          float Cha_x_bi_he(int16 data1, int16 data2, int16 data3, int16 data4) // 叉积差和比
   188          {
   189   1          float left_value;
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 4   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 4   
 
   190   1          float right_value;
   191   1          float ad_sum;
@@ -270,7 +270,7 @@ stmt  level    source
   248   1          {
   249   2              annulus_t = fabs(last_speed) * 1;
   250   2              //                    annulus_t=annulus_t+5;
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 5   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 5   
 
   251   2          }
   252   1      }
@@ -338,7 +338,7 @@ stmt  level    source
   310   2      
   311   2              BUZZ_ON;
   312   2              road_type.out_annulus = 1;
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 6   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 6   
 
   313   2              annulus_s = 0;
   314   2              annulus_z = 0;
@@ -406,7 +406,7 @@ stmt  level    source
   374   2              error = Cha_x_bi_he(Left_Adc, Left_Shu_Adc * 2, Right_Adc, Right_Shu_Adc * 2) * 5; // 屏幕显�
              -�方向偏差值
   375   2              errors = Cha_x_bi_he(Left_Adc, Left_Shu_Adc, Right_Adc, Right_Shu_Adc);             // 归一化�
-C251 COMPILER V5.60.0,  ADC                                                                29/05/25  00:06:21  PAGE 7   
+C251 COMPILER V5.60.0,  ADC                                                                06/06/25  15:57:10  PAGE 7   
 
              -��标准方向偏差值
   376   2          }
@@ -422,25 +422,26 @@ stmt  level    source
   386          ****************************************************************************************/
   387          void Get_deviation(void)
   388          {
-  389   1      
+  389   1          static float last_error = 0;
   390   1          ADC_Collect();                   // 采集原始值赋值
   391   1          Data_current_analyze();          // 采集值归一化处理
   392   1          Annulus_handle();                // 环岛变量
   393   1          Annulus_assist();                // 环岛变量辅助
-  394   1          Current_Dir = Direction_error(); // 获取方向偏差
-  395   1      }
+  394   1          Current_Dir = 0.7 * Direction_error() + 0.3 * last_error; // 获取方向偏差
+  395   1          last_error = Current_Dir;
+  396   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1299     ------
+  code size            =      1336     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =        91         20
+  edata size           =        95         20
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -448,7 +449,7 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =       145     ------
+  hconst size          =       153     ------
 End of Module Information.
 
 

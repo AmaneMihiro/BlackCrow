@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 1   
+C251 COMPILER V5.60.0,  PID                                                                08/06/25  17:51:37  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE PID
@@ -66,7 +66,7 @@ stmt  level    source
    54   1          float KP; // 动态P，注意与Kp区分
    55   1      
    56   1          iError = Setpoint - Turepiont;
-C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 2   
+C251 COMPILER V5.60.0,  PID                                                                08/06/25  17:51:37  PAGE 2   
 
    57   1          KP = (iError)*sptr->Ki + sptr->Kp; // 动态P的计算
    58   1          // sptr->SumError+=iError;
@@ -115,43 +115,44 @@ stmt  level    source
   101          int32 IncPIDCalc(PID *sptr, float Setpoint, float Turepoint, float Kf)
   102          {
   103   1          uint8 enable_Ki;
-  104   1          float Error, output;
-  105   1          static float LastSetpoint = 0;
-  106   1          // 当前误差
-  107   1          Error = Setpoint - Turepoint; // 偏差
-  108   1      
-  109   1          if (fabs(Error) < 10)
-  110   1          {
-  111   2              enable_Ki = 1;
-  112   2          }
-  113   1          else
-  114   1          {
-  115   2              enable_Ki = 0;
-  116   2          }
-  117   1      
-  118   1          // enable_Ki = 1;
-  119   1      
-  120   1          output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastS
+  104   1          float Error;
+  105   1          int32 output;
+  106   1          static float LastSetpoint = 0;
+  107   1          // 当前误差
+  108   1          Error = Setpoint - Turepoint; // 偏差
+  109   1      
+  110   1          // if (fabs(Error) < 15)
+  111   1          // {
+  112   1          //     enable_Ki = 1;
+  113   1          // }
+  114   1          // else
+  115   1          // {
+  116   1          //     enable_Ki = 0;
+  117   1          // }
+  118   1      
+  119   1          enable_Ki = 1;
+  120   1      
+  121   1          output = sptr->Kp * (Error - sptr->LastError) + enable_Ki * sptr->Ki * Error + Kf * (Setpoint - LastS
              -etpoint);
-  121   1      
-C251 COMPILER V5.60.0,  PID                                                                29/05/25  00:06:20  PAGE 3   
+C251 COMPILER V5.60.0,  PID                                                                08/06/25  17:51:37  PAGE 3   
 
-  122   1          sptr->LastError = Error;
-  123   1          LastSetpoint = Setpoint;
-  124   1          return (output);
-  125   1      }
+  122   1      
+  123   1          sptr->LastError = Error;
+  124   1          LastSetpoint = Setpoint;
+  125   1          return (output);
+  126   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       660     ------
+  code size            =       612     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =         4         24
+  edata size           =         4         15
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

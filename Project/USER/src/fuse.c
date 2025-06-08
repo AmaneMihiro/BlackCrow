@@ -11,54 +11,54 @@ int16 GORY_Z = 0;
 uint8 outline_stop = 0;
 float temp_left = 0;
 float temp_right = 0;
-/****************************PID²ÎÊý³õÊ¼»¯**************************************
-º¯Êý£º  void PID_int(void)
-²ÎÊý£º  void
-ËµÃ÷£º  PIDÃ¿¸ö»·²ÎÊý³õÊ¼»¯
-·µ»ØÖµ£ºvoid
+/****************************PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½**************************************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void PID_int(void)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void
+Ëµï¿½ï¿½ï¿½ï¿½  PIDÃ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½void
 ********************************************************************************/
 void PID_int(void)
 {
-    L_SpeedPID.Kp = 2000; // ×óÂÖËÙ¶È»·PID²ÎÊý
+    L_SpeedPID.Kp = 800; // ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½PIDï¿½ï¿½ï¿½ï¿½
     L_SpeedPID.Ki = 0;
     L_SpeedPID.Kd = 0;
 
-    R_SpeedPID.Kp = 2000; // ÓÒËÙ¶È»·PID²ÎÊý
+    R_SpeedPID.Kp = 800; // ï¿½ï¿½ï¿½Ù¶È»ï¿½PIDï¿½ï¿½ï¿½ï¿½
     R_SpeedPID.Ki = 0;
     R_SpeedPID.Kd = 0;
 
     TurnPID.Kp = 15;
     TurnPID.Ki = 0;
-    TurnPID.Kd = 5;
+    TurnPID.Kd = 15;
 
     TurnPID.K_gory = 0;
 }
 
 static TASK_COMPONENTS TaskComps[] =
     {
-        {0, 1, 1, Motor_output_control}, // ½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·2ms
-                                         //    {0, 2, 2, Trailing_control},           //×ªÏòÍâ»·10ms
-                                         //    {0, 4, 4, Speed_control},              //C³µËÙ¶È»·20ms
+        {0, 1, 1, Motor_output_control}, // ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½2ms
+                                         //    {0, 2, 2, Trailing_control},           //×ªï¿½ï¿½ï¿½â»·10ms
+                                         //    {0, 4, 4, Speed_control},              //Cï¿½ï¿½ï¿½Ù¶È»ï¿½20ms
 };
 /**************************************************************************************
  * FunctionName   : TaskRemarks()
- * Description    : ÈÎÎñ±êÖ¾´¦Àí
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
- * attention      : ***ÔÚ¶¨Ê±Æ÷ÖÐ¶ÏÖÐµ÷ÓÃ´Ëº¯Êý¼´¿É***
+ * attention      : ***ï¿½Ú¶ï¿½Ê±ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ðµï¿½ï¿½Ã´Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½***
  **************************************************************************************/
 void TaskRemarks(void)
 {
     uint8 i;
-    for (i = 0; i < TASKS_MAX; i++) // Öð¸öÈÎÎñÊ±¼ä´¦Àí
+    for (i = 0; i < TASKS_MAX; i++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä´¦ï¿½ï¿½
     {
-        if (TaskComps[i].Timer) // Ê±¼ä²»Îª0
+        if (TaskComps[i].Timer) // Ê±ï¿½ä²»Îª0
         {
-            TaskComps[i].Timer--;        // ¼õÈ¥Ò»¸ö½ÚÅÄ
-            if (TaskComps[i].Timer == 0) // Ê±¼ä¼õÍêÁË
+            TaskComps[i].Timer--;        // ï¿½ï¿½È¥Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (TaskComps[i].Timer == 0) // Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             {
-                TaskComps[i].Timer = TaskComps[i].ItvTime; // »Ö¸´¼ÆÊ±Æ÷Öµ£¬´ÓÐÂÏÂÒ»´Î
-                TaskComps[i].Run = 1;                      // ÈÎÎñ¿ÉÒÔÔËÐÐ
+                TaskComps[i].Timer = TaskComps[i].ItvTime; // ï¿½Ö¸ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+                TaskComps[i].Run = 1;                      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
         }
     }
@@ -66,31 +66,31 @@ void TaskRemarks(void)
 
 /**************************************************************************************
  * FunctionName   : TaskProcess()
- * Description    : ÈÎÎñ´¦Àí|ÅÐ¶ÏÊ²Ã´Ê±ºò¸ÃÖ´ÐÐÄÇÒ»¸öÈÎÎñ
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½Ð¶ï¿½Ê²Ã´Ê±ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
- * * attention      : ***·ÅÔÚmianµÄwhile(1)¼´¿É***
+ * * attention      : ***ï¿½ï¿½ï¿½ï¿½mianï¿½ï¿½while(1)ï¿½ï¿½ï¿½ï¿½***
  **************************************************************************************/
 void TaskProcess(void)
 {
     uint8 i;
-    for (i = 0; i < TASKS_MAX; i++) // Öð¸öÈÎÎñÊ±¼ä´¦Àí
+    for (i = 0; i < TASKS_MAX; i++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä´¦ï¿½ï¿½
     {
-        if (TaskComps[i].Run) // Ê±¼ä²»Îª0
+        if (TaskComps[i].Run) // Ê±ï¿½ä²»Îª0
         {
-            TaskComps[i].TaskHook(); // ÔËÐÐÈÎÎñ
-            TaskComps[i].Run = 0;    // ±êÖ¾Çå0
+            TaskComps[i].TaskHook(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            TaskComps[i].Run = 0;    // ï¿½ï¿½Ö¾ï¿½ï¿½0
         }
     }
 }
 
 /***************************************************************************************
-º¯ÊýÃû£ºint16 range_protect(int16 duty, int16 min, int16 max)
-¹¦  ÄÜ£ºÏÞ·ù±£»¤
-²Î  Êý£º
-·µ»ØÖµ£ºduty
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½int16 range_protect(int16 duty, int16 min, int16 max)
+ï¿½ï¿½  ï¿½Ü£ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½duty
 **************************************************************************************/
-float range_protect(float duty, float min, float max) // ÏÞ·ù±£»¤
+float range_protect(float duty, float min, float max) // ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½
 {
     if (duty >= max)
     {
@@ -106,26 +106,28 @@ float range_protect(float duty, float min, float max) // ÏÞ·ù±£»¤
     }
 }
 
-/****************************½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·**************************************
-º¯Êý£º  void Motor_output_control()
-²ÎÊý£º  void
-ËµÃ÷£º  ½ÇËÙ¶ÈÄÚ»·ºÍD³µËÙ¶È»·(D³µ/ÈýÂÖ³µ²Å»áÓÃ)
-·µ»ØÖµ£ºvoid
+/****************************ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½**************************************
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void Motor_output_control()
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  void
+Ëµï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½Ù¶È»ï¿½(Dï¿½ï¿½/ï¿½ï¿½ï¿½Ö³ï¿½ï¿½Å»ï¿½ï¿½ï¿½)
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½void
 ***************************************************************************************/
 void Motor_output_control()
 {
 
     icm20602_get_gyro();
-    GORY_Z = icm20602_gyro_transition(icm20602_gyro_z); // µ¥Î»Îª¡ã/s
-    speed_measure();                                    // ±àÂëÆ÷²âÁ¿
-    Get_deviation();                                    // µç´Å²É¼¯²¢»ñÈ¡ÈüµÀÆ«²î
+    GORY_Z = icm20602_gyro_transition(icm20602_gyro_z); // ï¿½ï¿½Î»Îªï¿½ï¿½/s
+    speed_measure();                                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    Get_deviation();                                    // ï¿½ï¿½Å²É¼ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½
 
     ADC_PWM = PID_Turn_DT(&TurnPID, Current_Dir, 0);
 
     if ((Left_Adc < 3 && Right_Adc < 3 && Left_Shu_Adc < 3 && Right_Shu_Adc < 3) || outline_stop == 1)
     {
         outline_stop = 1;
-        go_motor(0, 0); // ¶¯Á¦Êä³ö
+        Speed_pwm_left += IncPIDCalc(&L_SpeedPID, 0, left_real_speed, 0);
+        Speed_pwm_right += IncPIDCalc(&R_SpeedPID, 0, right_real_speed, 0);
+        go_motor(Speed_pwm_left, Speed_pwm_right); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
     else
     {
@@ -141,7 +143,7 @@ void Motor_output_control()
         }
         Speed_pwm_left += IncPIDCalc(&L_SpeedPID, temp_left, left_real_speed, 0);
         Speed_pwm_right += IncPIDCalc(&R_SpeedPID, temp_right, right_real_speed, 0);
-        go_motor(Speed_pwm_left, Speed_pwm_right); // ¶¯Á¦Êä³ö
+        go_motor(Speed_pwm_left, Speed_pwm_right); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 }
 

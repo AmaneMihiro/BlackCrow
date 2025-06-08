@@ -386,10 +386,11 @@ float Direction_error(void)
 ****************************************************************************************/
 void Get_deviation(void)
 {
-
+    static float last_error = 0;
     ADC_Collect();                   // 采集原始值赋值
     Data_current_analyze();          // 采集值归一化处理
     Annulus_handle();                // 环岛变量
     Annulus_assist();                // 环岛变量辅助
-    Current_Dir = Direction_error(); // 获取方向偏差
+    Current_Dir = 0.7 * Direction_error() + 0.3 * last_error; // 获取方向偏差
+    last_error = Current_Dir;
 }
